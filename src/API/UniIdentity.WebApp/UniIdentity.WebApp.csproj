@@ -14,9 +14,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Application\Application.csproj" />
-      <ProjectReference Include="..\Domain\Domain.csproj" />
-      <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+      <ProjectReference Include="..\UniIdentity.Application\UniIdentity.Application.csproj" />
+      <ProjectReference Include="..\UniIdentity.Domain\UniIdentity.Domain.csproj" />
+      <ProjectReference Include="..\UniIdentity.Infrastructure\UniIdentity.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
