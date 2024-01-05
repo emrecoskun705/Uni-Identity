@@ -1,6 +1,10 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using UniIdentity.WebApp.Extensions;
 
-app.MapGet("/", () => "Hello World!");
+var builder = WebApplication
+    .CreateBuilder(args)
+    .ConfigureApplicationBuilder();
+
+var app = builder.Build()
+        .ConfigureApplication();
 
 app.Run();

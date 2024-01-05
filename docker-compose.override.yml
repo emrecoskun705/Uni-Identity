@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  webapi:
+    container_name: webapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:Default=Server=unitagram.db;Database=UniIdentityDb;User Id=admin;Password=admin1234"
+    ports:
+      - "6000:80"
+    depends_on: 
+      - uniidentity.db
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      
+  uniidentity.db:
+    container_name: uniidentity.db
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_DB=UniIdentityDb
+    restart: always
+    ports:
+      - "5435:5432"
+    volumes:
+      - uniidentity_data:/var/lib/postgresql/data/

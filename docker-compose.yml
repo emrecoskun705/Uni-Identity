@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  webapi:
+    image: ${DOCKER_REGISTRY-}webapi
+    build:
+      context: .
+      dockerfile: src/API/UniIdentity.WebApp/Dockerfile
+      
+  uniidentity.db:
+    image: postgres
+       
+    
+volumes: 
+  uniidentity_data:
