@@ -5,7 +5,7 @@ using UniIdentity.Domain.Users.ValueObjects;
 
 namespace UniIdentity.Infrastructure.Data.Configurations;
 
-internal class UserConfiguration : IEntityTypeConfiguration<User>
+internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -49,6 +49,10 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
                 c => c.Value,
                 val => IdentityId.FromValue(val)
             );
+
+        builder.HasMany(x => x.Credentials)
+            .WithOne(x => x.User)
+            .HasForeignKey(x => x.UserId);
 
         builder.HasIndex(x => x.NormalizedEmail)
             .HasDatabaseName("IX_User_NormalizedEmail")

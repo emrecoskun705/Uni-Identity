@@ -12,6 +12,8 @@ public abstract class Credential : BaseEntity<CredentialId>
     public string? SecretData { get; set; }
     public string? CredentialData { get; set; }
     public Int16 Priority { get; set; }
+    
+    public User User { get; set; }
 
     protected Credential(CredentialId id, UserId userId, DateTimeOffset createdDateTime, string? secretData, string? credentialData, short priority) : base(id)
     {

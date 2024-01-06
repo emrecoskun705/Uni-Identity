@@ -4,7 +4,7 @@ using UniIdentity.Domain.Users;
 
 namespace UniIdentity.Infrastructure.Data.Configurations;
 
-public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
+internal sealed class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
 {
     public void Configure(EntityTypeBuilder<UserRole> builder)
     {

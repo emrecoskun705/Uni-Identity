@@ -5,7 +5,7 @@ using UniIdentity.Domain.Roles.ValueObjects;
 
 namespace UniIdentity.Infrastructure.Data.Configurations;
 
-internal class RoleConfiguration : IEntityTypeConfiguration<Role>
+internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
     public void Configure(EntityTypeBuilder<Role> builder)
     {

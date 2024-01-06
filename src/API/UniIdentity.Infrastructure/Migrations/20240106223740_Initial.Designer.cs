@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240106171752_Initial")]
+    [Migration("20240106223740_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -177,6 +177,17 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("password");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Credentials.Credential", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Users.User", "User")
+                        .WithMany("Credentials")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Users.UserRole", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Roles.Role", "Role")
@@ -203,6 +214,8 @@ namespace UniIdentity.Infrastructure.Migrations
 
             modelBuilder.Entity("UniIdentity.Domain.Users.User", b =>
                 {
+                    b.Navigation("Credentials");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
