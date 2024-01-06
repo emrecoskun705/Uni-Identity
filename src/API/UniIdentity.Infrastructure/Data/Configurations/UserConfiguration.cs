@@ -43,13 +43,6 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
                 c => c.Value,
                 val => NormalizedUsername.Create(val)
             );
-        
-        builder.Property(x => x.Password)
-            .HasMaxLength(300)
-            .HasConversion(
-                c => c.Value,
-                val => Password.FromValue(val)
-            );
 
         builder.Property(x => x.IdentityId)
             .HasConversion(

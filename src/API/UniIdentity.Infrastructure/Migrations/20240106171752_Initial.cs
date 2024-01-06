@@ -14,6 +14,23 @@ namespace UniIdentity.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Credential",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Type = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    CreatedDateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    SecretData = table.Column<string>(type: "text", nullable: true),
+                    CredentialData = table.Column<string>(type: "text", nullable: true),
+                    Priority = table.Column<short>(type: "smallint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Credential", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Role",
                 columns: table => new
                 {
@@ -37,7 +54,6 @@ namespace UniIdentity.Infrastructure.Migrations
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     Username = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     NormalizedUsername = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    Password = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     CreatedDateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedDateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IdentityId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -81,6 +97,11 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Credential_UserId",
+                table: "Credential",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Role_NormalizedName",
                 table: "Role",
                 column: "NormalizedName",
@@ -113,6 +134,9 @@ namespace UniIdentity.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Credential");
+
             migrationBuilder.DropTable(
                 name: "UserRole");
 

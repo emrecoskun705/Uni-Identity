@@ -22,6 +22,43 @@ namespace UniIdentity.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("UniIdentity.Domain.Credentials.Credential", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CredentialData")
+                        .HasColumnType("text");
+
+                    b.Property<short>("Priority")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("SecretData")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("IX_Credential_UserId");
+
+                    b.ToTable("Credential");
+
+                    b.HasDiscriminator<string>("Type");
+
+                    b.UseTphMappingStrategy();
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Roles.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -90,11 +127,6 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
                     b.Property<DateTimeOffset?>("UpdatedDateTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -133,6 +165,13 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRole");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Credentials.PasswordCredential", b =>
+                {
+                    b.HasBaseType("UniIdentity.Domain.Credentials.Credential");
+
+                    b.HasDiscriminator().HasValue("password");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Users.UserRole", b =>
