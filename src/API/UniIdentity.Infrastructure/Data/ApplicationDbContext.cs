@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Credentials;
+using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Roles;
 using UniIdentity.Domain.Users;
 
@@ -17,6 +18,7 @@ internal sealed class ApplicationDbContext : DbContext, IUnitOfWork
     public DbSet<Role> Role { get; init; } 
     public DbSet<UserRole> UserRole { get; init; } 
     public DbSet<Credential> Credential { get; init; } 
+    public DbSet<Realm> Realm { get; init; } 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
