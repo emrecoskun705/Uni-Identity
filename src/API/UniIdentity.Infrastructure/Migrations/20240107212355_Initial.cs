@@ -44,6 +44,42 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Client",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClientId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    ClientSecret = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Protocol = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    BaseUrl = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    RootUrl = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    ManagementUrl = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    ClientAuthenticationType = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    RegistrationToken = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    AccessType = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    RealmId = table.Column<string>(type: "character varying(100)", nullable: false),
+                    PublicClient = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    Enabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    BearerOnly = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    ConsentRequired = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    AuthorizationCodeFlowEnabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    ImplicitFlowEnabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    DirectAccessGrantsEnabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    ClientCredentialsGrantEnabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Client", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Client_Realm_RealmId",
+                        column: x => x.RealmId,
+                        principalTable: "Realm",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -127,6 +163,18 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Client_ClientId",
+                table: "Client",
+                column: "ClientId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Client_RealmId_ClientId",
+                table: "Client",
+                columns: new[] { "RealmId", "ClientId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Credential_UserId",
                 table: "Credential",
                 column: "UserId");
@@ -169,6 +217,9 @@ namespace UniIdentity.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Client");
+
             migrationBuilder.DropTable(
                 name: "Credential");
 

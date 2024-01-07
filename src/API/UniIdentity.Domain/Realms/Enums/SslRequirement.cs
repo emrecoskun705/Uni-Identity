@@ -1,4 +1,4 @@
-﻿namespace UniIdentity.Domain.Realms.ValueObjects;
+﻿namespace UniIdentity.Domain.Realms.Enums;
 
 public enum SslRequirement
 {

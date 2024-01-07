@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UniIdentity.Domain.Realms;
-using UniIdentity.Domain.Realms.ValueObjects;
+using UniIdentity.Domain.Realms.Enums;
 
 namespace UniIdentity.Infrastructure.Data.Configurations;
 
