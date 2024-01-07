@@ -14,6 +14,23 @@ namespace UniIdentity.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Realm",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    AccessTokenLifeSpan = table.Column<int>(type: "integer", nullable: false),
+                    SsoMaxLifeSpan = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    SslRequirement = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    Enabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    VerifyEmail = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Realm", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Role",
                 columns: table => new
                 {
@@ -39,11 +56,18 @@ namespace UniIdentity.Infrastructure.Migrations
                     NormalizedUsername = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     CreatedDateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedDateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    RealmId = table.Column<string>(type: "character varying(100)", nullable: false),
                     IdentityId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_User_Realm_RealmId",
+                        column: x => x.RealmId,
+                        principalTable: "Realm",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,6 +156,11 @@ namespace UniIdentity.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_User_RealmId",
+                table: "User",
+                column: "RealmId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
@@ -151,6 +180,9 @@ namespace UniIdentity.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Realm");
         }
     }
 }

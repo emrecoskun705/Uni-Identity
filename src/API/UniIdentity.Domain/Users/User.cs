@@ -1,5 +1,6 @@
 ﻿using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Credentials;
+using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Users.Events;
 using UniIdentity.Domain.Users.ValueObjects;
 
@@ -17,8 +18,10 @@ public sealed class User : BaseEntity<UserId>
     public DateTimeOffset? UpdatedDateTime { get; set; }
     public IEnumerable<UserRole> UserRoles { get; }
     public IEnumerable<Credential> Credentials { get; }
-    
+    public RealmId RealmId { get; set; }
     public IdentityId IdentityId { get; private set; }
+    
+    public Realm Realm { get; } = null!;
 
     private User(UserId id, Email email, Username username, DateTimeOffset createdDateTime, IdentityId identityId) : base(id)
     {

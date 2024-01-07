@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240106223740_Initial")]
+    [Migration("20240107124112_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -60,6 +60,43 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.HasDiscriminator<string>("Type");
 
                     b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Realms.Realm", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("AccessTokenLifeSpan")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Enabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("SslRequirement")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<int>("SsoMaxLifeSpan")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("VerifyEmail")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Realm");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Roles.Role", b =>
@@ -130,6 +167,10 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
+                    b.Property<string>("RealmId")
+                        .IsRequired()
+                        .HasColumnType("character varying(100)");
+
                     b.Property<DateTimeOffset?>("UpdatedDateTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -151,6 +192,8 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.HasIndex("NormalizedUsername")
                         .IsUnique()
                         .HasDatabaseName("IX_User_NormalizedUsername");
+
+                    b.HasIndex("RealmId");
 
                     b.ToTable("User");
                 });
@@ -188,6 +231,17 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Users.User", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
+                        .WithMany("Users")
+                        .HasForeignKey("RealmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Realm");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Users.UserRole", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Roles.Role", "Role")
@@ -205,6 +259,11 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Realms.Realm", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Roles.Role", b =>

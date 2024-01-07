@@ -54,6 +54,10 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId);
 
+        builder.HasOne(x => x.Realm)
+            .WithMany(x => x.Users)
+            .HasForeignKey(x => x.RealmId);
+
         builder.HasIndex(x => x.NormalizedEmail)
             .HasDatabaseName("IX_User_NormalizedEmail")
             .IsUnique();
