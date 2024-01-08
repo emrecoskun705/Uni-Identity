@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240107212355_Initial")]
+    [Migration("20240108204639_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -133,6 +133,25 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasDatabaseName("IX_Client_RealmId_ClientId");
 
                     b.ToTable("Client");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Clients.ClientAttribute", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(3000)
+                        .HasColumnType("character varying(3000)");
+
+                    b.HasKey("Id", "Name");
+
+                    b.ToTable("ClientAttribute");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Credentials.Credential", b =>
@@ -341,6 +360,17 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Realm");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Clients.ClientAttribute", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Clients.Client", "Client")
+                        .WithMany("ClientAttributes")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Credentials.Credential", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Users.User", "User")
@@ -380,6 +410,11 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Clients.Client", b =>
+                {
+                    b.Navigation("ClientAttributes");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Realms.Realm", b =>

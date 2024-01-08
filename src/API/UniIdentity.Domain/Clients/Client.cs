@@ -27,6 +27,8 @@ public sealed class Client : BaseEntity<ClientId>
     public bool DirectAccessGrantsEnabled { get; private set; }
     public bool ClientCredentialsGrantEnabled { get; private set; }
 
+    public ICollection<ClientAttribute> ClientAttributes { get; set; }
+    
     public Realm Realm { get; }
 
     private Client(

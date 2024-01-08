@@ -107,6 +107,25 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ClientAttribute",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Value = table.Column<string>(type: "character varying(3000)", maxLength: 3000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientAttribute", x => new { x.Id, x.Name });
+                    table.ForeignKey(
+                        name: "FK_ClientAttribute_Client_Id",
+                        column: x => x.Id,
+                        principalTable: "Client",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Credential",
                 columns: table => new
                 {
@@ -218,13 +237,16 @@ namespace UniIdentity.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Client");
+                name: "ClientAttribute");
 
             migrationBuilder.DropTable(
                 name: "Credential");
 
             migrationBuilder.DropTable(
                 name: "UserRole");
+
+            migrationBuilder.DropTable(
+                name: "Client");
 
             migrationBuilder.DropTable(
                 name: "Role");
