@@ -225,6 +225,25 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.ToTable("Realm");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Realms.RealmAttribute", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(3000)
+                        .HasColumnType("character varying(3000)");
+
+                    b.HasKey("Id", "Name");
+
+                    b.ToTable("RealmAttribute");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Roles.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -379,6 +398,17 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Realms.RealmAttribute", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
+                        .WithMany("RealmAttributes")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Realm");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Users.User", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
@@ -417,6 +447,8 @@ namespace UniIdentity.Infrastructure.Migrations
             modelBuilder.Entity("UniIdentity.Domain.Realms.Realm", b =>
                 {
                     b.Navigation("Clients");
+
+                    b.Navigation("RealmAttributes");
 
                     b.Navigation("Users");
                 });

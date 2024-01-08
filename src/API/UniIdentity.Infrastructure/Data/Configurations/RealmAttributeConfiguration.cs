@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Data.Configurations;
 
-internal sealed class ClientAttributeConfiguration : IEntityTypeConfiguration<ClientAttribute>
+internal sealed class RealmAttributeConfiguration : IEntityTypeConfiguration<RealmAttribute>
 {
-    public void Configure(EntityTypeBuilder<ClientAttribute> builder)
+    public void Configure(EntityTypeBuilder<RealmAttribute> builder)
     {
         builder.HasKey(x => new { x.Id, x.Name });
         
@@ -16,9 +16,8 @@ internal sealed class ClientAttributeConfiguration : IEntityTypeConfiguration<Cl
         builder.Property(x => x.Value)
             .HasMaxLength(3000);
         
-        builder.HasOne(x => x.Client)
-            .WithMany(x => x.ClientAttributes)
+        builder.HasOne(x => x.Realm)
+            .WithMany(x => x.RealmAttributes)
             .HasForeignKey(x => x.Id);
-        
     }
 }

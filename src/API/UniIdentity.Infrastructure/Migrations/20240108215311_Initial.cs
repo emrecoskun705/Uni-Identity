@@ -80,6 +80,25 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RealmAttribute",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "character varying(100)", nullable: false),
+                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Value = table.Column<string>(type: "character varying(3000)", maxLength: 3000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RealmAttribute", x => new { x.Id, x.Name });
+                    table.ForeignKey(
+                        name: "FK_RealmAttribute_Realm_Id",
+                        column: x => x.Id,
+                        principalTable: "Realm",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -241,6 +260,9 @@ namespace UniIdentity.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Credential");
+
+            migrationBuilder.DropTable(
+                name: "RealmAttribute");
 
             migrationBuilder.DropTable(
                 name: "UserRole");
