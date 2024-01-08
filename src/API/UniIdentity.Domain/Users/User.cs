@@ -16,8 +16,8 @@ public sealed class User : BaseEntity<UserId>
     public NormalizedUsername NormalizedUsername { get; set; }
     public DateTimeOffset CreatedDateTime { get; set; }
     public DateTimeOffset? UpdatedDateTime { get; set; }
-    public IEnumerable<UserRole> UserRoles { get; }
-    public IEnumerable<Credential> Credentials { get; }
+    public ICollection<UserRole> UserRoles { get; }
+    public ICollection<Credential> Credentials { get; }
     public RealmId RealmId { get; set; }
     public IdentityId IdentityId { get; private set; }
     

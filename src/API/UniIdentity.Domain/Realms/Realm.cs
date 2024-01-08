@@ -17,6 +17,6 @@ public sealed class Realm : BaseEntity<RealmId>
     
     public bool VerifyEmail { get; set; }
     
-    public IEnumerable<User> Users { get; set; }
-    public IEnumerable<Client> Clients { get; set; }
+    public ICollection<User> Users { get; set; }
+    public ICollection<Client> Clients { get; set; }
 }

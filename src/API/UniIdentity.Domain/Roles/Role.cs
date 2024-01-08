@@ -11,7 +11,7 @@ public sealed class Role : BaseEntity<RoleId>
     public RoleId Id { get; set; }
     public Name Name { get; set; }
     public NormalizedName NormalizedName { get; set; }
-    public IEnumerable<UserRole>? UserRoles { get; }
+    public ICollection<UserRole>? UserRoles { get; private set; }
 
     private Role(RoleId id, Name name)
     {
