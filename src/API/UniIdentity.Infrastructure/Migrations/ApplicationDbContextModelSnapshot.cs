@@ -282,6 +282,43 @@ namespace UniIdentity.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Protocol")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("RealmId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RealmId")
+                        .HasDatabaseName("IX_Scope_RealmId");
+
+                    b.HasIndex("RealmId", "Name")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Scope_RealmId_Name");
+
+                    b.ToTable("Scope");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -409,6 +446,17 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Realm");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
+                        .WithMany("Scopes")
+                        .HasForeignKey("RealmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Realm");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Users.User", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
@@ -449,6 +497,8 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Clients");
 
                     b.Navigation("RealmAttributes");
+
+                    b.Navigation("Scopes");
 
                     b.Navigation("Users");
                 });

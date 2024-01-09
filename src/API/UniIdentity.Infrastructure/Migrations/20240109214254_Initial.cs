@@ -99,6 +99,27 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Scope",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Protocol = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    RealmId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Scope", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Scope_Realm_RealmId",
+                        column: x => x.RealmId,
+                        principalTable: "Realm",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -224,6 +245,17 @@ namespace UniIdentity.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Scope_RealmId",
+                table: "Scope",
+                column: "RealmId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Scope_RealmId_Name",
+                table: "Scope",
+                columns: new[] { "RealmId", "Name" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_IdentityId",
                 table: "User",
                 column: "IdentityId",
@@ -263,6 +295,9 @@ namespace UniIdentity.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "RealmAttribute");
+
+            migrationBuilder.DropTable(
+                name: "Scope");
 
             migrationBuilder.DropTable(
                 name: "UserRole");
