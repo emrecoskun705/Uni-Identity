@@ -319,6 +319,25 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.ToTable("Scope");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Scopes.ScopeAttribute", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.HasKey("Id", "Name");
+
+                    b.ToTable("ScopeAttribute");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -449,12 +468,23 @@ namespace UniIdentity.Infrastructure.Migrations
             modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
-                        .WithMany("Scopes")
+                        .WithMany()
                         .HasForeignKey("RealmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Realm");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Scopes.ScopeAttribute", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Scopes.Scope", "Scope")
+                        .WithMany("ScopeAttributes")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Scope");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Users.User", b =>
@@ -498,14 +528,17 @@ namespace UniIdentity.Infrastructure.Migrations
 
                     b.Navigation("RealmAttributes");
 
-                    b.Navigation("Scopes");
-
                     b.Navigation("Users");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Roles.Role", b =>
                 {
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
+                {
+                    b.Navigation("ScopeAttributes");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Users.User", b =>

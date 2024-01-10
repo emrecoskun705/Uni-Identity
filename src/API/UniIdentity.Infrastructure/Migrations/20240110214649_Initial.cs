@@ -166,6 +166,25 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ScopeAttribute",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScopeAttribute", x => new { x.Id, x.Name });
+                    table.ForeignKey(
+                        name: "FK_ScopeAttribute_Scope_Id",
+                        column: x => x.Id,
+                        principalTable: "Scope",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Credential",
                 columns: table => new
                 {
@@ -297,13 +316,16 @@ namespace UniIdentity.Infrastructure.Migrations
                 name: "RealmAttribute");
 
             migrationBuilder.DropTable(
-                name: "Scope");
+                name: "ScopeAttribute");
 
             migrationBuilder.DropTable(
                 name: "UserRole");
 
             migrationBuilder.DropTable(
                 name: "Client");
+
+            migrationBuilder.DropTable(
+                name: "Scope");
 
             migrationBuilder.DropTable(
                 name: "Role");
