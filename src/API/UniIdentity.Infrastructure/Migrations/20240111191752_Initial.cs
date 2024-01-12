@@ -166,6 +166,31 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ClientScope",
+                columns: table => new
+                {
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScopeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DefaultScope = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientScope", x => new { x.ClientId, x.ScopeId });
+                    table.ForeignKey(
+                        name: "FK_ClientScope_Client_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Client",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClientScope_Scope_ScopeId",
+                        column: x => x.ScopeId,
+                        principalTable: "Scope",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScopeAttribute",
                 columns: table => new
                 {
@@ -253,6 +278,11 @@ namespace UniIdentity.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClientScope_ScopeId",
+                table: "ClientScope",
+                column: "ScopeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Credential_UserId",
                 table: "Credential",
                 column: "UserId");
@@ -308,6 +338,9 @@ namespace UniIdentity.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ClientAttribute");
+
+            migrationBuilder.DropTable(
+                name: "ClientScope");
 
             migrationBuilder.DropTable(
                 name: "Credential");

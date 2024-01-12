@@ -9,6 +9,11 @@ internal sealed class ScopeAttributeConfiguration : IEntityTypeConfiguration<Sco
     public void Configure(EntityTypeBuilder<ScopeAttribute> builder)
     {
         builder.HasKey(x => new { x.Id, x.Name });
+
+        builder.Property(x => x.Id)
+            .HasConversion(
+                x => x.Value,
+                x => ScopeId.FromValue(x));
         
         builder.Property(x => x.Name)
             .HasMaxLength(255);

@@ -28,28 +28,15 @@ public sealed class Client : BaseEntity<ClientId>
     public bool ClientCredentialsGrantEnabled { get; private set; }
 
     public ICollection<ClientAttribute> ClientAttributes { get; set; }
-    
+    public ICollection<ClientScope> ClientScopes { get; set; }
+
     public Realm Realm { get; }
 
     private Client(
-        string clientId,
-        string clientSecret,
-        string name,
-        Protocol protocol,
-        string baseUrl,
-        string rootUrl,
-        string managementUrl,
-        ClientAuthenticationType clientAuthenticationType,
-        string registrationToken,
-        AccessType accessType,
-        RealmId realmId,
-        bool publicClient,
-        bool enabled,
-        bool bearerOnly,
-        bool consentRequired,
-        bool authorizationCodeFlowEnabled,
-        bool implicitFlowEnabled,
-        bool directAccessGrantsEnabled,
+        string clientId,string clientSecret,string name,Protocol protocol,
+        string baseUrl,string rootUrl,string managementUrl,ClientAuthenticationType clientAuthenticationType,
+        string registrationToken,AccessType accessType,RealmId realmId,bool publicClient,bool enabled,bool bearerOnly,
+        bool consentRequired,bool authorizationCodeFlowEnabled,bool implicitFlowEnabled,bool directAccessGrantsEnabled,
         bool clientCredentialsGrantEnabled)
     {
         ClientId = clientId;

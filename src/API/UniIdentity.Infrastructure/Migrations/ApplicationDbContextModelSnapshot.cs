@@ -151,6 +151,24 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.ToTable("ClientAttribute");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Clients.ClientScope", b =>
+                {
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ScopeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("DefaultScope")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("ClientId", "ScopeId");
+
+                    b.HasIndex("ScopeId");
+
+                    b.ToTable("ClientScope");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Credentials.Credential", b =>
                 {
                     b.Property<Guid>("Id")
@@ -443,6 +461,25 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Clients.ClientScope", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Clients.Client", "Client")
+                        .WithMany("ClientScopes")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniIdentity.Domain.Scopes.Scope", "Scope")
+                        .WithMany("ClientScopes")
+                        .HasForeignKey("ScopeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Scope");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Credentials.Credential", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Users.User", "User")
@@ -520,6 +557,8 @@ namespace UniIdentity.Infrastructure.Migrations
             modelBuilder.Entity("UniIdentity.Domain.Clients.Client", b =>
                 {
                     b.Navigation("ClientAttributes");
+
+                    b.Navigation("ClientScopes");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Realms.Realm", b =>
@@ -538,6 +577,8 @@ namespace UniIdentity.Infrastructure.Migrations
 
             modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
                 {
+                    b.Navigation("ClientScopes");
+
                     b.Navigation("ScopeAttributes");
                 });
 

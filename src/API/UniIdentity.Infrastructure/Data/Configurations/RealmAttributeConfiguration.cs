@@ -10,6 +10,11 @@ internal sealed class RealmAttributeConfiguration : IEntityTypeConfiguration<Rea
     {
         builder.HasKey(x => new { x.Id, x.Name });
         
+        builder.Property(x => x.Id)
+            .HasConversion(
+                x => x.Value,
+                x => new RealmId(x));
+        
         builder.Property(x => x.Name)
             .HasMaxLength(255);
 
