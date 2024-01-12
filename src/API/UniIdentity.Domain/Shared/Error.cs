@@ -8,27 +8,32 @@ public class Error : IEquatable<Error>
     /// <summary>
     /// The empty error instance.
     /// </summary>
-    public static readonly Error None = new(string.Empty, string.Empty);
+    public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
 
     /// <summary>
     /// The null value error instance.
     /// </summary>
-    public static readonly Error NullValue = new("Error.NullValue", "The specified result value is null.");
+    public static readonly Error NullValue = new("Error.NullValue", "The specified result value is null.", ErrorType.Failure);
 
     /// <summary>
     /// The condition not met error instance.
     /// </summary>
-    public static readonly Error ConditionNotMet = new("Error.ConditionNotMet", "The specified condition was not met.");
+    public static readonly Error ConditionNotMet = new("Error.ConditionNotMet", "The specified condition was not met.", ErrorType.Failure);
 
+    public static Error NotFound(string code, string description) => new Error(code, description, ErrorType.Notfound);
+    public static Error Validation(string code, string description) => new Error(code, description, ErrorType.Validation);
+    public static Error Failure(string code, string description) => new Error(code, description, ErrorType.Failure);
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="Error"/> class.
     /// </summary>
     /// <param name="code">The error code.</param>
     /// <param name="message">The error message.</param>
-    public Error(string code, string message)
+    private Error(string code, string message, ErrorType errorType)
     {
         Code = code;
         Message = message;
+        ErrorType = errorType;
     }
 
     /// <summary>
@@ -40,6 +45,11 @@ public class Error : IEquatable<Error>
     /// Gets the error message.
     /// </summary>
     public string Message { get; }
+    
+    /// <summary>
+    /// Gets the error type.
+    /// </summary>
+    public ErrorType ErrorType { get; }
 
     public static implicit operator string(Error error) => error.Code;
 
@@ -79,4 +89,11 @@ public class Error : IEquatable<Error>
 
     /// <inheritdoc />
     public override string ToString() => Code;
+}
+
+public enum ErrorType
+{
+    Failure,
+    Notfound,
+    Validation,
 }
