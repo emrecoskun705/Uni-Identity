@@ -28,6 +28,8 @@ public static class DependencyInjection
         #region Dapper
         services.AddSingleton<ISqlConnectionFactory>(_ => new SqlConnectionFactory(connectionString));
         #endregion
+
+        services.AddScoped<ApplicationDbContextInitializer>();
         
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
