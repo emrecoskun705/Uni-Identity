@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240111191752_Initial")]
+    [Migration("20240114210051_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -125,7 +125,6 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId")
-                        .IsUnique()
                         .HasDatabaseName("IX_Client_ClientId");
 
                     b.HasIndex("RealmId", "ClientId")

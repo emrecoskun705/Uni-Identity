@@ -268,8 +268,7 @@ namespace UniIdentity.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Client_ClientId",
                 table: "Client",
-                column: "ClientId",
-                unique: true);
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Client_RealmId_ClientId",

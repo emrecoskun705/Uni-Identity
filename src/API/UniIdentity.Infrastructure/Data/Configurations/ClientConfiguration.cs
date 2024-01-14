@@ -90,8 +90,7 @@ internal sealed class ClientConfiguration : IEntityTypeConfiguration<Client>
             .HasForeignKey(x => x.RealmId);
 
         builder.HasIndex(x => x.ClientId)
-            .HasDatabaseName("IX_Client_ClientId")
-            .IsUnique();
+            .HasDatabaseName("IX_Client_ClientId");
 
         builder.HasIndex(x => new { x.RealmId, x.ClientId })
             .HasDatabaseName("IX_Client_RealmId_ClientId")

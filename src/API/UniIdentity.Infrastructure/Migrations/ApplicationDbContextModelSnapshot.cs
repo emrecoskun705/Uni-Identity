@@ -122,7 +122,6 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId")
-                        .IsUnique()
                         .HasDatabaseName("IX_Client_ClientId");
 
                     b.HasIndex("RealmId", "ClientId")
