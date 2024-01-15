@@ -2,6 +2,7 @@
 using UniIdentity.Domain.Clients.ValueObjects;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Realms;
+using UniIdentity.Domain.Roles;
 
 namespace UniIdentity.Domain.Clients;
 
@@ -29,6 +30,7 @@ public sealed class Client : BaseEntity<ClientId>
 
     public ICollection<ClientAttribute> ClientAttributes { get; set; }
     public ICollection<ClientScope> ClientScopes { get; set; }
+    public ICollection<Role> Roles { get; set; }
 
     public Realm Realm { get; }
 

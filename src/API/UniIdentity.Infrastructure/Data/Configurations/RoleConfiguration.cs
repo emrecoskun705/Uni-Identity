@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Roles;
 using UniIdentity.Domain.Roles.ValueObjects;
 
@@ -29,19 +31,33 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
                 val => NormalizedName.Create(val)
             );
 
+        builder.Property(x => x.RealmId)
+            .HasConversion(
+                x => x.Value,
+                x => new RealmId(x));
+        
+        builder.Property(x => x.ClientId)
+            .HasConversion(
+                x => x.Value,
+                x => new ClientId(x));
+        
+        builder.HasOne(x => x.Realm)
+            .WithMany(x => x.Roles)
+            .HasForeignKey(x => x.RealmId);
+        
+        builder.HasOne(x => x.Client)
+            .WithMany(x => x.Roles)
+            .HasForeignKey(x => x.ClientId);
+        
+        builder.HasIndex(x => x.RealmId)
+            .HasDatabaseName("IX_Role_RealmId");
+        
+        builder.HasIndex(x => x.ClientId)
+            .HasDatabaseName("IX_Role_ClientId");
+        
         builder.HasIndex(x => x.NormalizedName)
             .HasDatabaseName("IX_Role_NormalizedName")
             .IsUnique();
-
-        builder.HasData(
-            Role.Create(
-                new RoleId(Guid.Parse("8426249A-A917-45E8-B8BB-43A551A884ED")), 
-                new Name(Role.DefaultUser)
-                ),
-            Role.Create(
-                new RoleId(Guid.Parse("35C029CB-F156-4787-9D24-D63951956E3E")), 
-                new Name(Role.Administrator)
-            )
-        );
+        
     }
 }

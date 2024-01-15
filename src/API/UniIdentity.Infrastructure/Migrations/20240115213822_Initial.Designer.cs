@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240114210051_Initial")]
+    [Migration("20240115213822_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -269,6 +269,9 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -279,27 +282,23 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
+                    b.Property<string>("RealmId")
+                        .IsRequired()
+                        .HasColumnType("character varying(100)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId")
+                        .HasDatabaseName("IX_Role_ClientId");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasDatabaseName("IX_Role_NormalizedName");
 
-                    b.ToTable("Role");
+                    b.HasIndex("RealmId")
+                        .HasDatabaseName("IX_Role_RealmId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("8426249a-a917-45e8-b8bb-43a551a884ed"),
-                            Name = "DefaultUser",
-                            NormalizedName = "DEFAULTUSER"
-                        },
-                        new
-                        {
-                            Id = new Guid("35c029cb-f156-4787-9d24-d63951956e3e"),
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        });
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
@@ -504,6 +503,25 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Realm");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Roles.Role", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Clients.Client", "Client")
+                        .WithMany("Roles")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
+                        .WithMany("Roles")
+                        .HasForeignKey("RealmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Realm");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
@@ -561,6 +579,8 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("ClientAttributes");
 
                     b.Navigation("ClientScopes");
+
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Realms.Realm", b =>
@@ -568,6 +588,8 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Clients");
 
                     b.Navigation("RealmAttributes");
+
+                    b.Navigation("Roles");
 
                     b.Navigation("Users");
                 });

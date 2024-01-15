@@ -1,6 +1,7 @@
 ﻿using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Realms.Enums;
+using UniIdentity.Domain.Roles;
 using UniIdentity.Domain.Users;
 
 namespace UniIdentity.Domain.Realms;
@@ -19,6 +20,7 @@ public sealed class Realm : BaseEntity<RealmId>
     public ICollection<User> Users { get; private set; }
     public ICollection<Client> Clients { get; private set; }
     public ICollection<RealmAttribute> RealmAttributes { get; private set; }
+    public ICollection<Role> Roles { get; private set; }
 
     public Realm(RealmId id,
         int accessTokenLifeSpan,
