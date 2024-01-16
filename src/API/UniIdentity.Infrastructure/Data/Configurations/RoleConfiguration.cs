@@ -23,41 +23,9 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
                 c => c.Value,
                 val => new Name(val)
             );
-
-        builder.Property(x => x.NormalizedName)
-            .HasMaxLength(20)
-            .HasConversion(
-                c => c.Value,
-                val => NormalizedName.Create(val)
-            );
-
-        builder.Property(x => x.RealmId)
-            .HasConversion(
-                x => x.Value,
-                x => new RealmId(x));
         
-        builder.Property(x => x.ClientId)
-            .HasConversion(
-                x => x.Value,
-                x => new ClientId(x));
-        
-        builder.HasOne(x => x.Realm)
-            .WithMany(x => x.Roles)
-            .HasForeignKey(x => x.RealmId);
-        
-        builder.HasOne(x => x.Client)
-            .WithMany(x => x.Roles)
-            .HasForeignKey(x => x.ClientId);
-        
-        builder.HasIndex(x => x.RealmId)
-            .HasDatabaseName("IX_Role_RealmId");
-        
-        builder.HasIndex(x => x.ClientId)
-            .HasDatabaseName("IX_Role_ClientId");
-        
-        builder.HasIndex(x => x.NormalizedName)
-            .HasDatabaseName("IX_Role_NormalizedName")
+        builder.HasIndex(x => x.Name)
+            .HasDatabaseName("IX_Role_Name")
             .IsUnique();
-        
     }
 }

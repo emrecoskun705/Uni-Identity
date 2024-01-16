@@ -20,7 +20,6 @@ public sealed class Realm : BaseEntity<RealmId>
     public ICollection<User> Users { get; private set; }
     public ICollection<Client> Clients { get; private set; }
     public ICollection<RealmAttribute> RealmAttributes { get; private set; }
-    public ICollection<Role> Roles { get; private set; }
 
     public Realm(RealmId id,
         int accessTokenLifeSpan,

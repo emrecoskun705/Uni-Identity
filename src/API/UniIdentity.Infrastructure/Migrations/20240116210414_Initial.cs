@@ -29,6 +29,18 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Role",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Client",
                 columns: table => new
                 {
@@ -151,33 +163,6 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Role",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    NormalizedName = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    IsClientRole = table.Column<bool>(type: "boolean", nullable: false),
-                    RealmId = table.Column<string>(type: "character varying(100)", nullable: false),
-                    ClientId = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Role", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Role_Client_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Client",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Role_Realm_RealmId",
-                        column: x => x.RealmId,
-                        principalTable: "Realm",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ClientScope",
                 columns: table => new
                 {
@@ -290,20 +275,10 @@ namespace UniIdentity.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Role_ClientId",
+                name: "IX_Role_Name",
                 table: "Role",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Role_NormalizedName",
-                table: "Role",
-                column: "NormalizedName",
+                column: "Name",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Role_RealmId",
-                table: "Role",
-                column: "RealmId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Scope_RealmId",
@@ -367,6 +342,9 @@ namespace UniIdentity.Infrastructure.Migrations
                 name: "UserRole");
 
             migrationBuilder.DropTable(
+                name: "Client");
+
+            migrationBuilder.DropTable(
                 name: "Scope");
 
             migrationBuilder.DropTable(
@@ -374,9 +352,6 @@ namespace UniIdentity.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
-
-            migrationBuilder.DropTable(
-                name: "Client");
 
             migrationBuilder.DropTable(
                 name: "Realm");
