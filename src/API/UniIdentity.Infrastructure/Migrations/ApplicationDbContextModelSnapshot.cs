@@ -266,8 +266,11 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ClientId")
+                    b.Property<Guid?>("ClientId")
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("IsClientRole")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -504,9 +507,7 @@ namespace UniIdentity.Infrastructure.Migrations
                 {
                     b.HasOne("UniIdentity.Domain.Clients.Client", "Client")
                         .WithMany("Roles")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
 
                     b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
                         .WithMany("Roles")

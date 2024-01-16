@@ -13,8 +13,9 @@ public sealed class Role : BaseEntity<RoleId>
     public RoleId Id { get; private set; }
     public Name Name { get; private set; }
     public NormalizedName NormalizedName { get; private set; }
+    public bool IsClientRole { get; private set; }
     public RealmId RealmId { get; private set; }
-    public ClientId ClientId { get; private set; }
+    public ClientId? ClientId { get; private set; }
     
     public Realm? Realm { get; private set; }
     public Client? Client { get; private set; }

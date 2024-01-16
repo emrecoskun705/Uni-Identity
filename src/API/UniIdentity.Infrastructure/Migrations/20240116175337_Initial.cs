@@ -157,8 +157,9 @@ namespace UniIdentity.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     NormalizedName = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    IsClientRole = table.Column<bool>(type: "boolean", nullable: false),
                     RealmId = table.Column<string>(type: "character varying(100)", nullable: false),
-                    ClientId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -167,8 +168,7 @@ namespace UniIdentity.Infrastructure.Migrations
                         name: "FK_Role_Client_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Client",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Role_Realm_RealmId",
                         column: x => x.RealmId,

@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240115213822_Initial")]
+    [Migration("20240116175337_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -269,8 +269,11 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ClientId")
+                    b.Property<Guid?>("ClientId")
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("IsClientRole")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -507,9 +510,7 @@ namespace UniIdentity.Infrastructure.Migrations
                 {
                     b.HasOne("UniIdentity.Domain.Clients.Client", "Client")
                         .WithMany("Roles")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
 
                     b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
                         .WithMany("Roles")
