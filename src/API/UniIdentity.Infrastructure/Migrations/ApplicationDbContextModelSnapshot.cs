@@ -266,16 +266,37 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ClientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ClientRealmConstraint")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("IsClientRole")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("RealmId")
+                        .IsRequired()
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("ClientId")
+                        .HasDatabaseName("IX_Role_ClientId");
+
+                    b.HasIndex("RealmId")
+                        .HasDatabaseName("IX_Role_RealmId");
+
+                    b.HasIndex("ClientRealmConstraint", "Name")
                         .IsUnique()
-                        .HasDatabaseName("IX_Role_Name");
+                        .HasDatabaseName("IX_Role_ClientRealmConstraint_Name");
 
                     b.ToTable("Role");
                 });
@@ -482,6 +503,23 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Realm");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Roles.Role", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Clients.Client", "Client")
+                        .WithMany("Roles")
+                        .HasForeignKey("ClientId");
+
+                    b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
+                        .WithMany("Roles")
+                        .HasForeignKey("RealmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Realm");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
@@ -539,6 +577,8 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("ClientAttributes");
 
                     b.Navigation("ClientScopes");
+
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Realms.Realm", b =>
@@ -546,6 +586,8 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Clients");
 
                     b.Navigation("RealmAttributes");
+
+                    b.Navigation("Roles");
 
                     b.Navigation("Users");
                 });

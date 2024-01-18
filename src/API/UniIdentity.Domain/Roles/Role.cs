@@ -8,18 +8,49 @@ namespace UniIdentity.Domain.Roles;
 
 public sealed class Role : BaseEntity<RoleId>
 {
-    public RoleId Id { get; private set; }
     public Name Name { get; private set; }
+    public string ClientRealmConstraint { get; private set; }
+    public bool IsClientRole { get; private set; }
+    public RealmId RealmId { get; private set; }
+    public ClientId? ClientId { get; private set; }
+    
+    public Realm? Realm { get; private set; }
+    public Client? Client { get; private set; }
     public ICollection<UserRole>? UserRoles { get; private set; }
 
-    private Role(RoleId id, Name name)
+    private Role(RoleId id, Name name, RealmId realmId, ClientId clientId)
     {
         Id = id;
         Name = name;
+        RealmId = realmId;
+        ClientId = clientId;
+    }
+    
+    private Role(RoleId id, Name name, RealmId realmId)
+    {
+        Id = id;
+        Name = name;
+        RealmId = realmId;
+        ClientId = null;
     }
 
-    public static Role Create(RoleId roleId, Name name, RealmId realmId, ClientId clientId)
+    public static Role CreateRealmRole(Name name, RealmId realmId)
     {
-        return new Role(roleId, name);
+        return new Role(RoleId.New(), name, realmId);
+    }
+    
+    public static Role CreateRealmRole(RoleId roleId, Name name, RealmId realmId)
+    {
+        return new Role(roleId, name, realmId);
+    }
+    
+    public static Role CreateClientRole(Name name, RealmId realmId, ClientId clientId)
+    {
+        return new Role(RoleId.New(), name, realmId, clientId);
+    }
+    
+    public static Role CreateClientRole(RoleId roleId, Name name, RealmId realmId, ClientId clientId)
+    {
+        return new Role(roleId, name, realmId, clientId);
     }
 }

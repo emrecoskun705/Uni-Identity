@@ -30,6 +30,7 @@ public sealed class Client : BaseEntity<ClientId>
 
     public ICollection<ClientAttribute> ClientAttributes { get; set; }
     public ICollection<ClientScope> ClientScopes { get; set; }
+    public ICollection<Role> Roles { get; set; }
 
     public Realm Realm { get; }
 
