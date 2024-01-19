@@ -6,8 +6,9 @@ using UniIdentity.Domain.Users;
 
 namespace UniIdentity.Domain.Roles;
 
-public sealed class Role : BaseEntity<RoleId>
+public sealed class Role : BaseEntity
 {
+    public RoleId Id { get; private set; }
     public Name Name { get; private set; }
     public string ClientRealmConstraint { get; private set; }
     public bool IsClientRole { get; private set; }

@@ -1,6 +1,6 @@
 ﻿namespace UniIdentity.Domain.Common;
 
-public abstract class BaseAuditableEntity<TEntityId> : BaseEntity<TEntityId>
+public abstract class BaseAuditableEntity : BaseEntity
 {
     public DateTimeOffset Created { get; set; }
 

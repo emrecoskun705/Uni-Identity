@@ -2,8 +2,9 @@
 
 namespace UniIdentity.Domain.Clients;
 
-public sealed class ClientAttribute : BaseEntity<ClientId>
+public sealed class ClientAttribute : BaseEntity
 {
+    public ClientId Id { get; private set; }
     public string Name { get; private set; }
     public string Value { get; private set; }
     
@@ -12,8 +13,9 @@ public sealed class ClientAttribute : BaseEntity<ClientId>
     public ClientAttribute(
         ClientId id,
         string name,
-        string value) : base(id)
+        string value)
     {
+        Id = id;
         Name = name;
         Value = value;
     }

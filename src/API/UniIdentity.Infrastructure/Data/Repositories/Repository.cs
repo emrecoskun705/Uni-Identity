@@ -3,9 +3,8 @@ using UniIdentity.Domain.Common;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-internal abstract class Repository<TEntity, TEntityId> 
-    where TEntity : BaseEntity<TEntityId>
-    where TEntityId : class
+internal abstract class Repository<TEntity> 
+    where TEntity : BaseEntity
 {
     protected readonly ApplicationDbContext _db;
 
@@ -13,13 +12,7 @@ internal abstract class Repository<TEntity, TEntityId>
     {
         _db = dbContext;
     }
-
-    public async Task<TEntity?> GetByIdAsync(TEntityId id, CancellationToken ct = default)
-    {
-        return await _db.Set<TEntity>()
-            .FirstOrDefaultAsync(x => x.Id == id, ct);
-    }
-
+    
     public void Add(TEntity entity)
     {
         _db.Add(entity);

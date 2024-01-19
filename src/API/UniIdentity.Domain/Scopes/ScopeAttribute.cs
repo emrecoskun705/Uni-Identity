@@ -1,18 +1,18 @@
 ﻿using UniIdentity.Domain.Common;
-using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Domain.Scopes;
 
-public class ScopeAttribute : BaseEntity<ScopeId>
+public class ScopeAttribute : BaseEntity
 {
+    public ScopeId Id { get; private set; }
     public string Name { get; private set; }
     public string Value { get; private set; }
     
     public Scope Scope { get; private set; }
 
     public ScopeAttribute(ScopeId id, string name, string value)
-        : base(id)
     {
+        Id = id;
         Name = name;
         Value = value;
     }

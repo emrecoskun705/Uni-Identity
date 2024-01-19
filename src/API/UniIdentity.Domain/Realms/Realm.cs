@@ -6,8 +6,9 @@ using UniIdentity.Domain.Users;
 
 namespace UniIdentity.Domain.Realms;
 
-public sealed class Realm : BaseEntity<RealmId>
+public sealed class Realm : BaseEntity
 {
+    public RealmId Id { get; private set; }
     public int AccessTokenLifeSpan { get; private set; }
     public int SsoMaxLifeSpan { get; private set; }
     public string Name { get; private set; }
@@ -29,8 +30,8 @@ public sealed class Realm : BaseEntity<RealmId>
         SslRequirement sslRequirement,
         bool enabled,
         bool verifyEmail)
-        : base(id)
     {
+        Id = id;
         AccessTokenLifeSpan = accessTokenLifeSpan;
         SsoMaxLifeSpan = ssoMaxLifeSpan;
         Name = name;

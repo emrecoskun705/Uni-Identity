@@ -1,13 +1,9 @@
 ﻿namespace UniIdentity.Domain.Common;
 
-public abstract class BaseEntity<TEntityId> : IEntity
+public abstract class BaseEntity: IEntity
 {
-    public TEntityId Id { get; init; } = default!;
-
     private readonly List<IDomainEvent> _domainEvents = new();
     
-    protected BaseEntity(TEntityId id) => Id = id;
-
     protected BaseEntity() {
 
     }

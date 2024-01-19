@@ -2,8 +2,9 @@
 
 namespace UniIdentity.Domain.Realms;
 
-public class RealmAttribute : BaseEntity<RealmId>
+public class RealmAttribute : BaseEntity
 {
+    public RealmId Id { get; private set; }
     public string Name { get; private set; }
     public string Value { get; private set; }
 
@@ -13,8 +14,8 @@ public class RealmAttribute : BaseEntity<RealmId>
         RealmId id,
         string name,
         string value)
-        : base(id)
     {
+        Id = id;
         Name = name;
         Value = value;
     }

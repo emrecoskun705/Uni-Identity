@@ -6,8 +6,9 @@ using UniIdentity.Domain.Roles;
 
 namespace UniIdentity.Domain.Clients;
 
-public sealed class Client : BaseEntity<ClientId>
+public sealed class Client : BaseEntity
 {
+    public ClientId Id { get; private set; }
     public string ClientId { get; private set; }
     public string ClientSecret { get; private set; }
     public string Name { get; private set; }

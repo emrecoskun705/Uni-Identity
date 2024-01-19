@@ -4,8 +4,9 @@ using UniIdentity.Domain.Users;
 
 namespace UniIdentity.Domain.Credentials;
 
-public abstract class Credential : BaseEntity<CredentialId>
+public abstract class Credential : BaseEntity
 {
+    public CredentialId Id { get; private set; }
     public UserId UserId { get; set; }
     public CredentialType Type { get; init; }
     public DateTimeOffset CreatedDateTime { get; set; }
@@ -15,8 +16,9 @@ public abstract class Credential : BaseEntity<CredentialId>
     
     public User User { get; set; }
 
-    protected Credential(CredentialId id, UserId userId, DateTimeOffset createdDateTime, string? secretData, string? credentialData, short priority) : base(id)
+    protected Credential(CredentialId id, UserId userId, DateTimeOffset createdDateTime, string? secretData, string? credentialData, short priority)
     {
+        Id = id;
         UserId = userId;
         CreatedDateTime = createdDateTime;
         SecretData = secretData;

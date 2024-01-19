@@ -6,8 +6,9 @@ using UniIdentity.Domain.Users.ValueObjects;
 
 namespace UniIdentity.Domain.Users;
 
-public sealed class User : BaseEntity<UserId>
+public sealed class User : BaseEntity
 {
+    public UserId Id { get; private set; }
     public Email? Email { get; set; }
     public NormalizedEmail? NormalizedEmail { get; set; }
     public bool EmailVerified { get; set; }
@@ -23,8 +24,9 @@ public sealed class User : BaseEntity<UserId>
     
     public Realm Realm { get; } = null!;
 
-    private User(UserId id, Email email, Username username, DateTimeOffset createdDateTime, IdentityId identityId) : base(id)
+    private User(UserId id, Email email, Username username, DateTimeOffset createdDateTime, IdentityId identityId)
     {
+        Id = id;
         Email = email;
         NormalizedEmail = NormalizedEmail.Create(email.Value);
         Username = username;

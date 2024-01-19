@@ -4,8 +4,9 @@ using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Domain.Scopes;
 
-public sealed class Scope : BaseEntity<ScopeId>
+public sealed class Scope : BaseEntity
 {
+    public ScopeId Id { get; private set; }
     public string Name { get; private set; }
     public string Protocol { get; private set; }
     public RealmId RealmId { get; private set; }
@@ -17,8 +18,8 @@ public sealed class Scope : BaseEntity<ScopeId>
     public ICollection<ClientScope> ClientScopes { get; private set; }
     
     public Scope(ScopeId id, string name, string protocol, RealmId realmId, string description)
-        : base(id)
     {
+        Id = id;
         Name = name;
         Protocol = protocol;
         RealmId = realmId;
