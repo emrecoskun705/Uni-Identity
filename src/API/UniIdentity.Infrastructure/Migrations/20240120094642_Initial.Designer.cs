@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240119211852_Initial")]
+    [Migration("20240120094642_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -304,6 +304,25 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.ToTable("Role");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Roles.RoleGraph", b =>
+                {
+                    b.Property<Guid>("ParentRoleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ChildRoleId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ParentRoleId", "ChildRoleId");
+
+                    b.HasIndex("ChildRoleId")
+                        .HasDatabaseName("IX_RoleGraph_ChildRoleId");
+
+                    b.HasIndex("ParentRoleId")
+                        .HasDatabaseName("IX_RoleGraph_ParentRoleId");
+
+                    b.ToTable("RoleGraph");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
                 {
                     b.Property<Guid>("Id")
@@ -523,6 +542,25 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Realm");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Roles.RoleGraph", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Roles.Role", "ChildRole")
+                        .WithMany("ChildRoles")
+                        .HasForeignKey("ChildRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniIdentity.Domain.Roles.Role", "ParentRole")
+                        .WithMany("ParentRoles")
+                        .HasForeignKey("ParentRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChildRole");
+
+                    b.Navigation("ParentRole");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
@@ -597,6 +635,10 @@ namespace UniIdentity.Infrastructure.Migrations
 
             modelBuilder.Entity("UniIdentity.Domain.Roles.Role", b =>
                 {
+                    b.Navigation("ChildRoles");
+
+                    b.Navigation("ParentRoles");
+
                     b.Navigation("UserRoles");
                 });
 

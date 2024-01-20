@@ -245,6 +245,30 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RoleGraph",
+                columns: table => new
+                {
+                    ParentRoleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ChildRoleId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleGraph", x => new { x.ParentRoleId, x.ChildRoleId });
+                    table.ForeignKey(
+                        name: "FK_RoleGraph_Role_ChildRoleId",
+                        column: x => x.ChildRoleId,
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoleGraph_Role_ParentRoleId",
+                        column: x => x.ParentRoleId,
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRole",
                 columns: table => new
                 {
@@ -306,6 +330,16 @@ namespace UniIdentity.Infrastructure.Migrations
                 column: "RealmId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RoleGraph_ChildRoleId",
+                table: "RoleGraph",
+                column: "ChildRoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleGraph_ParentRoleId",
+                table: "RoleGraph",
+                column: "ParentRoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Scope_RealmId",
                 table: "Scope",
                 column: "RealmId");
@@ -359,6 +393,9 @@ namespace UniIdentity.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "RealmAttribute");
+
+            migrationBuilder.DropTable(
+                name: "RoleGraph");
 
             migrationBuilder.DropTable(
                 name: "ScopeAttribute");

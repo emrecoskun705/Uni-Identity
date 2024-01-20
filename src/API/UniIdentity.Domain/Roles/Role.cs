@@ -18,6 +18,8 @@ public sealed class Role : BaseEntity
     public Realm? Realm { get; private set; }
     public Client? Client { get; private set; }
     public ICollection<UserRole>? UserRoles { get; private set; }
+    public ICollection<RoleGraph>? ParentRoles { get; private set; }
+    public ICollection<RoleGraph>? ChildRoles { get; private set; }
 
     private Role(RoleId id, Name name, RealmId realmId, ClientId clientId)
     {
