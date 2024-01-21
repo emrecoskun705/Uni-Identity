@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Realms.Enums;
+using UniIdentity.Domain.Roles;
+using UniIdentity.Domain.Roles.ValueObjects;
 using UniIdentity.Domain.Scopes;
 
 namespace UniIdentity.Infrastructure.Data;
@@ -27,6 +29,9 @@ public class ApplicationDbContextInitializer
     private readonly ILogger<ApplicationDbContextInitializer> _logger;
     private readonly ApplicationDbContext _context;
 
+    private const string MasterRealmId = "master";
+
+    
     public ApplicationDbContextInitializer(
         ILogger<ApplicationDbContextInitializer> logger,
         ApplicationDbContext context)
@@ -63,11 +68,45 @@ public class ApplicationDbContextInitializer
 
     private async Task TrySeedAsync()
     {
+        // order important
+        
         await AddMasterRealm();
         
         await AddDefaultScopesToMaster();
-    }
 
+        await AddDefaultRolesToMaster();
+    }
+    
+    private async Task AddDefaultRolesToMaster()
+    {
+        
+        var masterRealmRoles = new List<RealmRoleDto>()
+        {
+            new("81596A81-52E0-4A97-85B8-BAFA2A38CEE9", "default-roles-master"),
+            new("60E092CC-E651-4489-B945-AF763EB5C306", "admin"), 
+            new("A4D5165B-D733-4A88-AA1C-D1C31539EF1E", "create-realm") 
+        };
+
+        foreach (var realmRoleDto in masterRealmRoles)
+        {
+            var realmRole = await _context.Role.AsNoTracking().FirstOrDefaultAsync(
+                x => x.Id == RoleId.FromValue(Guid.Parse(realmRoleDto.Id)));
+
+            if (realmRole == null)
+            {
+                realmRole = Role.CreateRealmRole(
+                    RoleId.FromValue(Guid.Parse(realmRoleDto.Id)),
+                    new Name(realmRoleDto.Name),
+                    new RealmId(MasterRealmId));
+            
+                _context.Add(realmRole);
+            }
+        }
+
+
+        await _context.SaveChangesAsync();
+    }
+    
     private async Task AddDefaultScopesToMaster()
     {
         var defaultScopes = new List<ScopeDto>()
@@ -141,6 +180,18 @@ public class ApplicationDbContextInitializer
             Id = id;
             Name = name;
             Description = description;
+        }
+    }
+
+    private class RealmRoleDto
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+
+        public RealmRoleDto(string id, string name)
+        {
+            Id = id;
+            Name = name;
         }
     }
 }

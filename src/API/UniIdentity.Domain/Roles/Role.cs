@@ -39,21 +39,45 @@ public sealed class Role : BaseEntity
 
     public static Role CreateRealmRole(Name name, RealmId realmId)
     {
-        return new Role(RoleId.New(), name, realmId);
+        var role = new Role(RoleId.New(), name, realmId)
+        {
+            ClientRealmConstraint = realmId.Value,
+            IsClientRole = false
+        };
+        
+        return role;
     }
     
     public static Role CreateRealmRole(RoleId roleId, Name name, RealmId realmId)
     {
-        return new Role(roleId, name, realmId);
+        var role = new Role(roleId, name, realmId)
+        {
+            ClientRealmConstraint = realmId.Value,
+            IsClientRole = false
+        };
+
+        return role;
     }
     
     public static Role CreateClientRole(Name name, RealmId realmId, ClientId clientId)
     {
-        return new Role(RoleId.New(), name, realmId, clientId);
+        var role = new Role(RoleId.New(), name, realmId, clientId)
+        {
+            ClientRealmConstraint = clientId.Value.ToString(),
+            IsClientRole = true
+        };
+
+        return role;
     }
     
     public static Role CreateClientRole(RoleId roleId, Name name, RealmId realmId, ClientId clientId)
     {
-        return new Role(roleId, name, realmId, clientId);
+        var role = new Role(roleId, name, realmId, clientId)
+        {
+            ClientRealmConstraint = clientId.Value.ToString(),
+            IsClientRole = true
+        };
+
+        return role;
     }
 }
