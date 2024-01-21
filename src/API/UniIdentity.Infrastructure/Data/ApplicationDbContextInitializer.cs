@@ -86,9 +86,9 @@ public class ApplicationDbContextInitializer
     {
         var defaultClients = new List<Client>
         {
-            new("account", null, "account", Protocol.OpenIdConnect, "/realms/master/account/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false),
-            new("account-console", null, "account-console", Protocol.OpenIdConnect, "/realms/master/account/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false),
-            new("admin-console", null, "admin-console", Protocol.OpenIdConnect, "/admin/master/console/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false)
+            Client.Create(new ClientTemplate("account", null, "account", Protocol.OpenIdConnect, "/realms/master/account/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false)),
+            Client.Create(new ClientTemplate("account-console", null, "account-console", Protocol.OpenIdConnect, "/realms/master/account/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false)),
+            Client.Create(new ClientTemplate("admin-console", null, "admin-console", Protocol.OpenIdConnect, "/admin/master/console/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false))
         };
 
         foreach (var defaultClient in defaultClients)
