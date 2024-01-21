@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240120094642_Initial")]
+    [Migration("20240121170929_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -41,14 +41,8 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<string>("BaseUrl")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
-
-                    b.Property<bool>("BearerOnly")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("ClientAuthenticationType")
                         .IsRequired()
@@ -65,7 +59,6 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasColumnType("character varying(255)");
 
                     b.Property<string>("ClientSecret")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
@@ -90,12 +83,10 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("ManagementUrl")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
@@ -103,22 +94,15 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
-                    b.Property<bool>("PublicClient")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
                     b.Property<string>("RealmId")
                         .IsRequired()
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("RegistrationToken")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
                     b.Property<string>("RootUrl")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 

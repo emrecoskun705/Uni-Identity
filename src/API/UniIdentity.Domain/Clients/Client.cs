@@ -10,19 +10,17 @@ public sealed class Client : BaseEntity
 {
     public ClientId Id { get; private set; }
     public string ClientId { get; private set; }
-    public string ClientSecret { get; private set; }
-    public string Name { get; private set; }
+    public string? ClientSecret { get; private set; }
+    public string? Name { get; private set; }
     public Protocol? Protocol { get; private set; }
-    public string BaseUrl { get; private set; }
-    public string RootUrl { get; private set; }
-    public string ManagementUrl { get; private set; }
+    public string? BaseUrl { get; private set; }
+    public string? RootUrl { get; private set; }
+    public string? ManagementUrl { get; private set; }
     public ClientAuthenticationType ClientAuthenticationType { get; private set; }
-    public string RegistrationToken { get; private set; }
+    public string? RegistrationToken { get; private set; }
     public AccessType AccessType { get; private set; }
     public RealmId RealmId { get; private set; }
-    public bool PublicClient { get; private set; }
     public bool Enabled { get; private set; }
-    public bool BearerOnly { get; private set; }
     public bool ConsentRequired { get; private set; }
     public bool AuthorizationCodeFlowEnabled { get; private set; }
     public bool ImplicitFlowEnabled { get; private set; }
@@ -35,13 +33,14 @@ public sealed class Client : BaseEntity
 
     public Realm Realm { get; }
 
-    private Client(
-        string clientId,string clientSecret,string name,Protocol protocol,
-        string baseUrl,string rootUrl,string managementUrl,ClientAuthenticationType clientAuthenticationType,
-        string registrationToken,AccessType accessType,RealmId realmId,bool publicClient,bool enabled,bool bearerOnly,
+    public Client(
+        string clientId,string? clientSecret,string? name,Protocol? protocol,
+        string? baseUrl,string? rootUrl,string? managementUrl,ClientAuthenticationType clientAuthenticationType,
+        string? registrationToken,AccessType accessType,RealmId realmId,bool enabled,
         bool consentRequired,bool authorizationCodeFlowEnabled,bool implicitFlowEnabled,bool directAccessGrantsEnabled,
         bool clientCredentialsGrantEnabled)
     {
+        Id = Clients.ClientId.New();
         ClientId = clientId;
         ClientSecret = clientSecret;
         Name = name;
@@ -53,9 +52,7 @@ public sealed class Client : BaseEntity
         RegistrationToken = registrationToken;
         AccessType = accessType;
         RealmId = realmId;
-        PublicClient = publicClient;
         Enabled = enabled;
-        BearerOnly = bearerOnly;
         ConsentRequired = consentRequired;
         AuthorizationCodeFlowEnabled = authorizationCodeFlowEnabled;
         ImplicitFlowEnabled = implicitFlowEnabled;

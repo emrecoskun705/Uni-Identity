@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Clients.Enums;
+using UniIdentity.Domain.Clients.ValueObjects;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Realms.Enums;
 using UniIdentity.Domain.Roles;
@@ -75,6 +78,30 @@ public class ApplicationDbContextInitializer
         await AddDefaultScopesToMaster();
 
         await AddDefaultRolesToMaster();
+
+        await AddDefaultClientsToMaster();
+    }
+
+    private async Task AddDefaultClientsToMaster()
+    {
+        var defaultClients = new List<Client>
+        {
+            new("account", null, "account", Protocol.OpenIdConnect, "/realms/master/account/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false),
+            new("account-console", null, "account-console", Protocol.OpenIdConnect, "/realms/master/account/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false),
+            new("admin-console", null, "admin-console", Protocol.OpenIdConnect, "/admin/master/console/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false)
+        };
+
+        foreach (var defaultClient in defaultClients)
+        {
+            var client = await _context.Client.FirstOrDefaultAsync(x => x.ClientId == defaultClient.ClientId && x.RealmId == defaultClient.RealmId);
+
+            if (client == null)
+            {
+                _context.Add(defaultClient);
+            }
+        }
+
+        await _context.SaveChangesAsync();
     }
     
     private async Task AddDefaultRolesToMaster()
@@ -194,4 +221,5 @@ public class ApplicationDbContextInitializer
             Name = name;
         }
     }
+    
 }

@@ -60,14 +60,8 @@ internal sealed class ClientConfiguration : IEntityTypeConfiguration<Client>
             .HasConversion(
                 x => x.Value,
                 x => new RealmId(x));
-
-        builder.Property(x => x.PublicClient)
-            .HasDefaultValue(false);
         
         builder.Property(x => x.Enabled)
-            .HasDefaultValue(false);
-        
-        builder.Property(x => x.BearerOnly)
             .HasDefaultValue(false);
         
         builder.Property(x => x.ConsentRequired)
