@@ -138,29 +138,28 @@ public class ApplicationDbContextInitializer
     {
         var defaultScopes = new List<ScopeDto>()
         {
-            new ScopeDto("0E3F4F4C-8C06-401D-9B8A-B8142A484117", "offline_access",
+            new ScopeDto( "offline_access",
                 "OpenID Connect built-in scope: offline_access"),
-            new ScopeDto("BE5F6D07-82FB-4032-9928-A2164FAD44C6", "profile", "OpenID Connect built-in scope: profile"),
-            new ScopeDto("1EB50C36-DBA9-4C15-98B3-2FB5CD8F579F", "email", "OpenID Connect built-in scope: email"),
-            new ScopeDto("28B82C24-CF99-43AF-ADFF-4A34C6D31E0A", "address", "OpenID Connect built-in scope: address"),
-            new ScopeDto("E3C5208E-406B-420F-B400-231D4BEBF27E", "phone", "OpenID Connect built-in scope: phone"),
-            new ScopeDto("CD9682B2-7725-4D92-BB06-DAF390BD05A6", "roles",
+            new ScopeDto( "profile", "OpenID Connect built-in scope: profile"),
+            new ScopeDto( "email", "OpenID Connect built-in scope: email"),
+            new ScopeDto( "address", "OpenID Connect built-in scope: address"),
+            new ScopeDto( "phone", "OpenID Connect built-in scope: phone"),
+            new ScopeDto( "roles",
                 "OpenID Connect scope for add user roles to the access token"),
-            new ScopeDto("E633F3C0-5065-4DF5-816A-1A1C92D0CDB6", "web-origins",
+            new ScopeDto( "web-origins",
                 "OpenID Connect scope for add allowed web origins to the access token"),
-            new ScopeDto("1063B956-5216-493F-BE80-4ED71B09F2E7", "microprofile-jwt",
+            new ScopeDto( "microprofile-jwt",
                 "Microprofile - JWT built-in scope"),
         };
         
         foreach (var scope in defaultScopes)
         {
             var addScope =
-                await _context.Scope.FirstOrDefaultAsync(x => x.Id == ScopeId.FromValue( Guid.Parse(scope.Id)));
+                await _context.Scope.FirstOrDefaultAsync(x => x.RealmId == new RealmId("master") && x.Name == scope.Name );
 
             if (addScope == null)
             {
-                addScope = new Scope(
-                    ScopeId.FromValue(Guid.Parse(scope.Id)),
+                addScope = Scope.Create(
                     scope.Name,
                     "openid-connect",
                     new RealmId("master"),
@@ -198,13 +197,11 @@ public class ApplicationDbContextInitializer
 
     private class ScopeDto
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public ScopeDto(string id, string name, string description)
+        public ScopeDto(string name, string description)
         {
-            Id = id;
             Name = name;
             Description = description;
         }

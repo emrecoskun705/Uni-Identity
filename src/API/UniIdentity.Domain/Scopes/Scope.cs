@@ -17,7 +17,7 @@ public sealed class Scope : BaseEntity
     public ICollection<ScopeAttribute> ScopeAttributes { get; private set; }
     public ICollection<ClientScope> ClientScopes { get; private set; }
     
-    public Scope(ScopeId id, string name, string protocol, RealmId realmId, string description)
+    private Scope(ScopeId id, string name, string protocol, RealmId realmId, string description)
     {
         Id = id;
         Name = name;
@@ -26,4 +26,11 @@ public sealed class Scope : BaseEntity
         RealmId = realmId;
         Description = description;
     }
+
+    public static Scope Create(string name, string protocol, RealmId realmId, string description)
+    {
+        return new Scope(ScopeId.New(), name, protocol, realmId, description);
+    }
+    
+    
 }
