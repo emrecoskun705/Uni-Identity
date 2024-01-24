@@ -4,8 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UniIdentity.Application.Contracts.Data;
 using UniIdentity.Domain.Common;
+using UniIdentity.Domain.Users;
 using UniIdentity.Infrastructure.Data;
 using UniIdentity.Infrastructure.Data.Interceptors;
+using UniIdentity.Infrastructure.Data.Repositories;
 
 namespace UniIdentity.Infrastructure;
 
@@ -30,8 +32,10 @@ public static class DependencyInjection
         #endregion
 
         services.AddScoped<ApplicationDbContextInitializer>();
+        services.AddScoped<IUserRepository, UserRepository>();
         
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        
 
         return services;
     }
