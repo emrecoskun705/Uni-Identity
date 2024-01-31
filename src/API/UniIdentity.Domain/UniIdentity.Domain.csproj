@@ -14,4 +14,8 @@
       <Folder Include="Realms\ValueObjects\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\UniIdentity.Common\UniIdentity.Common.csproj" />
+    </ItemGroup>
+
 </Project>
