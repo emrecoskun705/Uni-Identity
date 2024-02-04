@@ -3,6 +3,11 @@ using UniIdentity.Common.Json;
 
 namespace UniIdentity.Domain.Representation;
 
+/// <summary>
+/// List of below claims from different sources
+/// https://openid.net/specs/openid-connect-core-1_0.html#IDToken
+/// https://datatracker.ietf.org/doc/html/rfc7519#section-4.1
+/// </summary>
 [Serializable]
 public class JsonWebToken : IToken
 {
@@ -12,10 +17,10 @@ public class JsonWebToken : IToken
     [JsonPropertyName("sub")]
     public string? Subject { get; set; }
     
-    private string[]? _audience;
-    
     [JsonPropertyName("aud")]
     [JsonConverter(typeof(TokenStringArrayConverter))]
+    private string[]? _audience;
+    
     public string[]? Audience {
         get => _audience;
         private set => _audience = value;
