@@ -3,9 +3,10 @@
 namespace UniIdentity.Domain.Representation;
 
 /// <summary>
-/// List of below claims from different sources
+/// List of claims from different sources
 /// https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
 /// https://openid.net/specs/openid-connect-core-1_0.html#IDToken
+/// https://datatracker.ietf.org/doc/html/rfc7519#section-4.1
 /// </summary>
 [Serializable]
 public class IdToken : JsonWebToken
@@ -13,76 +14,76 @@ public class IdToken : JsonWebToken
     /// <summary>
     /// https://openid.net/specs/openid-connect-frontchannel-1_0.html#RPLogout
     /// </summary>
-    [JsonPropertyName("sid")]
+    [JsonPropertyName(UniJwtClaimNames.Sid)]
     public string? SessionId { get; set; }
     
-    [JsonPropertyName("auth_time")]
+    [JsonPropertyName(UniJwtClaimNames.AuthTime)]
     protected long? AuthTime { get; set; }
     
-    [JsonPropertyName("nonce")]
+    [JsonPropertyName(UniJwtClaimNames.Nonce)]
     protected string? Nonce { get; set; }
     
-    [JsonPropertyName("amr")]
+    [JsonPropertyName(UniJwtClaimNames.Amr)]
     protected string? Amr { get; set; }
     
-    [JsonPropertyName("azp")]
+    [JsonPropertyName(UniJwtClaimNames.Azp)]
     protected string? Azp { get; set; }
     
-    [JsonPropertyName("name")]
+    [JsonPropertyName(UniJwtClaimNames.Name)]
     protected string? Name { get; set; }
     
-    [JsonPropertyName("given_name")]
+    [JsonPropertyName(UniJwtClaimNames.GivenName)]
     protected string? GivenName { get; set; }
     
-    [JsonPropertyName("family_name")]
+    [JsonPropertyName(UniJwtClaimNames.FamilyName)]
     protected string? FamilyName { get; set; }
     
-    [JsonPropertyName("middle_name")]
+    [JsonPropertyName(UniJwtClaimNames.MiddleName)]
     protected string? MiddleName { get; set; }
     
-    [JsonPropertyName("nickname")]
+    [JsonPropertyName(UniJwtClaimNames.Nickname)]
     protected string? Nickname { get; set; }
     
-    [JsonPropertyName("preferred_username")]
+    [JsonPropertyName(UniJwtClaimNames.PreferredUsername)]
     protected string? PreferredUsername { get; set; }
     
-    [JsonPropertyName("profile")]
+    [JsonPropertyName(UniJwtClaimNames.Profile)]
     protected string? Profile { get; set; }
     
-    [JsonPropertyName("picture")]
+    [JsonPropertyName(UniJwtClaimNames.Picture)]
     protected string? Picture { get; set; }
     
-    [JsonPropertyName("website")]
+    [JsonPropertyName(UniJwtClaimNames.Website)]
     protected string? Website { get; set; }
     
-    [JsonPropertyName("email")]
+    [JsonPropertyName(UniJwtClaimNames.Email)]
     protected string? Email { get; set; }
     
-    [JsonPropertyName("email_verified")]
+    [JsonPropertyName(UniJwtClaimNames.EmailVerified)]
     protected bool? EmailVerified { get; set; }
     
-    [JsonPropertyName("gender")]
+    [JsonPropertyName(UniJwtClaimNames.Gender)]
     protected string? Gender { get; set; }
     
-    [JsonPropertyName("birthdate")]
+    [JsonPropertyName(UniJwtClaimNames.Birthdate)]
     protected long? Birthdate { get; set; }
     
-    [JsonPropertyName("zoneinfo")]
+    [JsonPropertyName(UniJwtClaimNames.Zoneinfo)]
     protected string? ZoneInfo { get; set; }
     
-    [JsonPropertyName("locale")]
+    [JsonPropertyName(UniJwtClaimNames.Locale)]
     protected string? Locale { get; set; }
     
-    [JsonPropertyName("phone_number")]
+    [JsonPropertyName(UniJwtClaimNames.PhoneNumber)]
     protected string? PhoneNumber { get; set; }
     
-    [JsonPropertyName("phone_number_verified")]
+    [JsonPropertyName(UniJwtClaimNames.PhoneNumberVerified)]
     protected bool? PhoneNumberVerified { get; set; }
     
-    [JsonPropertyName("address")]
+    [JsonPropertyName(UniJwtClaimNames.Address)]
     protected string? Address { get; set; }
     
-    [JsonPropertyName("updated_at")]
+    [JsonPropertyName(UniJwtClaimNames.UpdatedAt)]
     protected long? UpdatedAt { get; set; }
     
     public override TokenType GetTokenType()

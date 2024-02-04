@@ -4,20 +4,20 @@ using UniIdentity.Common.Json;
 namespace UniIdentity.Domain.Representation;
 
 /// <summary>
-/// List of below claims from different sources
+/// List of claims from different sources
 /// https://openid.net/specs/openid-connect-core-1_0.html#IDToken
 /// https://datatracker.ietf.org/doc/html/rfc7519#section-4.1
 /// </summary>
 [Serializable]
 public class JsonWebToken : IToken
 {
-    [JsonPropertyName("iss")]
+    [JsonPropertyName(UniJwtClaimNames.Iss)]
     public string? Issuer { get;  set; }
     
-    [JsonPropertyName("sub")]
+    [JsonPropertyName(UniJwtClaimNames.Sub)]
     public string? Subject { get; set; }
     
-    [JsonPropertyName("aud")]
+    [JsonPropertyName(UniJwtClaimNames.Aud)]
     [JsonConverter(typeof(TokenStringArrayConverter))]
     private string[]? _audience;
     
@@ -26,19 +26,19 @@ public class JsonWebToken : IToken
         private set => _audience = value;
     }
     
-    [JsonPropertyName("exp")]
+    [JsonPropertyName(UniJwtClaimNames.Exp)]
     public long? Expiration { get; set; }
     
-    [JsonPropertyName("nbf")]
+    [JsonPropertyName(UniJwtClaimNames.Nbf)]
     public long? NotBefore { get; set; }
     
-    [JsonPropertyName("iat")]
+    [JsonPropertyName(UniJwtClaimNames.Iat)]
     public long? IssuedAt { get; set; }
     
-    [JsonPropertyName("jti")]
+    [JsonPropertyName(UniJwtClaimNames.Jti)]
     public string? JwtId { get; set; }
     
-    [JsonPropertyName("typ")]
+    [JsonPropertyName(UniJwtClaimNames.Typ)]
     public string? Type { get; set; }
     
     public Dictionary<string, object> CustomClaims { get; } = new();

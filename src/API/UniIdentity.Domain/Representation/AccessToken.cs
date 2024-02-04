@@ -5,13 +5,13 @@ namespace UniIdentity.Domain.Representation;
 [Serializable]
 public class AccessToken : IdToken
 {
-    [JsonPropertyName("realm_access")]
+    [JsonPropertyName(UniJwtClaimNames.RealmAccess)]
     public Access? RealmAccess { get; set; }
     
-    [JsonPropertyName("resource_access")]
+    [JsonPropertyName(UniJwtClaimNames.ResourceAccess)]
     public Dictionary<string, Access>? ResourceAccess { get; set; }
     
-    [JsonPropertyName("scope")]
+    [JsonPropertyName(UniJwtClaimNames.Scope)]
     public string? Scope { get; set; }
     
     public override TokenType GetTokenType()
@@ -22,7 +22,7 @@ public class AccessToken : IdToken
     [Serializable]
     public class Access
     {
-        [JsonPropertyName("roles")]
+        [JsonPropertyName(UniJwtClaimNames.Roles)]
         private HashSet<string>? _roles;
         public HashSet<string>? Roles
         {
