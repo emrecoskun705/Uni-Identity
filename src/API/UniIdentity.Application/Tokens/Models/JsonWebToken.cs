@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using UniIdentity.Common.Json;
 
-namespace UniIdentity.Domain.Representation;
+namespace UniIdentity.Application.Tokens.Models;
 
 /// <summary>
 /// List of claims from different sources

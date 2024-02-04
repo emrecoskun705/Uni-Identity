@@ -1,4 +1,4 @@
-﻿namespace UniIdentity.Domain.Representation;
+﻿namespace UniIdentity.Application.Tokens.Models;
 
 public interface IToken
 {

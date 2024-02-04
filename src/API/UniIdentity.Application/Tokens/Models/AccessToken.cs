@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace UniIdentity.Domain.Representation;
+namespace UniIdentity.Application.Tokens.Models;
 
 [Serializable]
 public class AccessToken : IdToken
