@@ -18,73 +18,73 @@ public class IdToken : JsonWebToken
     public string? SessionId { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.AuthTime)]
-    protected long? AuthTime { get; set; }
+    public long? AuthTime { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Nonce)]
-    protected string? Nonce { get; set; }
+    public string? Nonce { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Amr)]
-    protected string? Amr { get; set; }
+    public string? Amr { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Azp)]
-    protected string? Azp { get; set; }
+    public string? Azp { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Name)]
-    protected string? Name { get; set; }
+    public string? Name { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.GivenName)]
-    protected string? GivenName { get; set; }
+    public string? GivenName { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.FamilyName)]
-    protected string? FamilyName { get; set; }
+    public string? FamilyName { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.MiddleName)]
-    protected string? MiddleName { get; set; }
+    public string? MiddleName { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Nickname)]
-    protected string? Nickname { get; set; }
+    public string? Nickname { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.PreferredUsername)]
-    protected string? PreferredUsername { get; set; }
+    public string? PreferredUsername { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Profile)]
-    protected string? Profile { get; set; }
+    public string? Profile { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Picture)]
-    protected string? Picture { get; set; }
+    public string? Picture { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Website)]
-    protected string? Website { get; set; }
+    public string? Website { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Email)]
-    protected string? Email { get; set; }
+    public string? Email { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.EmailVerified)]
-    protected bool? EmailVerified { get; set; }
+    public bool? EmailVerified { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Gender)]
-    protected string? Gender { get; set; }
+    public string? Gender { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Birthdate)]
-    protected long? Birthdate { get; set; }
+    public long? Birthdate { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Zoneinfo)]
-    protected string? ZoneInfo { get; set; }
+    public string? ZoneInfo { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Locale)]
-    protected string? Locale { get; set; }
+    public string? Locale { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.PhoneNumber)]
-    protected string? PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.PhoneNumberVerified)]
-    protected bool? PhoneNumberVerified { get; set; }
+    public bool? PhoneNumberVerified { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.Address)]
-    protected string? Address { get; set; }
+    public string? Address { get; set; }
     
     [JsonPropertyName(UniJwtClaimNames.UpdatedAt)]
-    protected long? UpdatedAt { get; set; }
+    public long? UpdatedAt { get; set; }
     
     public override TokenType GetTokenType()
     {
