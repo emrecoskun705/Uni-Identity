@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UniIdentity.Application.Contracts.Data;
 using UniIdentity.Domain.Common;
+using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Users;
 using UniIdentity.Infrastructure.Data;
 using UniIdentity.Infrastructure.Data.Interceptors;
@@ -33,6 +34,7 @@ public static class DependencyInjection
 
         services.AddScoped<ApplicationDbContextInitializer>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRealmRepository, RealmRepository>();
         
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using UniIdentity.Domain.Common;
+﻿using UniIdentity.Domain.Common;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
