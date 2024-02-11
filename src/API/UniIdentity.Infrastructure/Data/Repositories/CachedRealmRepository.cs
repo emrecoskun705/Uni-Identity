@@ -4,7 +4,7 @@ using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-public class CachedRealmRepository : IRealmRepository
+internal sealed class CachedRealmRepository : IRealmRepository
 {
     private static readonly TimeSpan CacheTime = TimeSpan.FromDays(1);
     private readonly IRealmRepository _realmRepository;
