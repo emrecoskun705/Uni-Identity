@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UniIdentity.Application.Contracts.Data;
@@ -34,8 +35,8 @@ public static class DependencyInjection
 
         services.AddScoped<ApplicationDbContextInitializer>();
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IRealmRepository, RealmRepository>();
-        
+        services.AddKeyedScoped<IRealmRepository, RealmRepository>("og");
+        services.AddScoped<IRealmRepository, CachedRealmRepository>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         
 
