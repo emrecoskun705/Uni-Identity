@@ -39,6 +39,8 @@ public static class DependencyInjection
         services.AddScoped<IRealmRepository, CachedRealmRepository>();
         services.AddKeyedScoped<IClientRepository, ClientRepository>("og");
         services.AddScoped<IClientRepository, CachedClientRepository>();
+        services.AddKeyedScoped<IClientAttributeRepository, ClientAttributeRepository>("og");
+        services.AddScoped<IClientAttributeRepository, CachedClientAttributeRepository>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         
 
