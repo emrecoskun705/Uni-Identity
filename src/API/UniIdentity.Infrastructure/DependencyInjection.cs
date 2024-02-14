@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UniIdentity.Application.Contracts.Data;
+using UniIdentity.Application.Contracts.Sessions;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Realms;
@@ -10,6 +11,7 @@ using UniIdentity.Domain.Users;
 using UniIdentity.Infrastructure.Data;
 using UniIdentity.Infrastructure.Data.Interceptors;
 using UniIdentity.Infrastructure.Data.Repositories;
+using UniIdentity.Infrastructure.Sessions;
 
 namespace UniIdentity.Infrastructure;
 
@@ -42,7 +44,9 @@ public static class DependencyInjection
         services.AddKeyedScoped<IClientAttributeRepository, ClientAttributeRepository>("og");
         services.AddScoped<IClientAttributeRepository, CachedClientAttributeRepository>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
-        
+        services.AddScoped<ISessionManager, SessionManager>();
+
+        services.AddDistributedMemoryCache();
 
         return services;
     }
