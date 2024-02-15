@@ -44,7 +44,8 @@ public static class DependencyInjection
         services.AddKeyedScoped<IClientAttributeRepository, ClientAttributeRepository>("og");
         services.AddScoped<IClientAttributeRepository, CachedClientAttributeRepository>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
-        services.AddScoped<ISessionManager, SessionManager>();
+        services.AddSingleton<ISessionManager, SessionManager>();
+        services.AddSingleton(TimeProvider.System);
 
         services.AddDistributedMemoryCache();
 
