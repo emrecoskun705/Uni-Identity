@@ -18,20 +18,27 @@ internal sealed class SessionManager : ISessionManager
         _timeProvider = timeProvider;
     }
 
-    public async Task<SessionKey> CreateUserSession(User user)
+    public async Task<SessionKey> CreateUserSession(UserId userId)
     {
         var sessionUtcStartDate = _timeProvider.GetUtcNow();
-        var sessionKey = new SessionKey(Guid.NewGuid().ToString(), sessionUtcStartDate.DateTime);
+        var sessionKey = SessionKey.Create(Guid.NewGuid().ToString(), sessionUtcStartDate.DateTime);
 
-        var existingSessions = await GetUserSessionsAsync(user.Id.Value.ToString());
+        var existingSessions = await GetUserSessionsAsync(userId.ToString());
         
         existingSessions.Add(sessionKey);
 
-        await _cache.SetAsync(UserSessionCacheKey(user.Id.Value.ToString()), SerializeSessions(existingSessions));
+        await _cache.SetAsync(UserSessionCacheKey(userId.ToString()), SerializeSessions(existingSessions));
 
         return sessionKey;
     }
-    
+
+    public async Task RemoveUserSession(UserId userId, SessionKey sessionKey)
+    {
+        var existingSessions = await GetUserSessionsAsync(userId.ToString());
+        existingSessions.Remove(sessionKey);
+        await _cache.SetAsync(UserSessionCacheKey(userId.ToString()), SerializeSessions(existingSessions));
+    }
+
     private async Task<List<SessionKey>> GetUserSessionsAsync(string userId)
     {
         var sessionsData = await _cache.GetStringAsync(UserSessionCacheKey(userId));
