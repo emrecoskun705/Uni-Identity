@@ -12,8 +12,8 @@ internal abstract class Repository<TEntity>
         _db = dbContext;
     }
     
-    public void Add(TEntity entity)
+    public async Task AddAsync(TEntity entity)
     {
-        _db.Add(entity);
+        await _db.AddAsync(entity);
     }
 }
