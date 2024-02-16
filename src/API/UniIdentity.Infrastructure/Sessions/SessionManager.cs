@@ -39,6 +39,12 @@ internal sealed class SessionManager : ISessionManager
         await _cache.SetAsync(UserSessionCacheKey(userId.ToString()), SerializeSessions(existingSessions));
     }
 
+    public async Task<bool> CheckUserSessionExists(UserId userId, SessionKey sessionKey)
+    {
+        var existingSessions = await GetUserSessionsAsync(userId.ToString());
+        return existingSessions.Exists(x => x.Key == sessionKey.Key);
+    }
+    
     private async Task<List<SessionKey>> GetUserSessionsAsync(string userId)
     {
         var sessionsData = await _cache.GetStringAsync(UserSessionCacheKey(userId));

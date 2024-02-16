@@ -6,4 +6,5 @@ public interface ISessionManager
 {
     Task<SessionKey> CreateUserSession(UserId userId);
     Task RemoveUserSession(UserId userId, SessionKey sessionKey);
+    Task<bool> CheckUserSessionExists(UserId userId, SessionKey sessionKey);
 }
