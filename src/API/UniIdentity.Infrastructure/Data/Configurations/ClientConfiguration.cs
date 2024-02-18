@@ -15,10 +15,13 @@ internal sealed class ClientConfiguration : IEntityTypeConfiguration<Client>
         builder.Property(x => x.Id)
             .HasConversion(
                 x => x.Value,
-                x => ClientId.FromValue(x));
+                x => ClientUniqueId.FromValue(x));
 
         builder.Property(x => x.ClientId)
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .HasConversion(
+                x => x.Value,
+                x => ClientId.FromValue(x));
 
         builder.Property(x => x.ClientSecret)
             .HasMaxLength(255);

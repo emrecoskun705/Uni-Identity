@@ -14,5 +14,5 @@ public interface IClientRepository
     /// <param name="realmId">The identifier of the realm.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the client if found; otherwise, null.</returns>
-    Task<Client?> GetByClientIdAndRealmId(string clientId, RealmId realmId, CancellationToken ct = default);
+    Task<Client?> GetByClientIdAndRealmId(ClientId clientId, RealmId realmId, CancellationToken ct = default);
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Clients.ValueObjects;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Roles;
 using UniIdentity.Domain.Roles.ValueObjects;
@@ -32,10 +33,10 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
                 x => x.Value,
                 x => new RealmId(x));
         
-        builder.Property(x => x.ClientId)
+        builder.Property(x => x.ClientUniqueId)
             .HasConversion(
                 x => x.Value,
-                x => new ClientId(x));
+                x => new ClientUniqueId(x));
         
         builder.HasOne(x => x.Realm)
             .WithMany(x => x.Roles)
@@ -43,12 +44,12 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
         
         builder.HasOne(x => x.Client)
             .WithMany(x => x.Roles)
-            .HasForeignKey(x => x.ClientId);
+            .HasForeignKey(x => x.ClientUniqueId);
         
         builder.HasIndex(x => x.RealmId)
             .HasDatabaseName("IX_Role_RealmId");
         
-        builder.HasIndex(x => x.ClientId)
+        builder.HasIndex(x => x.ClientUniqueId)
             .HasDatabaseName("IX_Role_ClientId");
         
         builder.HasIndex(x => new { x.ClientRealmConstraint, x.Name})

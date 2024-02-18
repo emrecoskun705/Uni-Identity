@@ -52,6 +52,7 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("ClientId")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
@@ -117,7 +118,7 @@ namespace UniIdentity.Infrastructure.Migrations
 
             modelBuilder.Entity("UniIdentity.Domain.Clients.ClientAttribute", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("UniqueId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -129,14 +130,14 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasMaxLength(3000)
                         .HasColumnType("character varying(3000)");
 
-                    b.HasKey("Id", "Name");
+                    b.HasKey("UniqueId", "Name");
 
                     b.ToTable("ClientAttribute");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Clients.ClientScope", b =>
                 {
-                    b.Property<Guid>("ClientId")
+                    b.Property<Guid>("ClientUniqueId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ScopeId")
@@ -145,7 +146,7 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Property<bool>("DefaultScope")
                         .HasColumnType("boolean");
 
-                    b.HasKey("ClientId", "ScopeId");
+                    b.HasKey("ClientUniqueId", "ScopeId");
 
                     b.HasIndex("ScopeId");
 
@@ -250,13 +251,13 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ClientId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("ClientRealmConstraint")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<Guid?>("ClientUniqueId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsClientRole")
                         .HasColumnType("boolean");
@@ -272,7 +273,7 @@ namespace UniIdentity.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId")
+                    b.HasIndex("ClientUniqueId")
                         .HasDatabaseName("IX_Role_ClientId");
 
                     b.HasIndex("RealmId")
@@ -458,7 +459,7 @@ namespace UniIdentity.Infrastructure.Migrations
                 {
                     b.HasOne("UniIdentity.Domain.Clients.Client", "Client")
                         .WithMany("ClientAttributes")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("UniqueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -469,7 +470,7 @@ namespace UniIdentity.Infrastructure.Migrations
                 {
                     b.HasOne("UniIdentity.Domain.Clients.Client", "Client")
                         .WithMany("ClientScopes")
-                        .HasForeignKey("ClientId")
+                        .HasForeignKey("ClientUniqueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -510,7 +511,7 @@ namespace UniIdentity.Infrastructure.Migrations
                 {
                     b.HasOne("UniIdentity.Domain.Clients.Client", "Client")
                         .WithMany("Roles")
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientUniqueId");
 
                     b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
                         .WithMany("Roles")

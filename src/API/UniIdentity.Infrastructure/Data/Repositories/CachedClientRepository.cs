@@ -18,7 +18,7 @@ internal sealed class CachedClientRepository : IClientRepository
         _memoryCache = memoryCache;
     }
     
-    public async Task<Client?> GetByClientIdAndRealmId(string clientId, RealmId realmId, CancellationToken ct = default)
+    public async Task<Client?> GetByClientIdAndRealmId(ClientId clientId, RealmId realmId, CancellationToken ct = default)
     {
         return await _memoryCache.GetOrCreateAsync(
             CacheKeys.ClientByClientIdAndRealmId(clientId, realmId),

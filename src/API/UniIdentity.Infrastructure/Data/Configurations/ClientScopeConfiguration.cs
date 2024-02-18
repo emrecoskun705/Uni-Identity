@@ -8,12 +8,12 @@ internal sealed class ClientScopeConfiguration : IEntityTypeConfiguration<Client
 {
     public void Configure(EntityTypeBuilder<ClientScope> builder)
     {
-        builder.HasKey(x => new { x.ClientId, x.ScopeId });
+        builder.HasKey(x => new { ClientId = x.ClientUniqueId, x.ScopeId });
         
         builder
             .HasOne(x => x.Client)
             .WithMany(x => x.ClientScopes)
-            .HasForeignKey(x => x.ClientId);
+            .HasForeignKey(x => x.ClientUniqueId);
 
         builder
             .HasOne(x => x.Scope)

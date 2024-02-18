@@ -9,8 +9,8 @@ namespace UniIdentity.Domain.Clients;
 
 public sealed class Client : BaseEntity
 {
-    public ClientId Id { get; private set; }
-    public string ClientId { get; private set; }
+    public ClientUniqueId Id { get; private set; }
+    public ClientId ClientId { get; private set; }
     public string? ClientSecret { get; private set; }
     public string? Name { get; private set; }
     public Protocol? Protocol { get; private set; }
@@ -44,7 +44,7 @@ public sealed class Client : BaseEntity
     
     private Client(ClientTemplate clientTemplate)
     {
-        Id = Clients.ClientId.New();
+        Id = ClientUniqueId.New();
         ClientId = clientTemplate.ClientId;
         ClientSecret = clientTemplate.ClientSecret;
         Name = clientTemplate.Name;
@@ -70,7 +70,7 @@ public sealed class Client : BaseEntity
     }
 }
 
-public record ClientTemplate(string ClientId,string? ClientSecret,string? Name,Protocol? Protocol,
+public record ClientTemplate(ClientId ClientId,string? ClientSecret,string? Name,Protocol? Protocol,
     string? BaseUrl, string? RootUrl ,string? ManagementUrl, ClientAuthenticationType ClientAuthenticationType,
     string? RegistrationToken,AccessType AccessType,RealmId RealmId,bool Enabled,
     bool ConsentRequired,bool AuthorizationCodeFlowEnabled,bool ImplicitFlowEnabled,bool DirectAccessGrantsEnabled,

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Clients.ValueObjects;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
@@ -17,14 +18,14 @@ internal sealed class CachedClientAttributeRepository : IClientAttributeReposito
         _memoryCache = memoryCache;
     }
 
-    public async Task<IEnumerable<ClientAttribute>?> GetClientAttributes(ClientId clientId)
+    public async Task<IEnumerable<ClientAttribute>?> GetClientAttributes(ClientUniqueId clientUniqueId)
     {
         return await _memoryCache.GetOrCreateAsync(
-            CacheKeys.ClientAttributeByClientId(clientId),
+            CacheKeys.ClientAttributeByClientId(clientUniqueId),
             cacheEntry =>
             {
                 cacheEntry.SetAbsoluteExpiration(CacheTime);
-                return _clientAttributeRepository.GetClientAttributes(clientId);
+                return _clientAttributeRepository.GetClientAttributes(clientUniqueId);
             });
     }
 }

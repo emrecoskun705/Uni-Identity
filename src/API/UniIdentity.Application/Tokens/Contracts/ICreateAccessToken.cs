@@ -7,5 +7,5 @@ namespace UniIdentity.Application.Tokens.Contracts;
 
 public interface ICreateAccessToken
 {
-    AccessToken Create(RealmId realmId, ClientId clientId, UserId userId, CancellationToken cancellationToken = default);
+    Task<AccessToken> Create(RealmId realmId, ClientId clientId, UserId userId, CancellationToken cancellationToken = default);
 }
