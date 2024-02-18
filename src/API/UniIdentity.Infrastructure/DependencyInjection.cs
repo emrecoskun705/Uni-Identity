@@ -2,12 +2,14 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using UniIdentity.Application.Contracts.Context;
 using UniIdentity.Application.Contracts.Data;
 using UniIdentity.Application.Contracts.Sessions;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Users;
+using UniIdentity.Infrastructure.Context;
 using UniIdentity.Infrastructure.Data;
 using UniIdentity.Infrastructure.Data.Interceptors;
 using UniIdentity.Infrastructure.Data.Repositories;
@@ -35,6 +37,7 @@ public static class DependencyInjection
         services.AddSingleton<ISqlConnectionFactory>(_ => new SqlConnectionFactory(connectionString));
         #endregion
 
+        services.AddHttpContextAccessor();
         services.AddScoped<ApplicationDbContextInitializer>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddKeyedScoped<IRealmRepository, RealmRepository>("og");
@@ -46,6 +49,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddSingleton<ISessionManager, SessionManager>();
         services.AddSingleton(TimeProvider.System);
+        services.AddScoped<IUniHttpContextAccessor, UniHttpContextAccessor>();
 
         services.AddDistributedMemoryCache();
 
