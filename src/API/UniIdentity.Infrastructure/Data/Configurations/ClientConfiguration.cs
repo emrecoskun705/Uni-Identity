@@ -15,13 +15,13 @@ internal sealed class ClientConfiguration : IEntityTypeConfiguration<Client>
         builder.Property(x => x.Id)
             .HasConversion(
                 x => x.Value,
-                x => ClientUniqueId.FromValue(x));
+                x => ClientId.FromValue(x));
 
-        builder.Property(x => x.ClientId)
+        builder.Property(x => x.ClientKey)
             .HasMaxLength(255)
             .HasConversion(
                 x => x.Value,
-                x => ClientId.FromValue(x));
+                x => ClientKey.FromValue(x));
 
         builder.Property(x => x.ClientSecret)
             .HasMaxLength(255);
@@ -86,10 +86,10 @@ internal sealed class ClientConfiguration : IEntityTypeConfiguration<Client>
             .WithMany(x => x.Clients)
             .HasForeignKey(x => x.RealmId);
 
-        builder.HasIndex(x => x.ClientId)
+        builder.HasIndex(x => x.ClientKey)
             .HasDatabaseName("IX_Client_ClientId");
 
-        builder.HasIndex(x => new { x.RealmId, x.ClientId })
+        builder.HasIndex(x => new { x.RealmId, ClientId = x.ClientKey })
             .HasDatabaseName("IX_Client_RealmId_ClientId")
             .IsUnique();
     }

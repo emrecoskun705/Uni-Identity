@@ -11,8 +11,19 @@ internal sealed class ClientRepository : Repository<Client>, IClientRepository
     {
     }
     
-    public async Task<Client?> GetByClientIdAndRealmId(ClientId clientId, RealmId realmId, CancellationToken ct = default)
+    public async Task<Client?> GetByClientIdAndRealmIdAsync(ClientKey clientKey, RealmId realmId, CancellationToken ct = default)
     {
-        return await _db.Client.FirstOrDefaultAsync(x => x.ClientId == clientId && x.RealmId == realmId, ct);
+        return await _db.Client.FirstOrDefaultAsync(x => x.ClientKey == clientKey && x.RealmId == realmId, ct);
+    }
+    
+    public async Task<IEnumerable<ClientAttribute>> GetClientAttributesAsync(RealmId realmId, ClientKey clientKey, CancellationToken ct = default)
+    {
+        return await _db.Client
+            .Join(_db.ClientAttribute, 
+                client => client, 
+                clientAttribute => clientAttribute.Client,
+                (client, clientAttribute) => clientAttribute)
+            .Where(x => x.Client.RealmId == realmId && x.Client.ClientKey == clientKey)
+            .ToListAsync(cancellationToken: ct);
     }
 }

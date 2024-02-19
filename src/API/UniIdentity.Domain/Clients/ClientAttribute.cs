@@ -5,18 +5,18 @@ namespace UniIdentity.Domain.Clients;
 
 public sealed class ClientAttribute : BaseEntity
 {
-    public ClientUniqueId UniqueId { get; private set; }
+    public ClientId Id { get; private set; }
     public string Name { get; private set; }
     public string Value { get; private set; }
     
     public Client Client { get; set; }
 
     public ClientAttribute(
-        ClientUniqueId uniqueId,
+        ClientId id,
         string name,
         string value)
     {
-        UniqueId = uniqueId;
+        Id = id;
         Name = name;
         Value = value;
     }

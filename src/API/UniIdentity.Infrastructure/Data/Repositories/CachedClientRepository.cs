@@ -18,14 +18,26 @@ internal sealed class CachedClientRepository : IClientRepository
         _memoryCache = memoryCache;
     }
     
-    public async Task<Client?> GetByClientIdAndRealmId(ClientId clientId, RealmId realmId, CancellationToken ct = default)
+    public async Task<Client?> GetByClientIdAndRealmIdAsync(ClientKey clientKey, RealmId realmId, CancellationToken ct = default)
     {
         return await _memoryCache.GetOrCreateAsync(
-            CacheKeys.ClientByClientIdAndRealmId(clientId, realmId),
+            CacheKeys.ClientByClientIdAndRealmId(clientKey, realmId),
             cacheEntry =>
             {
                 cacheEntry.SetAbsoluteExpiration(CacheTime);
-                return _clientRepository.GetByClientIdAndRealmId(clientId, realmId, ct);
+                return _clientRepository.GetByClientIdAndRealmIdAsync(clientKey, realmId, ct);
             });
+    }
+
+    
+    public async Task<IEnumerable<ClientAttribute>> GetClientAttributesAsync(RealmId realmId, ClientKey clientKey, CancellationToken ct = default)
+    {
+        return await _memoryCache.GetOrCreateAsync(
+            CacheKeys.ClientByClientIdAndRealmId(clientKey, realmId),
+            cacheEntry =>
+            {
+                cacheEntry.SetAbsoluteExpiration(CacheTime);
+                return _clientRepository.GetClientAttributesAsync(realmId, clientKey, ct);
+            }) ?? [];
     }
 }

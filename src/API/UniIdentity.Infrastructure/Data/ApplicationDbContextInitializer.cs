@@ -86,14 +86,14 @@ public class ApplicationDbContextInitializer
     {
         var defaultClients = new List<Client>
         {
-            Client.Create(new ClientTemplate(ClientId.FromValue("account") , null, "account", Protocol.OpenIdConnect, "/realms/master/account/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false)),
-            Client.Create(new ClientTemplate(ClientId.FromValue("account-console"), null, "account-console", Protocol.OpenIdConnect, "/realms/master/account/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false)),
-            Client.Create(new ClientTemplate(ClientId.FromValue("admin-console"), null, "admin-console", Protocol.OpenIdConnect, "/admin/master/console/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false))
+            Client.Create(new ClientTemplate(ClientKey.FromValue("account") , null, "account", Protocol.OpenIdConnect, "/realms/master/account/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false)),
+            Client.Create(new ClientTemplate(ClientKey.FromValue("account-console"), null, "account-console", Protocol.OpenIdConnect, "/realms/master/account/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false)),
+            Client.Create(new ClientTemplate(ClientKey.FromValue("admin-console"), null, "admin-console", Protocol.OpenIdConnect, "/admin/master/console/", null, null, ClientAuthenticationType.ClientSecret, null, AccessType.Public, new RealmId(MasterRealmId), true, false, true, false, false, false))
         };
 
         foreach (var defaultClient in defaultClients)
         {
-            var client = await _context.Client.FirstOrDefaultAsync(x => x.ClientId == defaultClient.ClientId && x.RealmId == defaultClient.RealmId);
+            var client = await _context.Client.FirstOrDefaultAsync(x => x.ClientKey == defaultClient.ClientKey && x.RealmId == defaultClient.RealmId);
 
             if (client == null)
             {

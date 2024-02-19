@@ -33,7 +33,7 @@ namespace UniIdentity.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClientId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    ClientKey = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     ClientSecret = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     Protocol = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
@@ -133,16 +133,16 @@ namespace UniIdentity.Infrastructure.Migrations
                 name: "ClientAttribute",
                 columns: table => new
                 {
-                    UniqueId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Value = table.Column<string>(type: "character varying(3000)", maxLength: 3000, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientAttribute", x => new { x.UniqueId, x.Name });
+                    table.PrimaryKey("PK_ClientAttribute", x => new { x.Id, x.Name });
                     table.ForeignKey(
-                        name: "FK_ClientAttribute_Client_UniqueId",
-                        column: x => x.UniqueId,
+                        name: "FK_ClientAttribute_Client_Id",
+                        column: x => x.Id,
                         principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -157,14 +157,14 @@ namespace UniIdentity.Infrastructure.Migrations
                     ClientRealmConstraint = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     IsClientRole = table.Column<bool>(type: "boolean", nullable: false),
                     RealmId = table.Column<string>(type: "character varying(100)", nullable: false),
-                    ClientUniqueId = table.Column<Guid>(type: "uuid", nullable: true)
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Role_Client_ClientUniqueId",
-                        column: x => x.ClientUniqueId,
+                        name: "FK_Role_Client_ClientId",
+                        column: x => x.ClientId,
                         principalTable: "Client",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -179,16 +179,16 @@ namespace UniIdentity.Infrastructure.Migrations
                 name: "ClientScope",
                 columns: table => new
                 {
-                    ClientUniqueId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
                     ScopeId = table.Column<Guid>(type: "uuid", nullable: false),
                     DefaultScope = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientScope", x => new { x.ClientUniqueId, x.ScopeId });
+                    table.PrimaryKey("PK_ClientScope", x => new { x.ClientId, x.ScopeId });
                     table.ForeignKey(
-                        name: "FK_ClientScope_Client_ClientUniqueId",
-                        column: x => x.ClientUniqueId,
+                        name: "FK_ClientScope_Client_ClientId",
+                        column: x => x.ClientId,
                         principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -293,12 +293,12 @@ namespace UniIdentity.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Client_ClientId",
                 table: "Client",
-                column: "ClientId");
+                column: "ClientKey");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Client_RealmId_ClientId",
                 table: "Client",
-                columns: new[] { "RealmId", "ClientId" },
+                columns: new[] { "RealmId", "ClientKey" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -314,7 +314,7 @@ namespace UniIdentity.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Role_ClientId",
                 table: "Role",
-                column: "ClientUniqueId");
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Role_ClientRealmConstraint_Name",

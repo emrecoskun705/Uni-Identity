@@ -33,10 +33,10 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
                 x => x.Value,
                 x => new RealmId(x));
         
-        builder.Property(x => x.ClientUniqueId)
+        builder.Property(x => x.ClientId)
             .HasConversion(
                 x => x.Value,
-                x => new ClientUniqueId(x));
+                x => new ClientId(x));
         
         builder.HasOne(x => x.Realm)
             .WithMany(x => x.Roles)
@@ -44,12 +44,12 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
         
         builder.HasOne(x => x.Client)
             .WithMany(x => x.Roles)
-            .HasForeignKey(x => x.ClientUniqueId);
+            .HasForeignKey(x => x.ClientId);
         
         builder.HasIndex(x => x.RealmId)
             .HasDatabaseName("IX_Role_RealmId");
         
-        builder.HasIndex(x => x.ClientUniqueId)
+        builder.HasIndex(x => x.ClientId)
             .HasDatabaseName("IX_Role_ClientId");
         
         builder.HasIndex(x => new { x.ClientRealmConstraint, x.Name})

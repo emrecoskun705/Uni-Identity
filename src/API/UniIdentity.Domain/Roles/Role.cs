@@ -14,7 +14,7 @@ public sealed class Role : BaseEntity
     public string ClientRealmConstraint { get; private set; }
     public bool IsClientRole { get; private set; }
     public RealmId RealmId { get; private set; }
-    public ClientUniqueId? ClientUniqueId { get; private set; }
+    public ClientId? ClientId { get; private set; }
     
     public Realm? Realm { get; private set; }
     public Client? Client { get; private set; }
@@ -22,12 +22,12 @@ public sealed class Role : BaseEntity
     public ICollection<RoleGraph>? ParentRoles { get; private set; }
     public ICollection<RoleGraph>? ChildRoles { get; private set; }
 
-    private Role(RoleId id, Name name, RealmId realmId, ClientUniqueId clientUniqueId)
+    private Role(RoleId id, Name name, RealmId realmId, ClientId clientId)
     {
         Id = id;
         Name = name;
         RealmId = realmId;
-        ClientUniqueId = clientUniqueId;
+        ClientId = clientId;
     }
     
     private Role(RoleId id, Name name, RealmId realmId)
@@ -35,7 +35,7 @@ public sealed class Role : BaseEntity
         Id = id;
         Name = name;
         RealmId = realmId;
-        ClientUniqueId = null;
+        ClientId = null;
     }
 
     public static Role CreateRealmRole(Name name, RealmId realmId)
@@ -60,22 +60,22 @@ public sealed class Role : BaseEntity
         return role;
     }
     
-    public static Role CreateClientRole(Name name, RealmId realmId, ClientUniqueId clientUniqueId)
+    public static Role CreateClientRole(Name name, RealmId realmId, ClientId clientId)
     {
-        var role = new Role(RoleId.New(), name, realmId, clientUniqueId)
+        var role = new Role(RoleId.New(), name, realmId, clientId)
         {
-            ClientRealmConstraint = clientUniqueId.Value.ToString(),
+            ClientRealmConstraint = clientId.Value.ToString(),
             IsClientRole = true
         };
 
         return role;
     }
     
-    public static Role CreateClientRole(RoleId roleId, Name name, RealmId realmId, ClientUniqueId clientUniqueId)
+    public static Role CreateClientRole(RoleId roleId, Name name, RealmId realmId, ClientId clientId)
     {
-        var role = new Role(roleId, name, realmId, clientUniqueId)
+        var role = new Role(roleId, name, realmId, clientId)
         {
-            ClientRealmConstraint = clientUniqueId.Value.ToString(),
+            ClientRealmConstraint = clientId.Value.ToString(),
             IsClientRole = true
         };
 

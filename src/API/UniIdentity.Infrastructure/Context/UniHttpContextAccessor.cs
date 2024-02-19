@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using UniIdentity.Application.Contracts.Context;
+using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Context;
 
@@ -11,21 +13,39 @@ internal sealed class UniHttpContextAccessor : IUniHttpContextAccessor
     private static readonly string ClientIdName = "client_id";
     
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IClientRepository _clientRepository;
     
-    public UniHttpContextAccessor(IHttpContextAccessor httpContextAccessor)
+    public UniHttpContextAccessor(IHttpContextAccessor httpContextAccessor, IClientRepository clientRepository)
     {
         _httpContextAccessor = httpContextAccessor;
+        _clientRepository = clientRepository;
         RealmId = ExtractRealmIdFromUrl(HttpContext.Request.Path);
         ClientId = ExtractClientIdFromBody();
     }
 
     public HttpContext HttpContext => _httpContextAccessor.HttpContext!;
-    
-    public string? ClientId {get; init; }
 
-    public string? RealmId { get; init; }
-    
-    private static string? ExtractRealmIdFromUrl(PathString path)
+    public ClientKey? ClientId { get; }
+
+    public RealmId? RealmId { get; }
+
+    public async Task<ClientAttribute?> GetClientAttributeAsync(string attributeName)
+    {
+        if (ClientId == null || RealmId == null)
+            return null;
+        
+        var client = await _clientRepository.GetByClientIdAndRealmIdAsync(ClientId, RealmId);
+
+        if (client == null)
+            return null;
+        
+        // get it from cached client attributes
+        var clientAttributes = await _clientRepository.GetClientAttributesAsync(RealmId, ClientId);
+
+        return clientAttributes.FirstOrDefault(x => x.Name == attributeName);
+    }
+
+    private static RealmId? ExtractRealmIdFromUrl(PathString path)
     {
         if (path.Value == null)
             return null;
@@ -34,17 +54,17 @@ internal sealed class UniHttpContextAccessor : IUniHttpContextAccessor
 
         if (path.Value.StartsWith(PathStartsWith))
         {
-            return segments[RealmIndex];
+            return new RealmId(segments[RealmIndex]);
         }
 
         return null;
     }
     
-    private string? ExtractClientIdFromBody()
+    private ClientKey? ExtractClientIdFromBody()
     {
         var formData = HttpContext.Request.Form;
         if (formData.TryGetValue(ClientIdName, out var clientId))
-            return clientId;
+            return ClientKey.FromValue(clientId!);
 
         return null;
     }
