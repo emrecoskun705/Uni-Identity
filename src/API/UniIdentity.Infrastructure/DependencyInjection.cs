@@ -47,7 +47,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddSingleton<ISessionManager, SessionManager>();
         services.AddSingleton(TimeProvider.System);
-        services.AddScoped<IUniHttpContextAccessor, UniHttpContextAccessor>();
+        services.AddScoped<IUniHttpContext, UniHttpContext>();
 
         services.AddDistributedMemoryCache();
 

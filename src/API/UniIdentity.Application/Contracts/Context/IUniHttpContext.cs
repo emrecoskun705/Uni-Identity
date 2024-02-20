@@ -7,7 +7,7 @@ namespace UniIdentity.Application.Contracts.Context;
 /// <summary>
 /// Represents an accessor for accessing HTTP context information in a UniIdentity application.
 /// </summary>
-public interface IUniHttpContextAccessor
+public interface IUniHttpContext
 {
     /// <summary>
     /// Gets the HTTP context associated with the current request.

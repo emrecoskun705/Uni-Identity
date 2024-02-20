@@ -5,7 +5,7 @@ using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Context;
 
-internal sealed class UniHttpContextAccessor : IUniHttpContextAccessor
+internal sealed class UniHttpContext : IUniHttpContext
 {
     private static readonly int RealmIndex = 2;
     private static readonly char RealmPathSplitChar = '/';
@@ -15,7 +15,7 @@ internal sealed class UniHttpContextAccessor : IUniHttpContextAccessor
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IClientRepository _clientRepository;
     
-    public UniHttpContextAccessor(IHttpContextAccessor httpContextAccessor, IClientRepository clientRepository)
+    public UniHttpContext(IHttpContextAccessor httpContextAccessor, IClientRepository clientRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _clientRepository = clientRepository;
