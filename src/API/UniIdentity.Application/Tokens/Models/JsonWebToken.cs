@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using UniIdentity.Application.Tokens.Attributes;
 using UniIdentity.Common.Json;
 
 namespace UniIdentity.Application.Tokens.Models;
@@ -11,13 +12,13 @@ namespace UniIdentity.Application.Tokens.Models;
 [Serializable]
 public class JsonWebToken : IToken
 {
-    [JsonPropertyName(UniJwtClaimNames.Iss)]
+    [JsonPropertyName(UniJwtClaimNames.Iss), Token]
     public string? Issuer { get;  set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Sub)]
+    [JsonPropertyName(UniJwtClaimNames.Sub), Token]
     public string? Subject { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Aud)]
+    [JsonPropertyName(UniJwtClaimNames.Aud), Token]
     [JsonConverter(typeof(TokenStringArrayConverter))]
     private string[]? _audience;
     
@@ -26,19 +27,19 @@ public class JsonWebToken : IToken
         private set => _audience = value;
     }
     
-    [JsonPropertyName(UniJwtClaimNames.Exp)]
+    [JsonPropertyName(UniJwtClaimNames.Exp), Token]
     public long? Expiration { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Nbf)]
+    [JsonPropertyName(UniJwtClaimNames.Nbf), Token]
     public long? NotBefore { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Iat)]
+    [JsonPropertyName(UniJwtClaimNames.Iat), Token]
     public long? IssuedAt { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Jti)]
+    [JsonPropertyName(UniJwtClaimNames.Jti), Token]
     public string? JwtId { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Typ)]
+    [JsonPropertyName(UniJwtClaimNames.Typ), Token]
     public string? Type { get; set; }
     
     public Dictionary<string, object> CustomClaims { get; } = new();

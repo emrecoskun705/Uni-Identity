@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using UniIdentity.Application.Tokens.Attributes;
 
 namespace UniIdentity.Application.Tokens.Models;
 
@@ -14,76 +15,76 @@ public class IdToken : JsonWebToken
     /// <summary>
     /// https://openid.net/specs/openid-connect-frontchannel-1_0.html#RPLogout
     /// </summary>
-    [JsonPropertyName(UniJwtClaimNames.Sid)]
+    [JsonPropertyName(UniJwtClaimNames.Sid), Token]
     public string? SessionId { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.AuthTime)]
+    [JsonPropertyName(UniJwtClaimNames.AuthTime), Token]
     public long? AuthTime { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Nonce)]
+    [JsonPropertyName(UniJwtClaimNames.Nonce), Token]
     public string? Nonce { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Amr)]
+    [JsonPropertyName(UniJwtClaimNames.Amr), Token]
     public string? Amr { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Azp)]
+    [JsonPropertyName(UniJwtClaimNames.Azp), Token]
     public string? Azp { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Name)]
+    [JsonPropertyName(UniJwtClaimNames.Name), Token]
     public string? Name { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.GivenName)]
+    [JsonPropertyName(UniJwtClaimNames.GivenName), Token]
     public string? GivenName { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.FamilyName)]
+    [JsonPropertyName(UniJwtClaimNames.FamilyName), Token]
     public string? FamilyName { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.MiddleName)]
+    [JsonPropertyName(UniJwtClaimNames.MiddleName), Token]
     public string? MiddleName { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Nickname)]
+    [JsonPropertyName(UniJwtClaimNames.Nickname), Token]
     public string? Nickname { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.PreferredUsername)]
+    [JsonPropertyName(UniJwtClaimNames.PreferredUsername), Token]
     public string? PreferredUsername { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Profile)]
+    [JsonPropertyName(UniJwtClaimNames.Profile), Token]
     public string? Profile { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Picture)]
+    [JsonPropertyName(UniJwtClaimNames.Picture), Token]
     public string? Picture { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Website)]
+    [JsonPropertyName(UniJwtClaimNames.Website), Token]
     public string? Website { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Email)]
+    [JsonPropertyName(UniJwtClaimNames.Email), Token]
     public string? Email { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.EmailVerified)]
+    [JsonPropertyName(UniJwtClaimNames.EmailVerified), Token]
     public bool? EmailVerified { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Gender)]
+    [JsonPropertyName(UniJwtClaimNames.Gender), Token]
     public string? Gender { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Birthdate)]
+    [JsonPropertyName(UniJwtClaimNames.Birthdate), Token]
     public long? Birthdate { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Zoneinfo)]
+    [JsonPropertyName(UniJwtClaimNames.Zoneinfo), Token]
     public string? ZoneInfo { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Locale)]
+    [JsonPropertyName(UniJwtClaimNames.Locale), Token]
     public string? Locale { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.PhoneNumber)]
+    [JsonPropertyName(UniJwtClaimNames.PhoneNumber), Token]
     public string? PhoneNumber { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.PhoneNumberVerified)]
+    [JsonPropertyName(UniJwtClaimNames.PhoneNumberVerified), Token]
     public bool? PhoneNumberVerified { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Address)]
+    [JsonPropertyName(UniJwtClaimNames.Address), Token]
     public string? Address { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.UpdatedAt)]
+    [JsonPropertyName(UniJwtClaimNames.UpdatedAt), Token]
     public long? UpdatedAt { get; set; }
     
     public override TokenType GetTokenType()

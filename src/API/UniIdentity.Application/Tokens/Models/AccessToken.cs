@@ -1,17 +1,18 @@
 ﻿using System.Text.Json.Serialization;
+using UniIdentity.Application.Tokens.Attributes;
 
 namespace UniIdentity.Application.Tokens.Models;
 
 [Serializable]
 public class AccessToken : IdToken
 {
-    [JsonPropertyName(UniJwtClaimNames.RealmAccess)]
+    [JsonPropertyName(UniJwtClaimNames.RealmAccess), Token]
     public Access? RealmAccess { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.ResourceAccess)]
+    [JsonPropertyName(UniJwtClaimNames.ResourceAccess), Token]
     public Dictionary<string, Access>? ResourceAccess { get; set; }
     
-    [JsonPropertyName(UniJwtClaimNames.Scope)]
+    [JsonPropertyName(UniJwtClaimNames.Scope), Token]
     public string? Scope { get; set; }
     
     public override TokenType GetTokenType()
@@ -22,7 +23,7 @@ public class AccessToken : IdToken
     [Serializable]
     public class Access
     {
-        [JsonPropertyName(UniJwtClaimNames.Roles)]
+        [JsonPropertyName(UniJwtClaimNames.Roles), Token]
         private HashSet<string>? _roles;
         public HashSet<string>? Roles
         {
