@@ -14,35 +14,69 @@ internal sealed class UniHttpContext : IUniHttpContext
     
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IClientRepository _clientRepository;
+    private readonly IRealmRepository _realmRepository;
     
-    public UniHttpContext(IHttpContextAccessor httpContextAccessor, IClientRepository clientRepository)
+    public UniHttpContext(IHttpContextAccessor httpContextAccessor, IClientRepository clientRepository, IRealmRepository realmRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _clientRepository = clientRepository;
+        _realmRepository = realmRepository;
         RealmId = ExtractRealmIdFromUrl(HttpContext.Request.Path);
-        ClientId = ExtractClientIdFromBody();
+        ClientKey = ExtractClientIdFromBody();
     }
 
     public HttpContext HttpContext => _httpContextAccessor.HttpContext!;
 
-    public ClientKey? ClientId { get; }
+    public ClientKey? ClientKey { get; }
 
     public RealmId? RealmId { get; }
 
     public async Task<ClientAttribute?> GetClientAttributeAsync(string attributeName)
     {
-        if (ClientId == null || RealmId == null)
+        if (ClientKey == null || RealmId == null)
             return null;
         
-        var client = await _clientRepository.GetByClientIdAndRealmIdAsync(ClientId, RealmId);
+        var client = await _clientRepository.GetByClientIdAndRealmIdAsync(ClientKey, RealmId);
 
         if (client == null)
             return null;
         
         // get it from cached client attributes
-        var clientAttributes = await _clientRepository.GetClientAttributesAsync(RealmId, ClientId);
+        var clientAttributes = await _clientRepository.GetClientAttributesAsync(RealmId, ClientKey);
 
         return clientAttributes.FirstOrDefault(x => x.Name == attributeName);
+    }
+
+    public async Task<Realm?> GetRealmAsync(CancellationToken ct = default)
+    {
+        if (RealmId == null)
+            return null;
+        
+        return await _realmRepository.GetByRealmId(RealmId, ct);
+    }
+
+    public async Task<Client?> GetClientAsync(CancellationToken ct = default)
+    {
+        if (RealmId == null || ClientKey == null)
+            return null;
+
+        return await _clientRepository.GetByClientIdAndRealmIdAsync(ClientKey, RealmId, ct);
+    }
+
+    public async Task<IEnumerable<ClientAttribute>> GetClientAttributesAsync(CancellationToken ct = default)
+    {
+        if (ClientKey == null || RealmId == null)
+            return [];
+        // get it from cached client repository by default
+        return await _clientRepository.GetClientAttributesAsync(RealmId, ClientKey, ct);
+    }
+
+    public async Task<IEnumerable<RealmAttribute>> GetRealmAttributesAsync(CancellationToken ct = default)
+    {
+        if (RealmId == null)
+            return [];
+        // get it from cached realm repository by default
+        return await _realmRepository.GetRealmAttributesAsync(RealmId, ct);
     }
 
     private static RealmId? ExtractRealmIdFromUrl(PathString path)
