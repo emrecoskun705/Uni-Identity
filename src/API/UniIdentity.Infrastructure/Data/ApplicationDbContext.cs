@@ -24,6 +24,7 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
     public DbSet<Client> Client { get; init; }
     public DbSet<Scope> Scope { get; init; }
     public DbSet<ClientAttribute> ClientAttribute { get; set; }
+    public DbSet<RealmAttribute> RealmAttribute { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

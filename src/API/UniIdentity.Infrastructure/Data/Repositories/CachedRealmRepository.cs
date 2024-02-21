@@ -26,4 +26,15 @@ internal sealed class CachedRealmRepository : IRealmRepository
                 return _realmRepository.GetByRealmId(realmId, ct);
             });
     }
+
+    public async Task<IEnumerable<RealmAttribute>> GetRealmAttributesAsync(RealmId realmId, CancellationToken ct = default)
+    {
+        return await _memoryCache.GetOrCreateAsync(
+            CacheKeys.RealmAttributesByRealmId(realmId),
+            cacheEntry =>
+            {
+                cacheEntry.SetAbsoluteExpiration(CacheTime);
+                return _realmRepository.GetRealmAttributesAsync(realmId, ct);
+            }) ?? [];
+    }
 }
