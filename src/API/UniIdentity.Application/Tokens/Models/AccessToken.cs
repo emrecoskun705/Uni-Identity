@@ -8,28 +8,30 @@ public class AccessToken : IdToken
 {
     [JsonPropertyName(UniJwtClaimNames.RealmAccess), Token]
     public Access? RealmAccess { get; set; }
-    
+
     [JsonPropertyName(UniJwtClaimNames.ResourceAccess), Token]
-    public Dictionary<string, Access>? ResourceAccess { get; set; }
+    public Dictionary<string, Access>? ResourceAccess { get; private set; }
     
     [JsonPropertyName(UniJwtClaimNames.Scope), Token]
     public string? Scope { get; set; }
-    
+
     public override TokenType GetTokenType()
     {
         return TokenType.Access;
     }
-    
+
+    public void AddNewResourceAccess(string key, Access value)
+    {
+        ResourceAccess ??= new Dictionary<string, Access>();
+        
+        ResourceAccess.Add(key, value);
+    }
+
     [Serializable]
     public class Access
     {
         [JsonPropertyName(UniJwtClaimNames.Roles), Token]
-        private HashSet<string>? _roles;
-        public HashSet<string>? Roles
-        {
-            get => _roles;
-            private set => _roles = value;
-        }
+        public List<string> Roles = []; 
         
         public bool RoleExists(string role)
         {
@@ -38,9 +40,11 @@ public class AccessToken : IdToken
 
         public void AddRole(string role)
         {
-            Roles ??= new();
-
             Roles.Add(role);
         }
+        
     }
+
+
+
 }
