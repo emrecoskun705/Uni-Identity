@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Common;
+using UniIdentity.Domain.Configs;
 using UniIdentity.Domain.Credentials;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Roles;
@@ -23,8 +24,10 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
     public DbSet<Realm> Realm { get; init; } 
     public DbSet<Client> Client { get; init; }
     public DbSet<Scope> Scope { get; init; }
-    public DbSet<ClientAttribute> ClientAttribute { get; set; }
-    public DbSet<RealmAttribute> RealmAttribute { get; set; }
+    public DbSet<ClientAttribute> ClientAttribute { get; init; }
+    public DbSet<RealmAttribute> RealmAttribute { get; init; }
+    public DbSet<Config> Config { get; init; }
+    public DbSet<ConfigAttribute> ConfigAttribute { get; init; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

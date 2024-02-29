@@ -63,6 +63,26 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Config",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    RealmId = table.Column<string>(type: "character varying(100)", nullable: false),
+                    Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ProviderId = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Config", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Config_Realm_RealmId",
+                        column: x => x.RealmId,
+                        principalTable: "Realm",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RealmAttribute",
                 columns: table => new
                 {
@@ -171,6 +191,26 @@ namespace UniIdentity.Infrastructure.Migrations
                         name: "FK_Role_Realm_RealmId",
                         column: x => x.RealmId,
                         principalTable: "Realm",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ConfigAttribute",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ConfigId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Value = table.Column<string>(type: "character varying(3000)", maxLength: 3000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ConfigAttribute", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ConfigAttribute_Config_ConfigId",
+                        column: x => x.ConfigId,
+                        principalTable: "Config",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -307,6 +347,17 @@ namespace UniIdentity.Infrastructure.Migrations
                 column: "ScopeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Config_RealmId_Name",
+                table: "Config",
+                columns: new[] { "RealmId", "Name" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ConfigAttribute_ConfigId",
+                table: "ConfigAttribute",
+                column: "ConfigId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Credential_UserId",
                 table: "Credential",
                 column: "UserId");
@@ -387,6 +438,9 @@ namespace UniIdentity.Infrastructure.Migrations
                 name: "ClientScope");
 
             migrationBuilder.DropTable(
+                name: "ConfigAttribute");
+
+            migrationBuilder.DropTable(
                 name: "Credential");
 
             migrationBuilder.DropTable(
@@ -400,6 +454,9 @@ namespace UniIdentity.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRole");
+
+            migrationBuilder.DropTable(
+                name: "Config");
 
             migrationBuilder.DropTable(
                 name: "Scope");

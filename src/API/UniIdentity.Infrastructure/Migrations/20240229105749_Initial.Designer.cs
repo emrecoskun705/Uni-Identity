@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240219193840_Initial")]
+    [Migration("20240229105749_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -154,6 +154,59 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.HasIndex("ScopeId");
 
                     b.ToTable("ClientScope");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Configs.Config", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<string>("ProviderId")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)");
+
+                    b.Property<string>("RealmId")
+                        .IsRequired()
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RealmId", "Name")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Config_RealmId_Name");
+
+                    b.ToTable("Config");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Configs.ConfigAttribute", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ConfigId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(3000)
+                        .HasColumnType("character varying(3000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigId");
+
+                    b.ToTable("ConfigAttribute");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Credentials.Credential", b =>
@@ -488,6 +541,28 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("Scope");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Configs.Config", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
+                        .WithMany()
+                        .HasForeignKey("RealmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Realm");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Configs.ConfigAttribute", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Configs.Config", "Config")
+                        .WithMany("ConfigAttributes")
+                        .HasForeignKey("ConfigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Config");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Credentials.Credential", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Users.User", "User")
@@ -605,6 +680,11 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.Navigation("ClientScopes");
 
                     b.Navigation("Roles");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Configs.Config", b =>
+                {
+                    b.Navigation("ConfigAttributes");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Realms.Realm", b =>

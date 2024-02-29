@@ -11,10 +11,12 @@ public class Config : BaseEntity
     public string ProviderId { get; private set; }
     
     public Realm Realm { get; private set; }
+    
+    public ICollection<ConfigAttribute> ConfigAttributes { get; private set; }
 
-    public Config(ConfigId ıd, RealmId realmId, string name, string providerId)
+    public Config(ConfigId id, RealmId realmId, string name, string providerId)
     {
-        Id = ıd;
+        Id = id;
         RealmId = realmId;
         Name = name;
         ProviderId = providerId;

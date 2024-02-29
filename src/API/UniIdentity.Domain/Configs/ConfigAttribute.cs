@@ -4,6 +4,7 @@ namespace UniIdentity.Domain.Configs;
 
 public class ConfigAttribute : BaseEntity
 {
+    public ConfigAttributeId Id { get; private set; }
     public ConfigId ConfigId { get; private set; }
     public string Name { get; private set; }
     public string Value { get; private set; }
