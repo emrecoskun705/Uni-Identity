@@ -69,7 +69,7 @@ namespace UniIdentity.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     RealmId = table.Column<string>(type: "character varying(100)", nullable: false),
                     Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
-                    ProviderId = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false)
+                    ProviderType = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false)
                 },
                 constraints: table =>
                 {

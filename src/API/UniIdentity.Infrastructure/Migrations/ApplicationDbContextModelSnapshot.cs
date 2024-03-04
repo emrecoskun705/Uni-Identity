@@ -163,7 +163,7 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
-                    b.Property<string>("ProviderId")
+                    b.Property<string>("ProviderType")
                         .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("character varying(400)");
@@ -179,6 +179,10 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasDatabaseName("IX_Config_RealmId_Name");
 
                     b.ToTable("Config");
+
+                    b.HasDiscriminator<string>("ProviderType");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Configs.ConfigAttribute", b =>
@@ -488,6 +492,13 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRole");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Configs.RsaGenerationConfig", b =>
+                {
+                    b.HasBaseType("UniIdentity.Domain.Configs.Config");
+
+                    b.HasDiscriminator().HasValue("rsa-key-generation");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Credentials.PasswordCredential", b =>
