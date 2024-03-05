@@ -27,7 +27,6 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
     public DbSet<ClientAttribute> ClientAttribute { get; init; }
     public DbSet<RealmAttribute> RealmAttribute { get; init; }
     public DbSet<Config> Config { get; init; }
-    public DbSet<ConfigAttribute> ConfigAttribute { get; init; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using UniIdentity.Domain;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Realms;
 using CacheKeys = UniIdentity.Domain.Clients.CacheKeys;
@@ -12,7 +13,9 @@ internal sealed class CachedClientRepository : IClientRepository
     private readonly IClientRepository _clientRepository;
     private readonly IMemoryCache _memoryCache;
 
-    public CachedClientRepository([FromKeyedServices("og")]IClientRepository clientRepository, IMemoryCache memoryCache)
+    public CachedClientRepository(
+        [FromKeyedServices(ServiceKey.ClientOriginalKey)]IClientRepository clientRepository, 
+        IMemoryCache memoryCache)
     {
         _clientRepository = clientRepository;
         _memoryCache = memoryCache;
