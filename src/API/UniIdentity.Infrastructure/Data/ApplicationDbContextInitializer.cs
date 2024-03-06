@@ -179,16 +179,8 @@ public class ApplicationDbContextInitializer
 
         if (masterRealm == null)
         {
-            masterRealm = new Realm(
-                new RealmId("master"),
-                300,
-                300,
-                "master",
-                SslRequirement.None,
-                true,
-                false
-            );
-
+            masterRealm = Realm.CreateRealmWithDefaultAttributes("master" , true);
+            
             _context.Add<Realm>(masterRealm);
             
             await _context.SaveChangesAsync();

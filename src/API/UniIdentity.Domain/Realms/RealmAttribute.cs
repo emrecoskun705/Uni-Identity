@@ -10,7 +10,7 @@ public class RealmAttribute : BaseEntity
 
     public Realm Realm { get; private set; }
 
-    public RealmAttribute(
+    private RealmAttribute(
         RealmId id,
         string name,
         string value)
@@ -18,5 +18,16 @@ public class RealmAttribute : BaseEntity
         Id = id;
         Name = name;
         Value = value;
+    }
+    
+    private RealmAttribute() {}
+
+    public static RealmAttribute Create(string name, string value)
+    {
+        return new RealmAttribute
+        {
+            Name = name,
+            Value = value
+        };
     }
 }

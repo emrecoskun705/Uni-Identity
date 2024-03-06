@@ -1,5 +1,7 @@
 ﻿using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Common;
+using UniIdentity.Domain.Configs.Enums;
+using UniIdentity.Domain.Realms.Consts;
 using UniIdentity.Domain.Realms.Enums;
 using UniIdentity.Domain.Roles;
 using UniIdentity.Domain.Users;
@@ -22,8 +24,10 @@ public sealed class Realm : BaseEntity
     public ICollection<Client> Clients { get; private set; }
     public ICollection<RealmAttribute> RealmAttributes { get; private set; }
     public ICollection<Role> Roles { get; private set; }
+    
+    private const int DefaultLifeSpan = 60;
 
-    public Realm(RealmId id,
+    private Realm(RealmId id,
         int accessTokenLifeSpan,
         int ssoMaxLifeSpan,
         string name,
@@ -39,4 +43,28 @@ public sealed class Realm : BaseEntity
         Enabled = enabled;
         VerifyEmail = verifyEmail;
     }
+
+    public static Realm CreateRealmWithDefaultAttributes(
+        string name,
+        bool enabled
+        )
+    {
+        var realm = new Realm(new RealmId(name), DefaultLifeSpan, DefaultLifeSpan, name, SslRequirement.None, enabled, false)
+        {
+            RealmAttributes = new List<RealmAttribute>()
+        };
+        
+        var defaultSignatureAlgorithm = SignatureAlg.RS256.ToString();
+        realm.AddAttribute(RealmAttributeName.SignatureAlgorithm, defaultSignatureAlgorithm);
+        return realm;
+    }
+
+    public void AddAttribute(string name, string value)
+    {
+        if (RealmAttributes == null)
+            RealmAttributes = new List<RealmAttribute>();
+        
+        RealmAttributes.Add(RealmAttribute.Create(name, value));
+    }
+
 }
