@@ -59,6 +59,11 @@ public sealed class Realm : BaseEntity
         return realm;
     }
 
+    public string GetSignatureAlgorithm()
+    {
+        return RealmAttributes.First(x => x.Name == RealmAttributeName.SignatureAlgorithm).Value;
+    }
+    
     public void AddAttribute(string name, string value)
     {
         if (RealmAttributes == null)
