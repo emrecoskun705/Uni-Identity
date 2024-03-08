@@ -59,9 +59,13 @@ public sealed class Realm : BaseEntity
         return realm;
     }
 
-    public string GetSignatureAlgorithm()
+    public SignatureAlg GetSignatureAlgorithm()
     {
-        return RealmAttributes.First(x => x.Name == RealmAttributeName.SignatureAlgorithm).Value;
+        var signatureAlgorithm = RealmAttributes.First(x => x.Name == RealmAttributeName.SignatureAlgorithm).Value;
+        if (Enum.TryParse(signatureAlgorithm, out SignatureAlg alg))
+            return alg;
+
+        throw new InvalidOperationException("Failed to parse signature algorithm from RealmAttributes.");
     }
     
     public void AddAttribute(string name, string value)
