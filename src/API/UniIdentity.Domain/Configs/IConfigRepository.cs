@@ -4,5 +4,5 @@ namespace UniIdentity.Domain.Configs;
 
 public interface IConfigRepository
 {
-    Task<RsaGenerationConfig?> GetRsaGenerationConfigAsync(RealmId realmId, string name);
+    Task<RsaGenerationConfig?> GetRsaGenerationConfigAsync(RealmId realmId, string name, CancellationToken ct = default);
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Configs;
 using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Application.Contracts.Context;
@@ -22,7 +23,7 @@ public interface IUniHttpContext
     /// <summary>
     /// Gets or sets the realm identifier (realm_id) associated with the OAuth 2.0 or OpenID Connect request.
     /// </summary>
-    RealmId? RealmId { get; }
+    RealmId RealmId { get; }
 
     /// <summary>
     /// Retrieves the attribute associated with the specified name for the client.
@@ -60,4 +61,12 @@ public interface IUniHttpContext
     /// <param name="ct">The cancellation token.</param>
     /// <returns> The task result contains a collection of realm attributes.</returns>
     Task<IEnumerable<RealmAttribute>> GetRealmAttributesAsync(CancellationToken ct = default);
+
+    /// <summary>
+    /// Retrieves the RSA generation configuration asynchronously for the specified name.
+    /// </summary>
+    /// <param name="name">The name of the RSA generation configuration to retrieve.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>The task result contains the RSA generation configuration.</returns>
+    Task<RsaGenerationConfig> GetRsaGenerationConfigAsync(string name, CancellationToken ct = default);
 }

@@ -54,18 +54,16 @@ public sealed class Realm : BaseEntity
             RealmAttributes = new List<RealmAttribute>()
         };
         
-        var defaultSignatureAlgorithm = SignatureAlg.RS256.ToString();
+        var defaultSignatureAlgorithm = SignatureAlg.RsaSha256;
         realm.AddAttribute(RealmAttributeName.SignatureAlgorithm, defaultSignatureAlgorithm);
         return realm;
     }
 
-    public SignatureAlg GetSignatureAlgorithm()
+    public string GetSignatureAlgorithm()
     {
         var signatureAlgorithm = RealmAttributes.First(x => x.Name == RealmAttributeName.SignatureAlgorithm).Value;
-        if (Enum.TryParse(signatureAlgorithm, out SignatureAlg alg))
-            return alg;
 
-        throw new InvalidOperationException("Failed to parse signature algorithm from RealmAttributes.");
+        return signatureAlgorithm;
     }
     
     public void AddAttribute(string name, string value)

@@ -12,7 +12,7 @@ internal sealed class ConfigRepository : Repository<Config>, IConfigRepository
     {
     }
 
-    public async Task<RsaGenerationConfig?> GetRsaGenerationConfigAsync(RealmId realmId, string name)
+    public async Task<RsaGenerationConfig?> GetRsaGenerationConfigAsync(RealmId realmId, string name, CancellationToken cancellationToken)
     {
         return await _db.Config
             .OfType<RsaGenerationConfig>()
@@ -22,6 +22,6 @@ internal sealed class ConfigRepository : Repository<Config>, IConfigRepository
                     x.ProviderType == ProviderType.RsaKeyGen &&
                     x.RealmId == realmId &&
                     x.Name == name)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 }

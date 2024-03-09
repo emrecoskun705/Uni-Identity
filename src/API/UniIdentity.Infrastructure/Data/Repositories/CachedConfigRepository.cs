@@ -21,14 +21,14 @@ internal sealed class CachedConfigRepository : IConfigRepository
         _memoryCache = memoryCache;
     }
 
-    public async Task<RsaGenerationConfig?> GetRsaGenerationConfigAsync(RealmId realmId, string name)
+    public async Task<RsaGenerationConfig?> GetRsaGenerationConfigAsync(RealmId realmId, string name, CancellationToken cancellationToken)
     {
         return await _memoryCache.GetOrCreateAsync(
             CacheKeys.ConfigsByRealmIdAndName(realmId, name),
             cacheEntry =>
             {
                 cacheEntry.SetAbsoluteExpiration(CacheTime);
-                return _configRepository.GetRsaGenerationConfigAsync(realmId, name);
+                return _configRepository.GetRsaGenerationConfigAsync(realmId, name, cancellationToken);
             });
     }
 }

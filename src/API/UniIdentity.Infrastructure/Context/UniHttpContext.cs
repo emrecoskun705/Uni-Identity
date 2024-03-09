@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using UniIdentity.Application.Contracts.Context;
 using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Configs;
 using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Context;
@@ -15,12 +16,14 @@ internal sealed class UniHttpContext : IUniHttpContext
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IClientRepository _clientRepository;
     private readonly IRealmRepository _realmRepository;
+    private readonly IConfigRepository _configRepository;
     
-    public UniHttpContext(IHttpContextAccessor httpContextAccessor, IClientRepository clientRepository, IRealmRepository realmRepository)
+    public UniHttpContext(IHttpContextAccessor httpContextAccessor, IClientRepository clientRepository, IRealmRepository realmRepository, IConfigRepository configRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _clientRepository = clientRepository;
         _realmRepository = realmRepository;
+        _configRepository = configRepository;
         RealmId = ExtractRealmIdFromUrl(HttpContext.Request.Path);
         ClientKey = ExtractClientIdFromBody();
     }
@@ -29,11 +32,11 @@ internal sealed class UniHttpContext : IUniHttpContext
 
     public ClientKey? ClientKey { get; }
 
-    public RealmId? RealmId { get; }
+    public RealmId RealmId { get; }
 
     public async Task<ClientAttribute?> GetClientAttributeAsync(string attributeName)
     {
-        if (ClientKey == null || RealmId == null)
+        if (ClientKey == null)
             return null;
         
         var client = await _clientRepository.GetByClientIdAndRealmIdAsync(ClientKey, RealmId);
@@ -58,19 +61,16 @@ internal sealed class UniHttpContext : IUniHttpContext
 
     public async Task<Client> GetClientAsync(CancellationToken ct = default)
     {
-        if (RealmId == null)
-            throw new ArgumentNullException(nameof(RealmId), "RealmId cannot be null.");
-    
         if (ClientKey == null)
             throw new ArgumentNullException(nameof(ClientKey), "ClientKey cannot be null.");
 
         return await _clientRepository.GetByClientIdAndRealmIdAsync(ClientKey, RealmId, ct)
-            ?? throw new InvalidOperationException("Failed to retrieve Client with the provided ClientKey and RealmId.");;
+            ?? throw new InvalidOperationException("Failed to retrieve Client with the provided ClientKey and RealmId.");
     }
 
     public async Task<IEnumerable<ClientAttribute>> GetClientAttributesAsync(CancellationToken ct = default)
     {
-        if (ClientKey == null || RealmId == null)
+        if (ClientKey == null)
             return [];
         // get it from cached client repository by default
         return await _clientRepository.GetClientAttributesAsync(RealmId, ClientKey, ct);
@@ -78,16 +78,20 @@ internal sealed class UniHttpContext : IUniHttpContext
 
     public async Task<IEnumerable<RealmAttribute>> GetRealmAttributesAsync(CancellationToken ct = default)
     {
-        if (RealmId == null)
-            return [];
         // get it from cached realm repository by default
         return await _realmRepository.GetRealmAttributesAsync(RealmId, ct);
     }
 
-    private static RealmId? ExtractRealmIdFromUrl(PathString path)
+    public async Task<RsaGenerationConfig> GetRsaGenerationConfigAsync(string name, CancellationToken ct = default)
+    {
+        return await _configRepository.GetRsaGenerationConfigAsync(RealmId, name, ct)
+            ?? throw new InvalidOperationException("Failed to retrieve RsaGenerationConfig with the provided RealmId and name.");
+    }
+
+    private static RealmId ExtractRealmIdFromUrl(PathString path)
     {
         if (path.Value == null)
-            return null;
+            throw new ArgumentNullException(nameof(path));
         
         var segments = path.Value.Trim(RealmPathSplitChar).Split(RealmPathSplitChar);
 
@@ -96,7 +100,7 @@ internal sealed class UniHttpContext : IUniHttpContext
             return new RealmId(segments[RealmIndex]);
         }
 
-        return null;
+        throw new InvalidOperationException("Invalid path format");
     }
     
     private ClientKey? ExtractClientIdFromBody()
