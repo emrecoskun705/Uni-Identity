@@ -494,6 +494,13 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.ToTable("UserRole");
                 });
 
+            modelBuilder.Entity("UniIdentity.Domain.Configs.HmacGenerationConfig", b =>
+                {
+                    b.HasBaseType("UniIdentity.Domain.Configs.Config");
+
+                    b.HasDiscriminator().HasValue("hmac-key-generation");
+                });
+
             modelBuilder.Entity("UniIdentity.Domain.Configs.RsaGenerationConfig", b =>
                 {
                     b.HasBaseType("UniIdentity.Domain.Configs.Config");

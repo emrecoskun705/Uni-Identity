@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240304074730_Initial")]
+    [Migration("20240309175209_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -495,6 +495,13 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRole");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Configs.HmacGenerationConfig", b =>
+                {
+                    b.HasBaseType("UniIdentity.Domain.Configs.Config");
+
+                    b.HasDiscriminator().HasValue("hmac-key-generation");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Configs.RsaGenerationConfig", b =>

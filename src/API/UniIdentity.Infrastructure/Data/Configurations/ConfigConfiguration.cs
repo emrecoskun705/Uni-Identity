@@ -33,7 +33,8 @@ internal sealed class ConfigConfiguration : IEntityTypeConfiguration<Config>
                 x => ProviderType.FromValue(x));
         
         builder.HasDiscriminator<ProviderType>("ProviderType")
-            .HasValue<RsaGenerationConfig>(ProviderType.RsaKeyGen);
+            .HasValue<RsaGenerationConfig>(ProviderType.RsaKeyGen)
+            .HasValue<HmacGenerationConfig>(ProviderType.HmacKeyGen);
 
         builder.Property(x => x.Name)
             .HasMaxLength(150);
