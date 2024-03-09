@@ -38,14 +38,14 @@ public interface IUniHttpContext
     /// </summary>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>The task result contains the realm.</returns>
-    Task<Realm?> GetRealmAsync(CancellationToken ct = default);
+    Task<Realm> GetRealmAsync(CancellationToken ct = default);
 
     /// <summary>
     /// Retrieves the client asynchronously.
     /// </summary>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>The task result contains the client.</returns>
-    Task<Client?> GetClientAsync(CancellationToken ct = default);
+    Task<Client> GetClientAsync(CancellationToken ct = default);
 
     /// <summary>
     /// Retrieves the attributes associated with the client identified by the provided realm id and client key asynchronously.

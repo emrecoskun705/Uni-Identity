@@ -47,20 +47,25 @@ internal sealed class UniHttpContext : IUniHttpContext
         return clientAttributes.FirstOrDefault(x => x.Name == attributeName);
     }
 
-    public async Task<Realm?> GetRealmAsync(CancellationToken ct = default)
+    public async Task<Realm> GetRealmAsync(CancellationToken ct = default)
     {
         if (RealmId == null)
-            return null;
+            throw new ArgumentNullException(nameof(RealmId), "RealmId cannot be null.");
         
-        return await _realmRepository.GetByRealmId(RealmId, ct);
+        return await _realmRepository.GetByRealmId(RealmId, ct)
+            ?? throw new InvalidOperationException("Failed to retrieve Realm with the provided RealmId.");;
     }
 
-    public async Task<Client?> GetClientAsync(CancellationToken ct = default)
+    public async Task<Client> GetClientAsync(CancellationToken ct = default)
     {
-        if (RealmId == null || ClientKey == null)
-            return null;
+        if (RealmId == null)
+            throw new ArgumentNullException(nameof(RealmId), "RealmId cannot be null.");
+    
+        if (ClientKey == null)
+            throw new ArgumentNullException(nameof(ClientKey), "ClientKey cannot be null.");
 
-        return await _clientRepository.GetByClientIdAndRealmIdAsync(ClientKey, RealmId, ct);
+        return await _clientRepository.GetByClientIdAndRealmIdAsync(ClientKey, RealmId, ct)
+            ?? throw new InvalidOperationException("Failed to retrieve Client with the provided ClientKey and RealmId.");;
     }
 
     public async Task<IEnumerable<ClientAttribute>> GetClientAttributesAsync(CancellationToken ct = default)
