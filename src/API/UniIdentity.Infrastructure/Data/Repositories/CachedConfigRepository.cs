@@ -9,7 +9,7 @@ namespace UniIdentity.Infrastructure.Data.Repositories;
 
 internal sealed class CachedConfigRepository : IConfigRepository
 {
-    private static readonly TimeSpan CacheTime = TimeSpan.FromDays(7);
+    private static readonly TimeSpan CacheTime = TimeSpan.FromDays(30);
     private readonly IConfigRepository _configRepository;
     private readonly IMemoryCache _memoryCache;
 
@@ -24,11 +24,22 @@ internal sealed class CachedConfigRepository : IConfigRepository
     public async Task<RsaGenerationConfig?> GetRsaGenerationConfigAsync(RealmId realmId, string name, CancellationToken cancellationToken)
     {
         return await _memoryCache.GetOrCreateAsync(
-            CacheKeys.ConfigsByRealmIdAndName(realmId, name),
+            CacheKeys.RsaConfigByRealmIdAndName(realmId, name),
             cacheEntry =>
             {
                 cacheEntry.SetAbsoluteExpiration(CacheTime);
                 return _configRepository.GetRsaGenerationConfigAsync(realmId, name, cancellationToken);
+            });
+    }
+
+    public async Task<HmacGenerationConfig?> GetHmacGenerationConfigAsync(RealmId realmId, string name, CancellationToken ct = default)
+    {
+        return await _memoryCache.GetOrCreateAsync(
+            CacheKeys.HmacConfigByRealmIdAndName(realmId, name),
+            cacheEntry =>
+            {
+                cacheEntry.SetAbsoluteExpiration(CacheTime);
+                return _configRepository.GetHmacGenerationConfigAsync(realmId, name, ct);
             });
     }
 }

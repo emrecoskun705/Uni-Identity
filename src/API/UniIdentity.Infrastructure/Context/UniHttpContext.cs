@@ -88,6 +88,12 @@ internal sealed class UniHttpContext : IUniHttpContext
             ?? throw new InvalidOperationException("Failed to retrieve RsaGenerationConfig with the provided RealmId and name.");
     }
 
+    public async Task<HmacGenerationConfig> GetHmacGenerationConfigAsync(string name, CancellationToken ct = default)
+    {
+        return await _configRepository.GetHmacGenerationConfigAsync(RealmId, name, ct)
+            ?? throw new InvalidOperationException("Failed to retrieve HmacGenerationConfig with the provided RealmId and name.");
+    }
+
     private static RealmId ExtractRealmIdFromUrl(PathString path)
     {
         if (path.Value == null)

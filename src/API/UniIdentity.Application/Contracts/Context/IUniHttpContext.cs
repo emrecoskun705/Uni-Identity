@@ -69,4 +69,12 @@ public interface IUniHttpContext
     /// <param name="ct">The cancellation token.</param>
     /// <returns>The task result contains the RSA generation configuration.</returns>
     Task<RsaGenerationConfig> GetRsaGenerationConfigAsync(string name, CancellationToken ct = default);
+    
+    /// <summary>
+    /// Retrieves the HMAC generation configuration asynchronously for the specified name.
+    /// </summary>
+    /// <param name="name">The name of the HMAC generation configuration to retrieve.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>The task result contains the HMAC generation configuration.</returns>
+    Task<HmacGenerationConfig> GetHmacGenerationConfigAsync(string name, CancellationToken ct = default);
 }

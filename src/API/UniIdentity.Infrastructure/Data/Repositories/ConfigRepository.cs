@@ -24,4 +24,17 @@ internal sealed class ConfigRepository : Repository<Config>, IConfigRepository
                     x.Name == name)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
+
+    public async Task<HmacGenerationConfig?> GetHmacGenerationConfigAsync(RealmId realmId, string name, CancellationToken ct = default)
+    {
+       return await _db.Config
+            .OfType<HmacGenerationConfig>()
+            .Include(config => config.ConfigAttributes)
+            .Where(
+                x =>
+                    x.ProviderType == ProviderType.HmacKeyGen &&
+                    x.RealmId == realmId &&
+                    x.Name == name)
+            .FirstOrDefaultAsync(cancellationToken: ct);
+    }
 }
