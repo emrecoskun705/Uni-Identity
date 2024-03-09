@@ -6,8 +6,9 @@ namespace UniIdentity.Domain.Configs;
 public sealed class RsaGenerationConfig : Config
 {
     // RSA Configuration attributes
-    private const string PublicKeyName = "PublicKey";
-    private const string PrivateKeyName = "PrivateKey";
+    private const string PublicKeyName = "publicKey";
+    private const string PrivateKeyName = "privateKey";
+    private const string Algorithm = "algorithm";
     
     private RsaGenerationConfig(ConfigId id, RealmId realmId, string name)
         : base(id, realmId, name)
@@ -15,7 +16,7 @@ public sealed class RsaGenerationConfig : Config
         ProviderType = ProviderType.RsaKeyGen;
     }
     
-    public static RsaGenerationConfig CreateWithConfigurations(RealmId realmId, string name, string publicKey, string privateKey)
+    public static RsaGenerationConfig CreateWithConfigurations(RealmId realmId, string name, string publicKey, string privateKey, string algorithm)
     {
         var config = new RsaGenerationConfig(ConfigId.New(), realmId, name)
         {
@@ -23,6 +24,7 @@ public sealed class RsaGenerationConfig : Config
         };
         config.ConfigAttributes.Add(new ConfigAttribute(config.Id, PublicKeyName, publicKey));
         config.ConfigAttributes.Add(new ConfigAttribute(config.Id, PrivateKeyName, privateKey));
+        config.ConfigAttributes.Add(new ConfigAttribute(config.Id, Algorithm, algorithm));
         return config;
     }
 
@@ -34,5 +36,10 @@ public sealed class RsaGenerationConfig : Config
     public string GetPrivateKey()
     {
         return ConfigAttributes.First(x => x.Name == PrivateKeyName).Value;
+    }
+
+    public string GetAlgorithm()
+    {
+        return ConfigAttributes.First(x => x.Name == Algorithm).Value;
     }
 }
