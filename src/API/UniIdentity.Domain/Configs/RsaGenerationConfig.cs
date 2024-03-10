@@ -1,4 +1,5 @@
-﻿using UniIdentity.Domain.Configs.ValueObjects;
+﻿using System.Security.Cryptography;
+using UniIdentity.Domain.Configs.ValueObjects;
 using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Domain.Configs;
@@ -41,5 +42,16 @@ public sealed class RsaGenerationConfig : Config
     public string GetAlgorithm()
     {
         return ConfigAttributes.First(x => x.Name == Algorithm).Value;
+    }
+
+    public RSAParameters GetRsaParameters()
+    {
+        byte[] privateKeyBytes = Convert.FromBase64String(GetPrivateKey());
+        using (RSA rsa = RSA.Create())
+        {
+            rsa.ImportRSAPrivateKey(privateKeyBytes, out _);
+
+            return rsa.ExportParameters(true);
+        }
     }
 }
