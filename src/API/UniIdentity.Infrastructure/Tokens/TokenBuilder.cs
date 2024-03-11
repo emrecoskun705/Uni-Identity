@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using UniIdentity.Application.Contracts.Context;
 using UniIdentity.Application.Tokens.Contracts;
 using UniIdentity.Application.Tokens.Models;
+using UniIdentity.Domain.Realms.Consts;
 
 namespace UniIdentity.Infrastructure.Tokens;
 
@@ -22,7 +23,7 @@ internal sealed class TokenBuilder : ITokenBuilder
         
         var claims = token.GetClaims();
         
-        var signatureAlgorithm = realm.GetSignatureAlgorithm();
+        var signatureAlgorithm = (await _httpContext.GetRealmAttributeAsync(RealmAttributeName.SignatureAlgorithm)).Value;
         
         SecurityKey key;
         SigningCredentials signingCredentials;

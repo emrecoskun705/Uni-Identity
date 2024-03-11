@@ -76,12 +76,11 @@ internal sealed class UniHttpContext : IUniHttpContext
         return await _clientRepository.GetClientAttributesAsync(RealmId, ClientKey, ct);
     }
 
-    public async Task<IEnumerable<RealmAttribute>> GetRealmAttributesAsync(CancellationToken ct = default)
+    public async Task<RealmAttribute> GetRealmAttributeAsync(string name, CancellationToken ct = default)
     {
-        // get it from cached realm repository by default
-        return await _realmRepository.GetRealmAttributesAsync(RealmId, ct);
+        return await _realmRepository.GetRealmAttributeAsync(RealmId, name, ct);
     }
-
+    
     public async Task<RsaGenerationConfig> GetRsaGenerationConfigAsync(string name, CancellationToken ct = default)
     {
         return await _configRepository.GetRsaGenerationConfigAsync(RealmId, name, ct)

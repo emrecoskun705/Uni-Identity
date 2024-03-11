@@ -56,11 +56,12 @@ public interface IUniHttpContext
     Task<IEnumerable<ClientAttribute>> GetClientAttributesAsync(CancellationToken ct = default);
     
     /// <summary>
-    /// Retrieves the attributes associated with the realm asynchronously.
+    /// Retrieves a specific attribute of a realm by its name asynchronously.
     /// </summary>
+    /// <param name="name">The name of the attribute to retrieve.</param>
     /// <param name="ct">The cancellation token.</param>
-    /// <returns> The task result contains a collection of realm attributes.</returns>
-    Task<IEnumerable<RealmAttribute>> GetRealmAttributesAsync(CancellationToken ct = default);
+    /// <returns>The task result contains the realm attribute if found; otherwise, an exception is thrown.</returns>
+    Task<RealmAttribute> GetRealmAttributeAsync(string name, CancellationToken ct = default);
 
     /// <summary>
     /// Retrieves the RSA generation configuration asynchronously for the specified name.
