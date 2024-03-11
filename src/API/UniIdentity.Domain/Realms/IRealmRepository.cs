@@ -14,11 +14,11 @@ public interface IRealmRepository
     Task<Realm?> GetByRealmId(RealmId realmId, CancellationToken ct = default);
 
     /// <summary>
-    /// Retrieves the attributes associated with a realm asynchronously.
+    /// Retrieves a specific attribute of a realm by its unique identifier and attribute name asynchronously.
     /// </summary>
     /// <param name="realmId">The unique identifier of the realm.</param>
+    /// <param name="name">The name of the attribute to retrieve.</param>
     /// <param name="ct">The cancellation token.</param>
-    /// <returns>The task result contains a collection of realm attributes if found; otherwise, an empty collection.</returns>
-
-    Task<IEnumerable<RealmAttribute>> GetRealmAttributesAsync(RealmId realmId, CancellationToken ct = default);
+    /// <returns>The task result contains the realm attribute if found; otherwise, an exception is thrown.</returns>
+    Task<RealmAttribute> GetRealmAttributeAsync(RealmId realmId, string name, CancellationToken ct = default);
 }

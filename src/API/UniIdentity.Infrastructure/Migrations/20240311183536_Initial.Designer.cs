@@ -12,7 +12,7 @@ using UniIdentity.Infrastructure.Data;
 namespace UniIdentity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240309175209_Initial")]
+    [Migration("20240311183536_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

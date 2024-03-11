@@ -7,7 +7,6 @@ namespace UniIdentity.Infrastructure.Data.Repositories;
 
 internal sealed class CachedRealmRepository : IRealmRepository
 {
-    private static readonly TimeSpan CacheTime = TimeSpan.FromDays(1);
     private readonly IRealmRepository _realmRepository;
     private readonly IMemoryCache _memoryCache;
 
@@ -23,21 +22,13 @@ internal sealed class CachedRealmRepository : IRealmRepository
     {
         return await _memoryCache.GetOrCreateAsync(
             CacheKeys.RealmById(realmId),
-            cacheEntry =>
-            {
-                cacheEntry.SetAbsoluteExpiration(CacheTime);
-                return _realmRepository.GetByRealmId(realmId, ct);
-            });
+            _ => _realmRepository.GetByRealmId(realmId, ct));
     }
 
-    public async Task<IEnumerable<RealmAttribute>> GetRealmAttributesAsync(RealmId realmId, CancellationToken ct = default)
+    public async Task<RealmAttribute> GetRealmAttributeAsync(RealmId realmId, string name, CancellationToken ct = default)
     {
-        return await _memoryCache.GetOrCreateAsync(
-            CacheKeys.RealmAttributesByRealmId(realmId),
-            cacheEntry =>
-            {
-                cacheEntry.SetAbsoluteExpiration(CacheTime);
-                return _realmRepository.GetRealmAttributesAsync(realmId, ct);
-            }) ?? [];
+        return (await _memoryCache.GetOrCreateAsync(
+            CacheKeys.RealmAttributeCacheKey(realmId, name),
+            _ => _realmRepository.GetRealmAttributeAsync(realmId, name, ct)))!;
     }
 }
