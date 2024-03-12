@@ -35,11 +35,11 @@ public sealed class Client : BaseEntity
 
     public Realm Realm { get; }
 
-    public string? GetSignatureAlgorithm()
+    public string? GetAttribute(string attribute)
     {
-        return ClientAttributes.FirstOrDefault(x => x.Name == OIDCAttribute.AccessTokenAlgorithm)?.Value;
+        return ClientAttributes.FirstOrDefault(x => x.Name == attribute)?.Value;
     }
-
+    
     public static Client Create(ClientTemplate clientTemplate)
     {
         

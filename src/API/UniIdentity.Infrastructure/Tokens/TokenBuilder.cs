@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.ComponentModel;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using UniIdentity.Application.Contracts.Context;
@@ -6,6 +7,7 @@ using UniIdentity.Application.Tokens.Contracts;
 using UniIdentity.Application.Tokens.Models;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Configs.Enums;
+using UniIdentity.Domain.OIDC;
 using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Tokens;
@@ -26,7 +28,7 @@ internal sealed class TokenBuilder : ITokenBuilder
         
         var claims = token.GetClaims();
         
-        var signatureAlgorithm = GetSignature(realm, client);
+        var signatureAlgorithm = GetSignatureAlgorithm(realm, client, token);
         
         SecurityKey key;
         SigningCredentials signingCredentials;
@@ -61,12 +63,18 @@ internal sealed class TokenBuilder : ITokenBuilder
     }
     
     /// <summary>
-    /// First look for client then realm if it does not exists return default signature algorithm. 
+    /// Retrieves the signature algorithm to be used for generating tokens based on the realm, client, and token type.
     /// </summary>
-    private string GetSignature(Realm realm, Client client)
+    private static string GetSignatureAlgorithm(Realm realm, Client client, IToken token)
     {
-        return client.GetSignatureAlgorithm() 
-               ?? realm.GetSignatureAlgorithm() 
-               ?? SignatureAlg.Default;
+        var algorithm = (token.GetTokenType() switch
+        {
+            TokenType.Access => client.GetAttribute(OIDCAttribute.AccessTokenAlgorithm),
+            TokenType.Id => client.GetAttribute(OIDCAttribute.IdTokenAlgorithm),
+            _ => throw new InvalidEnumArgumentException("Invalid TokenType enum exception.")
+        } ?? realm.GetSignatureAlgorithm()) ?? SignatureAlg.Default;
+
+        return algorithm;
     }
+    
 }
