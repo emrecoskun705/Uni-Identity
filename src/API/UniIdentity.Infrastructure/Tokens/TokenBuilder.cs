@@ -4,7 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using UniIdentity.Application.Contracts.Context;
 using UniIdentity.Application.Tokens.Contracts;
 using UniIdentity.Application.Tokens.Models;
-using UniIdentity.Domain.Realms.Consts;
+using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Configs.Enums;
+using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Tokens;
 
@@ -20,10 +22,11 @@ internal sealed class TokenBuilder : ITokenBuilder
     public async Task<string> Create(IToken token)
     {
         var realm = await _httpContext.GetRealmAsync();
+        var client = await _httpContext.GetClientAsync();
         
         var claims = token.GetClaims();
         
-        var signatureAlgorithm = (await _httpContext.GetRealmAttributeAsync(RealmAttributeName.SignatureAlgorithm)).Value;
+        var signatureAlgorithm = GetSignature(realm, client);
         
         SecurityKey key;
         SigningCredentials signingCredentials;
@@ -55,5 +58,15 @@ internal sealed class TokenBuilder : ITokenBuilder
         
         var tokenHandler = new JwtSecurityTokenHandler();
         return tokenHandler.WriteToken(tokenGenerator);
+    }
+    
+    /// <summary>
+    /// First look for client then realm if it does not exists return default signature algorithm. 
+    /// </summary>
+    private string GetSignature(Realm realm, Client client)
+    {
+        return client.GetSignatureAlgorithm() 
+               ?? realm.GetSignatureAlgorithm() 
+               ?? SignatureAlg.Default;
     }
 }

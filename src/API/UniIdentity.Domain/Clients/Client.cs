@@ -2,6 +2,7 @@
 using UniIdentity.Domain.Clients.Events;
 using UniIdentity.Domain.Clients.ValueObjects;
 using UniIdentity.Domain.Common;
+using UniIdentity.Domain.OIDC;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Roles;
 
@@ -33,6 +34,11 @@ public sealed class Client : BaseEntity
     public ICollection<Role> Roles { get; set; }
 
     public Realm Realm { get; }
+
+    public string? GetSignatureAlgorithm()
+    {
+        return ClientAttributes.FirstOrDefault(x => x.Name == OIDCAttribute.AccessTokenAlgorithm)?.Value;
+    }
 
     public static Client Create(ClientTemplate clientTemplate)
     {

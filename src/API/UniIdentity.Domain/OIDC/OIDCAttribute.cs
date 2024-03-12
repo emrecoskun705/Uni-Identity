@@ -2,5 +2,6 @@
 
 public static class OIDCAttribute
 {
-    public static readonly string AccessTokenAlgorithm = "access.token.algorithm";
+    public const string AccessTokenAlgorithm = "access.token.algorithm";
+    public const string IdTokenAlgorithm = "id.token.algorithm";
 }

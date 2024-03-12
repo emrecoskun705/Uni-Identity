@@ -67,19 +67,6 @@ internal sealed class UniHttpContext : IUniHttpContext
         return await _clientRepository.GetByClientIdAndRealmIdAsync(ClientKey, RealmId, ct)
             ?? throw new InvalidOperationException("Failed to retrieve Client with the provided ClientKey and RealmId.");
     }
-
-    public async Task<IEnumerable<ClientAttribute>> GetClientAttributesAsync(CancellationToken ct = default)
-    {
-        if (ClientKey == null)
-            return [];
-        // get it from cached client repository by default
-        return await _clientRepository.GetClientAttributesAsync(RealmId, ClientKey, ct);
-    }
-
-    public async Task<RealmAttribute> GetRealmAttributeAsync(string name, CancellationToken ct = default)
-    {
-        return await _realmRepository.GetRealmAttributeAsync(RealmId, name, ct);
-    }
     
     public async Task<RsaGenerationConfig> GetRsaGenerationConfigAsync(string name, CancellationToken ct = default)
     {
