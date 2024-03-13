@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniIdentity.Common", "API\U
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{7B1AE16F-DD11-45B3-83FA-4D013A148A8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniIdentity.Domain.UnitTests", "Tests\UniIdentity.Domain.UnitTests\UniIdentity.Domain.UnitTests.csproj", "{5D5DE51D-906E-415D-B8D1-334C70F19B52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{D911129A-ED32-406A-804D-37C666674DE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D911129A-ED32-406A-804D-37C666674DE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D911129A-ED32-406A-804D-37C666674DE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D5DE51D-906E-415D-B8D1-334C70F19B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D5DE51D-906E-415D-B8D1-334C70F19B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D5DE51D-906E-415D-B8D1-334C70F19B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D5DE51D-906E-415D-B8D1-334C70F19B52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,5 +67,6 @@ Global
 		{94CDBEDD-9868-4239-AA00-462F8901C5BD} = {29C4595D-83AC-48F2-A21B-1681C4B707E1}
 		{83AA1D5E-1C2B-442F-9785-8AF45D9CFC11} = {29C4595D-83AC-48F2-A21B-1681C4B707E1}
 		{D911129A-ED32-406A-804D-37C666674DE1} = {29C4595D-83AC-48F2-A21B-1681C4B707E1}
+		{5D5DE51D-906E-415D-B8D1-334C70F19B52} = {8F142FF8-C709-4D11-ABB0-CF1E267898CE}
 	EndGlobalSection
 EndGlobal
