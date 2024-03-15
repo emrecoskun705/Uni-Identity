@@ -9,9 +9,11 @@ using UniIdentity.Domain;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Configs;
+using UniIdentity.Domain.Credentials.Services;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Users;
 using UniIdentity.Infrastructure.Context;
+using UniIdentity.Infrastructure.Cryptography;
 using UniIdentity.Infrastructure.Data;
 using UniIdentity.Infrastructure.Data.Interceptors;
 using UniIdentity.Infrastructure.Data.Repositories;
@@ -54,6 +56,13 @@ public static class DependencyInjection
         services.AddScoped<IUniHttpContext, UniHttpContext>();
 
         services.AddDistributedMemoryCache();
+
+        #region Cryprography
+
+        services.AddTransient<IPasswordHasher, PasswordHasher>();
+        services.AddTransient<IPasswordVerifier, PasswordHasher>();
+
+        #endregion
 
         return services;
     }
