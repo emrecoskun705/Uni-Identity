@@ -1,5 +1,7 @@
-﻿using UniIdentity.Domain.Credentials.ValueObjects;
+﻿using UniIdentity.Domain.Credentials.Services;
+using UniIdentity.Domain.Credentials.ValueObjects;
 using UniIdentity.Domain.Users;
+using UniIdentity.Domain.Users.ValueObjects;
 
 namespace UniIdentity.Domain.Credentials;
 
@@ -10,18 +12,16 @@ public sealed class PasswordCredential : Credential
         Type = CredentialType.Password;
     }
 
-    public static PasswordCredential Create(UserId userId, DateTimeOffset createdDateTime, string password)
+    public static PasswordCredential Create(UserId userId, DateTimeOffset createdDateTime, string hashedPassword)
     {
-        var secretData = PasswordManager.HashPassword(password);
-        
-        var credential = new PasswordCredential(CredentialId.New(), userId, createdDateTime, secretData, null, 10);
+        var credential = new PasswordCredential(CredentialId.New(), userId, createdDateTime, hashedPassword, null, 10);
 
         return credential;
     }
 
-    public bool VerifyPassword(string password)
+    public bool VerifyPassword(string password, IPasswordVerifier passwordVerifier)
     {
-        return PasswordManager.VerifyHashedPassword(SecretData!, password);
+        return passwordVerifier.VerifyHashedPassword(SecretData!, Password.FromValue(password));
     }
     
 }
