@@ -6,5 +6,7 @@ public sealed record Password
 
     public string Value { get; init; }
     
-    public static Password FromValue(string Value) => new Password(Value);
+    public static Password FromValue(string value) => new Password(value);
+
+    public static implicit operator string(Password password) => password.Value;
 }
