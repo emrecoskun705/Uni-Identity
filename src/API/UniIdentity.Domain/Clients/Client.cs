@@ -2,13 +2,12 @@
 using UniIdentity.Domain.Clients.Events;
 using UniIdentity.Domain.Clients.ValueObjects;
 using UniIdentity.Domain.Common;
-using UniIdentity.Domain.OIDC;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Roles;
 
 namespace UniIdentity.Domain.Clients;
 
-public sealed class Client : BaseEntity
+public sealed class Client : AggregateRoot
 {
     public ClientId Id { get; private set; }
     public ClientKey ClientKey { get; private set; }
@@ -29,9 +28,9 @@ public sealed class Client : BaseEntity
     public bool DirectAccessGrantsEnabled { get; private set; }
     public bool ClientCredentialsGrantEnabled { get; private set; }
 
-    public ICollection<ClientAttribute> ClientAttributes { get; set; }
-    public ICollection<ClientScope> ClientScopes { get; set; }
-    public ICollection<Role> Roles { get; set; }
+    public ICollection<ClientAttribute> ClientAttributes { get; private set; }
+    public ICollection<ClientScope> ClientScopes { get; private set; }
+    public ICollection<Role> Roles { get; private set; }
 
     public Realm Realm { get; }
 
@@ -40,44 +39,53 @@ public sealed class Client : BaseEntity
         return ClientAttributes.FirstOrDefault(x => x.Name == attribute)?.Value;
     }
     
-    public static Client Create(ClientTemplate clientTemplate)
+    public static Client Create(RealmId realmId, ClientKey clientKey, Protocol protocol, string rootUrl)
     {
-        
-        var client = new Client(clientTemplate);
+        var client = new Client
+        {
+            ClientKey = clientKey,
+            RealmId = realmId,
+            RootUrl = rootUrl,
+            ManagementUrl = rootUrl,
+            Protocol = protocol,
+            Enabled = true,
+            AuthorizationCodeFlowEnabled = true,
+            DirectAccessGrantsEnabled = true,
+            AccessType = AccessType.Public
+        };
         client.AddDomainEvent(new ClientCreatedEvent(client.Id));
         return client;
     }
+
     
-    private Client(ClientTemplate clientTemplate)
+    private Client(ClientKey clientKey,string? clientSecret,string? name,Protocol? protocol,
+        string? baseUrl, string? rootUrl ,string? managementUrl, ClientAuthenticationType clientAuthenticationType,
+        string? registrationToken,AccessType accessType,RealmId realmId,bool enabled,
+        bool consentRequired,bool authorizationCodeFlowEnabled,bool implicitFlowEnabled,bool directAccessGrantsEnabled,
+        bool clientCredentialsGrantEnabled)
     {
         Id = ClientId.New();
-        ClientKey = clientTemplate.ClientKey;
-        ClientSecret = clientTemplate.ClientSecret;
-        Name = clientTemplate.Name;
-        Protocol = clientTemplate.Protocol;
-        BaseUrl = clientTemplate.BaseUrl;
-        RootUrl = clientTemplate.RootUrl;
-        ManagementUrl = clientTemplate.ManagementUrl;
-        ClientAuthenticationType = clientTemplate.ClientAuthenticationType;
-        RegistrationToken = clientTemplate.RegistrationToken;
-        AccessType = clientTemplate.AccessType;
-        RealmId = clientTemplate.RealmId;
-        Enabled = clientTemplate.Enabled;
-        ConsentRequired = clientTemplate.ConsentRequired;
-        AuthorizationCodeFlowEnabled = clientTemplate.AuthorizationCodeFlowEnabled;
-        ImplicitFlowEnabled = clientTemplate.ImplicitFlowEnabled;
-        DirectAccessGrantsEnabled = clientTemplate.DirectAccessGrantsEnabled;
-        ClientCredentialsGrantEnabled = clientTemplate.ClientCredentialsGrantEnabled;
+        ClientKey = clientKey;
+        ClientSecret = clientSecret;
+        Name = name;
+        Protocol = protocol;
+        BaseUrl = baseUrl;
+        RootUrl = rootUrl;
+        ManagementUrl = managementUrl;
+        ClientAuthenticationType = clientAuthenticationType;
+        RegistrationToken = registrationToken;
+        AccessType = accessType;
+        RealmId = realmId;
+        Enabled = enabled;
+        ConsentRequired = consentRequired;
+        AuthorizationCodeFlowEnabled = authorizationCodeFlowEnabled;
+        ImplicitFlowEnabled = implicitFlowEnabled;
+        DirectAccessGrantsEnabled = directAccessGrantsEnabled;
+        ClientCredentialsGrantEnabled = clientCredentialsGrantEnabled;
     }
 
     private Client()
     {
-        
+        Id = ClientId.New();
     }
 }
-
-public record ClientTemplate(ClientKey ClientKey,string? ClientSecret,string? Name,Protocol? Protocol,
-    string? BaseUrl, string? RootUrl ,string? ManagementUrl, ClientAuthenticationType ClientAuthenticationType,
-    string? RegistrationToken,AccessType AccessType,RealmId RealmId,bool Enabled,
-    bool ConsentRequired,bool AuthorizationCodeFlowEnabled,bool ImplicitFlowEnabled,bool DirectAccessGrantsEnabled,
-    bool ClientCredentialsGrantEnabled);
