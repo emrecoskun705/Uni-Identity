@@ -7,7 +7,7 @@ using UniIdentity.Domain.Users.ValueObjects;
 
 namespace UniIdentity.Domain.Users;
 
-public sealed class User : BaseEntity
+public sealed class User : AggregateRoot
 {
     public UserId Id { get; private set; }
     public Email? Email { get; private set; }
