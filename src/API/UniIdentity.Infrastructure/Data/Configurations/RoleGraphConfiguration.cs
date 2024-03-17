@@ -19,12 +19,12 @@ internal sealed class RoleGraphConfiguration : IEntityTypeConfiguration<RoleGrap
                 x => x.Value,
                 x => new RoleId(x));
 
-        builder.HasOne(x => x.ParentRole)
-            .WithMany(x => x.ParentRoles)
+        builder.HasOne<Role>()
+            .WithMany()
             .HasForeignKey(x => x.ParentRoleId);
         
-        builder.HasOne(x => x.ChildRole)
-            .WithMany(x => x.ChildRoles)
+        builder.HasOne<Role>()
+            .WithMany()
             .HasForeignKey(x => x.ChildRoleId);
 
         builder.HasIndex(x => x.ParentRoleId)

@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using UniIdentity.Application.Contracts.Context;
+using UniIdentity.Domain.ClientAttributes;
+using UniIdentity.Domain.ClientAttributes.Repositories;
 using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Clients.Repositories;
 using UniIdentity.Domain.Configs;
 using UniIdentity.Domain.Realms;
+using UniIdentity.Domain.Realms.Repositories;
 
 namespace UniIdentity.Infrastructure.Context;
 
@@ -14,16 +18,18 @@ internal sealed class UniHttpContext : IUniHttpContext
     private static readonly string ClientIdName = "client_id";
     
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IClientRepository _clientRepository;
-    private readonly IRealmRepository _realmRepository;
+    private readonly IGetClientRepository _getClientRepository;
+    private readonly IGetClientAttributeRepository _getClientAttributeRepository;
+    private readonly IGetRealmRepository _getRealmRepository;
     private readonly IConfigRepository _configRepository;
     
-    public UniHttpContext(IHttpContextAccessor httpContextAccessor, IClientRepository clientRepository, IRealmRepository realmRepository, IConfigRepository configRepository)
+    public UniHttpContext(IHttpContextAccessor httpContextAccessor, IGetClientRepository getClientRepository, IGetRealmRepository getRealmRepository, IConfigRepository configRepository, IGetClientAttributeRepository getClientAttributeRepository)
     {
         _httpContextAccessor = httpContextAccessor;
-        _clientRepository = clientRepository;
-        _realmRepository = realmRepository;
+        _getClientRepository = getClientRepository;
+        _getRealmRepository = getRealmRepository;
         _configRepository = configRepository;
+        _getClientAttributeRepository = getClientAttributeRepository;
         RealmId = ExtractRealmIdFromUrl(HttpContext.Request.Path);
         ClientKey = ExtractClientIdFromBody();
     }
@@ -38,16 +44,8 @@ internal sealed class UniHttpContext : IUniHttpContext
     {
         if (ClientKey == null)
             return null;
-        
-        var client = await _clientRepository.GetByClientIdAndRealmIdAsync(ClientKey, RealmId);
 
-        if (client == null)
-            return null;
-        
-        // get it from cached client attributes
-        var clientAttributes = await _clientRepository.GetClientAttributesAsync(RealmId, ClientKey);
-
-        return clientAttributes.FirstOrDefault(x => x.Name == attributeName);
+        return await _getClientAttributeRepository.GetByNameAsync(RealmId, ClientKey, attributeName);;
     }
 
     public async Task<Realm> GetRealmAsync(CancellationToken ct = default)
@@ -55,8 +53,8 @@ internal sealed class UniHttpContext : IUniHttpContext
         if (RealmId == null)
             throw new ArgumentNullException(nameof(RealmId), "RealmId cannot be null.");
         
-        return await _realmRepository.GetByRealmId(RealmId, ct)
-            ?? throw new InvalidOperationException("Failed to retrieve Realm with the provided RealmId.");;
+        return await _getRealmRepository.GetByRealmId(RealmId, ct)
+            ?? throw new InvalidOperationException("Failed to retrieve Realm with the provided RealmId.");
     }
 
     public async Task<Client> GetClientAsync(CancellationToken ct = default)
@@ -64,7 +62,7 @@ internal sealed class UniHttpContext : IUniHttpContext
         if (ClientKey == null)
             throw new ArgumentNullException(nameof(ClientKey), "ClientKey cannot be null.");
 
-        return await _clientRepository.GetByClientIdAndRealmIdAsync(ClientKey, RealmId, ct)
+        return await _getClientRepository.GetByClientKeyAndRealmIdAsync(ClientKey, RealmId, ct)
             ?? throw new InvalidOperationException("Failed to retrieve Client with the provided ClientKey and RealmId.");
     }
     

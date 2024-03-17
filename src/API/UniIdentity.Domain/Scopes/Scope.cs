@@ -12,11 +12,6 @@ public sealed class Scope : BaseEntity
     public RealmId RealmId { get; private set; }
     public string Description { get; private set; }
 
-    public Realm Realm { get; private set; }
-
-    public ICollection<ScopeAttribute> ScopeAttributes { get; private set; }
-    public ICollection<ClientScope> ClientScopes { get; private set; }
-    
     private Scope(ScopeId id, string name, string protocol, RealmId realmId, string description)
     {
         Id = id;

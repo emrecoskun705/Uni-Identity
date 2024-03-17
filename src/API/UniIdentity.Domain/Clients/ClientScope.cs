@@ -9,6 +9,4 @@ public class ClientScope
     public ScopeId ScopeId { get; private set; }
     public bool DefaultScope { get; private set; }
     
-    public Client Client { get; private set; }
-    public Scope Scope { get; private set; }
 }

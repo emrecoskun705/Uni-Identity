@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniIdentity.Domain.Realms;
+using UniIdentity.Domain.Realms.Repositories;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-internal class RealmRepository : Repository<Realm>, IRealmRepository
+internal class RealmRepository : Repository<Realm>, IGetRealmRepository, IAddRealmRepository
 {
     public RealmRepository(ApplicationDbContext dbContext)
         : base(dbContext)
@@ -14,11 +15,5 @@ internal class RealmRepository : Repository<Realm>, IRealmRepository
     {
         return await _db.Realm.FirstOrDefaultAsync(x => x.Id == realmId, cancellationToken: ct);
     }
-
-    public async Task<RealmAttribute> GetRealmAttributeAsync(RealmId realmId, string name, CancellationToken ct = default)
-    {
-        return await _db.RealmAttribute
-            .Where(x => x.Realm.Id == realmId && x.Name == name)
-            .FirstAsync(cancellationToken: ct);
-    }
+    
 }

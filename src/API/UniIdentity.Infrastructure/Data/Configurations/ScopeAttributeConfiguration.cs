@@ -21,8 +21,8 @@ internal sealed class ScopeAttributeConfiguration : IEntityTypeConfiguration<Sco
         builder.Property(x => x.Value)
             .HasMaxLength(2000);
         
-        builder.HasOne(x => x.Scope)
-            .WithMany(x => x.ScopeAttributes)
+        builder.HasOne<Scope>()
+            .WithMany()
             .HasForeignKey(x => x.Id);
     }
 }

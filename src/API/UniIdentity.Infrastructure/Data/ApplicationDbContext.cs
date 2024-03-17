@@ -1,9 +1,11 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using UniIdentity.Domain.ClientAttributes;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Configs;
 using UniIdentity.Domain.Credentials;
+using UniIdentity.Domain.RealmAttributes;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Roles;
 using UniIdentity.Domain.Scopes;

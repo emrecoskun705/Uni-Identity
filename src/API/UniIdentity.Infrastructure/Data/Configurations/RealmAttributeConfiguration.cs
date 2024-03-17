@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using UniIdentity.Domain.RealmAttributes;
 using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Data.Configurations;
@@ -21,8 +22,8 @@ internal sealed class RealmAttributeConfiguration : IEntityTypeConfiguration<Rea
         builder.Property(x => x.Value)
             .HasMaxLength(3000);
         
-        builder.HasOne(x => x.Realm)
-            .WithMany(x => x.RealmAttributes)
+        builder.HasOne<Realm>()
+            .WithMany()
             .HasForeignKey(x => x.Id);
     }
 }

@@ -38,12 +38,12 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
                 x => x.Value,
                 x => new ClientId(x));
         
-        builder.HasOne(x => x.Realm)
-            .WithMany(x => x.Roles)
+        builder.HasOne<Realm>()
+            .WithMany()
             .HasForeignKey(x => x.RealmId);
         
-        builder.HasOne(x => x.Client)
-            .WithMany(x => x.Roles)
+        builder.HasOne<Client>()
+            .WithMany()
             .HasForeignKey(x => x.ClientId);
         
         builder.HasIndex(x => x.RealmId)

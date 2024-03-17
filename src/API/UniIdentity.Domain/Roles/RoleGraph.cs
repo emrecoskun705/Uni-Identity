@@ -7,9 +7,6 @@ public sealed class RoleGraph : BaseEntity
     public RoleId ParentRoleId { get; private set; }
     public RoleId ChildRoleId { get; private set; }
     
-    public Role ParentRole { get; private set; }
-    public Role ChildRole { get; private set; }
-
     private RoleGraph(RoleId parentRoleId, RoleId childRoleId)
     {
         ParentRoleId = parentRoleId;

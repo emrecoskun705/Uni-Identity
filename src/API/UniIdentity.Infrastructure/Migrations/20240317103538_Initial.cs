@@ -29,6 +29,21 @@ namespace UniIdentity.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Scope",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Protocol = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    RealmId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Scope", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Client",
                 columns: table => new
                 {
@@ -88,7 +103,8 @@ namespace UniIdentity.Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "character varying(100)", nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Value = table.Column<string>(type: "character varying(3000)", maxLength: 3000, nullable: false)
+                    Value = table.Column<string>(type: "character varying(3000)", maxLength: 3000, nullable: false),
+                    RealmId = table.Column<string>(type: "character varying(100)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,23 +115,8 @@ namespace UniIdentity.Infrastructure.Migrations
                         principalTable: "Realm",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Scope",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Protocol = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    RealmId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Scope", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Scope_Realm_RealmId",
+                        name: "FK_RealmAttribute_Realm_RealmId",
                         column: x => x.RealmId,
                         principalTable: "Realm",
                         principalColumn: "Id",
@@ -145,6 +146,24 @@ namespace UniIdentity.Infrastructure.Migrations
                         name: "FK_User_Realm_RealmId",
                         column: x => x.RealmId,
                         principalTable: "Realm",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ScopeAttribute",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScopeAttribute", x => new { x.Id, x.Name });
+                    table.ForeignKey(
+                        name: "FK_ScopeAttribute_Scope_Id",
+                        column: x => x.Id,
+                        principalTable: "Scope",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -164,6 +183,31 @@ namespace UniIdentity.Infrastructure.Migrations
                         name: "FK_ClientAttribute_Client_Id",
                         column: x => x.Id,
                         principalTable: "Client",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClientScope",
+                columns: table => new
+                {
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScopeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DefaultScope = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientScope", x => new { x.ClientId, x.ScopeId });
+                    table.ForeignKey(
+                        name: "FK_ClientScope_Client_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Client",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClientScope_Scope_ScopeId",
+                        column: x => x.ScopeId,
+                        principalTable: "Scope",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -211,50 +255,6 @@ namespace UniIdentity.Infrastructure.Migrations
                         name: "FK_ConfigAttribute_Config_ConfigId",
                         column: x => x.ConfigId,
                         principalTable: "Config",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClientScope",
-                columns: table => new
-                {
-                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ScopeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DefaultScope = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClientScope", x => new { x.ClientId, x.ScopeId });
-                    table.ForeignKey(
-                        name: "FK_ClientScope_Client_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Client",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ClientScope_Scope_ScopeId",
-                        column: x => x.ScopeId,
-                        principalTable: "Scope",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ScopeAttribute",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ScopeAttribute", x => new { x.Id, x.Name });
-                    table.ForeignKey(
-                        name: "FK_ScopeAttribute_Scope_Id",
-                        column: x => x.Id,
-                        principalTable: "Scope",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -361,6 +361,11 @@ namespace UniIdentity.Infrastructure.Migrations
                 name: "IX_Credential_UserId",
                 table: "Credential",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RealmAttribute_RealmId",
+                table: "RealmAttribute",
+                column: "RealmId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Role_ClientId",

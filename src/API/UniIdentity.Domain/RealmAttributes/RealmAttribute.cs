@@ -1,6 +1,7 @@
 ﻿using UniIdentity.Domain.Common;
+using UniIdentity.Domain.Realms;
 
-namespace UniIdentity.Domain.Realms;
+namespace UniIdentity.Domain.RealmAttributes;
 
 public class RealmAttribute : BaseEntity
 {
@@ -22,10 +23,11 @@ public class RealmAttribute : BaseEntity
     
     private RealmAttribute() {}
 
-    public static RealmAttribute Create(string name, string value)
+    public static RealmAttribute Create(RealmId realmId, string name, string value)
     {
         return new RealmAttribute
         {
+            Id = realmId,
             Name = name,
             Value = value
         };
