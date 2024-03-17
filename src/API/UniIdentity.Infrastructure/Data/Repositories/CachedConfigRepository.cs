@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using UniIdentity.Domain;
 using UniIdentity.Domain.Configs;
 using UniIdentity.Domain.Realms;
-using CacheKeys = UniIdentity.Domain.Configs.CacheKeys;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 

@@ -109,7 +109,7 @@ public sealed class Realm : BaseEntity
     /// </remarks>
     public async Task AddAttribute(string name, string value, IAddRealmAttributeRepository addRealmAttributeRepository)
     {
-        var realmAttribute = RealmAttribute.Create(Id, name, value);
+        var realmAttribute =  new RealmAttribute(Id, name, value);
         await addRealmAttributeRepository.AddAsync(realmAttribute);
     }
 

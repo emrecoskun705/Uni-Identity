@@ -15,7 +15,7 @@ internal sealed class RealmAttributeRepository : Repository<Realm>, IGetRealmAtt
     public async Task<RealmAttribute> GetByNameAsync(RealmId realmId, string name, CancellationToken ct = default)
     {
         return await _db.RealmAttribute
-            .Where(x => x.Realm.Id == realmId && x.Name == name)
+            .Where(x => x.Id == realmId && x.Name == name)
             .FirstAsync(cancellationToken: ct);
     }
 }

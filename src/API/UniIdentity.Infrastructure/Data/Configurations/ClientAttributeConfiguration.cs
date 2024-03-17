@@ -9,7 +9,7 @@ internal sealed class ClientAttributeConfiguration : IEntityTypeConfiguration<Cl
 {
     public void Configure(EntityTypeBuilder<ClientAttribute> builder)
     {
-        builder.HasKey(x => new { Id = x.Id, x.Name });
+        builder.HasKey(x => new { Id = x.ClientId, x.Name });
         
         builder.Property(x => x.Name)
             .HasMaxLength(255);
@@ -19,7 +19,7 @@ internal sealed class ClientAttributeConfiguration : IEntityTypeConfiguration<Cl
         
         builder.HasOne<Client>()
             .WithMany()
-            .HasForeignKey(x => x.Id);
+            .HasForeignKey(x => x.ClientId);
         
     }
 }

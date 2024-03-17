@@ -1,5 +1,4 @@
-﻿using UniIdentity.Domain.Clients;
-using UniIdentity.Domain.Common;
+﻿using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Domain.Scopes;

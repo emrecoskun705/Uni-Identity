@@ -18,7 +18,7 @@ public class ClientAttributeRepository : Repository<ClientAttribute>, IGetClient
         return await _db.Client
             .Join(_db.ClientAttribute,
                 client => client.Id,
-                clientAttribute => clientAttribute.Id,
+                clientAttribute => clientAttribute.ClientId,
                 (client, clientAttribute) => new { client, clientAttribute })
             .Where(x => x.client.RealmId == realmId && x.client.ClientKey == clientKey && x.clientAttribute.Name == name)
             .Select(x => x.clientAttribute)
