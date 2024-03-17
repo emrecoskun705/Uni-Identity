@@ -1,6 +1,7 @@
 ﻿using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Credentials.Services;
 using UniIdentity.Domain.Realms;
+using UniIdentity.Domain.Shared;
 using UniIdentity.Domain.Users.Events;
 using UniIdentity.Domain.Users.ValueObjects;
 
@@ -39,6 +40,15 @@ public sealed class User : AggregateRoot
 
         user.AddDomainEvent(new UserCreatedDomainEvent(user.Id));
         return user;
+    }
+
+    public Result VerifyEmail()
+    {
+        if (EmailVerified)
+            Result.Failure(DomainErrors.UserErrors.EmailAlreadyVerified);
+
+        EmailVerified = true;
+        return Result.Success();
     }
     
 }

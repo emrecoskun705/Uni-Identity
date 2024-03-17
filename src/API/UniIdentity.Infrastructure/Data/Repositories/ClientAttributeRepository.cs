@@ -6,7 +6,7 @@ using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-public class ClientAttributeRepository : Repository<ClientAttribute>, IGetClientAttributeRepository
+public class ClientAttributeRepository : Repository<ClientAttribute>, IGetClientAttributeRepository, IAddClientAttributeRepository
 {
     public ClientAttributeRepository(ApplicationDbContext dbContext)
         : base(dbContext)

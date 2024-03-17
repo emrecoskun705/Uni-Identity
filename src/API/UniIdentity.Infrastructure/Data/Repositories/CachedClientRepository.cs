@@ -4,7 +4,6 @@ using UniIdentity.Domain;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Clients.Repositories;
 using UniIdentity.Domain.Realms;
-using CacheKeys = UniIdentity.Domain.Clients.CacheKeys;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 

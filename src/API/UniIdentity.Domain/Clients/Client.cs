@@ -1,4 +1,5 @@
-﻿using UniIdentity.Domain.ClientAttributes.Repositories;
+﻿using UniIdentity.Domain.ClientAttributes;
+using UniIdentity.Domain.ClientAttributes.Repositories;
 using UniIdentity.Domain.Clients.Enums;
 using UniIdentity.Domain.Clients.Events;
 using UniIdentity.Domain.Clients.ValueObjects;
@@ -31,6 +32,12 @@ public sealed class Client : AggregateRoot
     public async Task<string?> GetAttribute(string attribute, IGetClientAttributeRepository getClientAttributeRepository)
     {
         return (await getClientAttributeRepository.GetByNameAsync(RealmId, ClientKey, attribute)).Value;
+    }
+
+    public ClientAttribute CreateAttribute(string name, string value)
+    {
+        var clientAttribute = new ClientAttribute(Id, name, value);
+        return clientAttribute;
     }
     
     public static Client Create(RealmId realmId, ClientKey clientKey, Protocol protocol, string rootUrl)
