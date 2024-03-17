@@ -179,7 +179,7 @@ public class ApplicationDbContextInitializer
 
         if (masterRealm == null)
         {
-            masterRealm = Realm.CreateRealmWithDefaultAttributes("master" , true);
+            masterRealm = Realm.Create("master" , true);
             
             _context.Add<Realm>(masterRealm);
             

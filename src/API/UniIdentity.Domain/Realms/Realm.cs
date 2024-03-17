@@ -6,18 +6,52 @@ using UniIdentity.Domain.Realms.Enums;
 
 namespace UniIdentity.Domain.Realms;
 
+/// <summary>
+/// Represents a realm within the identity system, providing management capabilities for users, applications, roles, and groups.
+/// </summary>
+/// <remarks>
+/// Realms serve as spaces where various objects, such as users, applications, roles, and groups, are managed. Users typically belong to and authenticate within a specific realm.
+/// </remarks>
 public sealed class Realm : BaseEntity
 {
-    public RealmId Id { get; private set; }
-    public int AccessTokenLifeSpan { get; private set; }
-    public int SsoMaxLifeSpan { get; private set; }
-    public string Name { get; private set; }
-    public SslRequirement SslRequirement { get; private set; }
-    public bool Enabled { get; private set; }
-    public bool VerifyEmail { get; private set; }
-    
     private const int DefaultLifeSpan = 60;
 
+    /// <summary>
+    /// Gets the unique identifier of the realm.
+    /// </summary>
+    public RealmId Id { get; private set; }
+    
+    /// <summary>
+    /// Gets or sets the lifespan of access tokens issued for this realm, in seconds.
+    /// </summary>
+    public int AccessTokenLifeSpan { get; private set; }
+    
+    /// <summary>
+    /// Gets or sets the maximum single sign-on (SSO) lifespan for this realm, in seconds.
+    /// </summary>
+    public int SsoMaxLifeSpan { get; private set; }
+    
+    /// <summary>
+    /// Gets or sets the name of the realm.
+    /// </summary>
+    public string Name { get; private set; }
+    
+    /// <summary>
+    /// Gets or sets the SSL requirement level for communications with this realm.
+    /// </summary>
+    public SslRequirement SslRequirement { get; private set; }
+    
+    /// <summary>
+    /// Gets or sets a value indicating whether the realm is enabled.
+    /// </summary>
+    public bool Enabled { get; private set; }
+    
+    /// <summary>
+    /// Gets or sets a value indicating whether email verification is required for this realm.
+    /// </summary>
+    public bool VerifyEmail { get; private set; }
+    
+    // Private constructor to enforce creation through factory method
     private Realm(RealmId id,
         int accessTokenLifeSpan,
         int ssoMaxLifeSpan,
@@ -35,7 +69,13 @@ public sealed class Realm : BaseEntity
         VerifyEmail = verifyEmail;
     }
 
-    public static Realm CreateRealmWithDefaultAttributes(
+    /// <summary>
+    /// Creates a new realm.
+    /// </summary>
+    /// <param name="name">The name of the realm.</param>
+    /// <param name="enabled">A value indicating whether the realm is enabled.</param>
+    /// <returns>A new <see cref="Realm"/> instance with default attributes.</returns>
+    public static Realm Create(
         string name,
         bool enabled
         )
@@ -44,11 +84,29 @@ public sealed class Realm : BaseEntity
         return realm;
     }
 
+    /// <summary>
+    /// Retrieves the signature algorithm configured for this realm.
+    /// </summary>
+    /// <param name="getRealmAttributeRepository">The repository for retrieving realm attributes.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation (optional).</param>
+    /// <returns>The signature algorithm associated with this realm, or <c>null</c> if not found.</returns>
+    /// <remarks>
+    /// This method asynchronously retrieves the signature algorithm configured for this realm.
+    /// </remarks>
     public async Task<string?> GetSignatureAlgorithm(IGetRealmAttributeRepository getRealmAttributeRepository, CancellationToken cancellationToken = default)
     {
         return (await getRealmAttributeRepository.GetByNameAsync(Id, RealmAttributeName.SignatureAlgorithm, cancellationToken)).Value;
     }
     
+    /// <summary>
+    /// Adds a new attribute to the realm.
+    /// </summary>
+    /// <param name="name">The name of the attribute to add.</param>
+    /// <param name="value">The value of the attribute to add.</param>
+    /// <param name="addRealmAttributeRepository">The repository for adding realm attributes.</param>
+    /// <remarks>
+    /// This method adds a new attribute with the specified name and value to the realm.
+    /// </remarks>
     public async Task AddAttribute(string name, string value, IAddRealmAttributeRepository addRealmAttributeRepository)
     {
         var realmAttribute = RealmAttribute.Create(Id, name, value);
