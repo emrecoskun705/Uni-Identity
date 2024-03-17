@@ -5,5 +5,5 @@ namespace UniIdentity.Application.Tokens.Contracts;
 
 public interface ITokenBuilder
 {
-     Task<string> Create(IToken token);
+     Task<string> Create(IToken token, CancellationToken cancellationToken = default);
 }

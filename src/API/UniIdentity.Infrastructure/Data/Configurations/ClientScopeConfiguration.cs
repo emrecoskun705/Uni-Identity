@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Scopes;
 
 namespace UniIdentity.Infrastructure.Data.Configurations;
 
@@ -11,13 +12,13 @@ internal sealed class ClientScopeConfiguration : IEntityTypeConfiguration<Client
         builder.HasKey(x => new { ClientId = x.ClientId, x.ScopeId });
         
         builder
-            .HasOne(x => x.Client)
-            .WithMany(x => x.ClientScopes)
+            .HasOne<Client>()
+            .WithMany()
             .HasForeignKey(x => x.ClientId);
 
         builder
-            .HasOne(x => x.Scope)
-            .WithMany(x => x.ClientScopes)
+            .HasOne<Scope>()
+            .WithMany()
             .HasForeignKey(x => x.ScopeId);
     }
 }

@@ -82,8 +82,8 @@ internal sealed class ClientConfiguration : IEntityTypeConfiguration<Client>
         builder.Property(x => x.ClientCredentialsGrantEnabled)
             .HasDefaultValue(false);
 
-        builder.HasOne(x => x.Realm)
-            .WithMany(x => x.Clients)
+        builder.HasOne<Realm>()
+            .WithMany()
             .HasForeignKey(x => x.RealmId);
 
         builder.HasIndex(x => x.ClientKey)

@@ -1,12 +1,13 @@
-﻿using UniIdentity.Domain.Clients.ValueObjects;
+﻿using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Realms;
 
-namespace UniIdentity.Domain.Clients;
+// ReSharper disable once CheckNamespace
+namespace UniIdentity.Domain;
 
-public static class CacheKeys
+public static partial class CacheKeys
 {
     public static readonly Func<ClientKey,RealmId, string> ClientByClientIdAndRealmId = 
         (clientId, realmId) => $"client-{clientId.Value}-{realmId.Value}";
-    public static readonly Func<ClientId, string> ClientAttributesByClientId = 
-        (clientId) => $"client-attributes-{clientId.Value}";
+    public static readonly Func<RealmId, ClientKey, string, string> ClientAttributeByClientKeyRealmIdName = 
+        (realmAttribute, clientKey, name) => $"client-attributes-{realmAttribute.Value}-{clientKey.Value}-{name}";
 }

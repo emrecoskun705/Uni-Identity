@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using UniIdentity.Domain.ClientAttributes;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Configs;
 using UniIdentity.Domain.Realms;

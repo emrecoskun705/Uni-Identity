@@ -1,15 +1,16 @@
-﻿using UniIdentity.Domain.Clients.Enums;
+﻿using UniIdentity.Domain.ClientAttributes;
+using UniIdentity.Domain.ClientAttributes.Repositories;
+using UniIdentity.Domain.Clients.Enums;
 using UniIdentity.Domain.Clients.Events;
 using UniIdentity.Domain.Clients.ValueObjects;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Realms;
-using UniIdentity.Domain.Roles;
 
 namespace UniIdentity.Domain.Clients;
 
 public sealed class Client : AggregateRoot
 {
-    public ClientId Id { get; private set; }
+    public ClientId Id { get; }
     public ClientKey ClientKey { get; private set; }
     public string? ClientSecret { get; private set; }
     public string? Name { get; private set; }
@@ -28,15 +29,15 @@ public sealed class Client : AggregateRoot
     public bool DirectAccessGrantsEnabled { get; private set; }
     public bool ClientCredentialsGrantEnabled { get; private set; }
 
-    public ICollection<ClientAttribute> ClientAttributes { get; private set; }
-    public ICollection<ClientScope> ClientScopes { get; private set; }
-    public ICollection<Role> Roles { get; private set; }
-
-    public Realm Realm { get; }
-
-    public string? GetAttribute(string attribute)
+    public async Task<string?> GetAttribute(string attribute, IGetClientAttributeRepository getClientAttributeRepository)
     {
-        return ClientAttributes.FirstOrDefault(x => x.Name == attribute)?.Value;
+        return (await getClientAttributeRepository.GetByNameAsync(RealmId, ClientKey, attribute)).Value;
+    }
+
+    public ClientAttribute CreateAttribute(string name, string value)
+    {
+        var clientAttribute = new ClientAttribute(Id, name, value);
+        return clientAttribute;
     }
     
     public static Client Create(RealmId realmId, ClientKey clientKey, Protocol protocol, string rootUrl)
@@ -50,13 +51,13 @@ public sealed class Client : AggregateRoot
             Protocol = protocol,
             Enabled = true,
             AuthorizationCodeFlowEnabled = true,
+            ClientAuthenticationType = ClientAuthenticationType.ClientSecret,
             DirectAccessGrantsEnabled = true,
             AccessType = AccessType.Public
         };
         client.AddDomainEvent(new ClientCreatedEvent(client.Id));
         return client;
     }
-
     
     private Client(ClientKey clientKey,string? clientSecret,string? name,Protocol? protocol,
         string? baseUrl, string? rootUrl ,string? managementUrl, ClientAuthenticationType clientAuthenticationType,

@@ -2,7 +2,7 @@
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-internal abstract class Repository<TEntity> 
+public abstract class Repository<TEntity> 
     where TEntity : BaseEntity
 {
     protected readonly ApplicationDbContext _db;

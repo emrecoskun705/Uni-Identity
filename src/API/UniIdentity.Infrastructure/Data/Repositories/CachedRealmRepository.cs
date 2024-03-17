@@ -2,16 +2,17 @@
 using Microsoft.Extensions.DependencyInjection;
 using UniIdentity.Domain;
 using UniIdentity.Domain.Realms;
+using UniIdentity.Domain.Realms.Repositories;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-internal sealed class CachedRealmRepository : IRealmRepository
+internal sealed class CachedRealmRepository : IGetRealmRepository
 {
-    private readonly IRealmRepository _realmRepository;
+    private readonly IGetRealmRepository _realmRepository;
     private readonly IMemoryCache _memoryCache;
 
     public CachedRealmRepository(
-        [FromKeyedServices(ServiceKey.RealmOriginalKey)]IRealmRepository realmRepository, 
+        [FromKeyedServices(ServiceKey.RealmOriginalKey)]IGetRealmRepository realmRepository, 
         IMemoryCache memoryCache)
     {
         _realmRepository = realmRepository;
@@ -24,11 +25,5 @@ internal sealed class CachedRealmRepository : IRealmRepository
             CacheKeys.RealmById(realmId),
             _ => _realmRepository.GetByRealmId(realmId, ct));
     }
-
-    public async Task<RealmAttribute> GetRealmAttributeAsync(RealmId realmId, string name, CancellationToken ct = default)
-    {
-        return (await _memoryCache.GetOrCreateAsync(
-            CacheKeys.RealmAttributeCacheKey(realmId, name),
-            _ => _realmRepository.GetRealmAttributeAsync(realmId, name, ct)))!;
-    }
+    
 }

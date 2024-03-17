@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using UniIdentity.Domain.Credentials;
+using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Users;
 using UniIdentity.Domain.Users.ValueObjects;
 
@@ -50,13 +52,14 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
                 val => IdentityId.FromValue(val)
             );
 
-        builder.HasMany(x => x.Credentials)
-            .WithOne(x => x.User)
+        builder.HasMany<Credential>()
+            .WithOne()
             .HasForeignKey(x => x.UserId);
 
-        builder.HasOne(x => x.Realm)
-            .WithMany(x => x.Users)
-            .HasForeignKey(x => x.RealmId);
+        builder.HasOne<Realm>()
+            .WithMany()
+            .HasForeignKey(x => x.RealmId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasIndex(x => x.NormalizedEmail)
             .HasDatabaseName("IX_User_NormalizedEmail")

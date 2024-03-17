@@ -1,7 +1,7 @@
 ﻿using UniIdentity.Domain.Common;
-using UniIdentity.Domain.Credentials;
 using UniIdentity.Domain.Credentials.Services;
 using UniIdentity.Domain.Realms;
+using UniIdentity.Domain.Shared;
 using UniIdentity.Domain.Users.Events;
 using UniIdentity.Domain.Users.ValueObjects;
 
@@ -18,13 +18,9 @@ public sealed class User : AggregateRoot
     public NormalizedUsername NormalizedUsername { get; private set; }
     public DateTimeOffset CreatedDateTime { get; private set; }
     public DateTimeOffset? UpdatedDateTime { get; private set; }
-    public ICollection<UserRole> UserRoles { get; private set; }
-    public ICollection<Credential> Credentials { get; private set; }
     public RealmId RealmId { get; set; }
     public IdentityId IdentityId { get; private set; }
     
-    public Realm Realm { get; } = null!;
-
     private User(UserId id, Email email, Username username, DateTimeOffset createdDateTime, IdentityId identityId)
     {
         Id = id;
@@ -40,19 +36,19 @@ public sealed class User : AggregateRoot
     
     public static User Create(Email email, Username username, Password password, DateTimeOffset createTime, IPasswordHasher passwordHasher)
     {
-        var user = new User(UserId.New(), email, username, createTime, IdentityId.New())
-        {
-            Credentials = new List<Credential>()
-        };
+        var user = new User(UserId.New(), email, username, createTime, IdentityId.New());
 
-        var hashedPassword = passwordHasher.HashPassword(password);
-        
-        var passwordCredential = PasswordCredential.Create(user.Id, createTime, hashedPassword);
-        
-        user.Credentials.Add(passwordCredential);
-        
         user.AddDomainEvent(new UserCreatedDomainEvent(user.Id));
         return user;
+    }
+
+    public Result VerifyEmail()
+    {
+        if (EmailVerified)
+            Result.Failure(DomainErrors.UserErrors.EmailAlreadyVerified);
+
+        EmailVerified = true;
+        return Result.Success();
     }
     
 }
