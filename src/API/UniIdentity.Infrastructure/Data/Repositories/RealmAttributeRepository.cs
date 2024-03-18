@@ -5,7 +5,7 @@ using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-internal sealed class RealmAttributeRepository : Repository<Realm>, IGetRealmAttributeRepository
+internal sealed class RealmAttributeRepository : Repository<RealmAttribute>, IGetRealmAttributeRepository, IAddRealmAttributeRepository
 {
     public RealmAttributeRepository(ApplicationDbContext dbContext)
         : base(dbContext)
@@ -18,4 +18,5 @@ internal sealed class RealmAttributeRepository : Repository<Realm>, IGetRealmAtt
             .Where(x => x.Id == realmId && x.Name == name)
             .FirstAsync(cancellationToken: ct);
     }
+    
 }

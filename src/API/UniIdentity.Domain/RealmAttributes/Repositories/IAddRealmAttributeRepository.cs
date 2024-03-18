@@ -2,5 +2,5 @@
 
 public interface IAddRealmAttributeRepository
 {
-    Task AddAsync(RealmAttribute realm);
+    void Add(RealmAttribute realm);
 }

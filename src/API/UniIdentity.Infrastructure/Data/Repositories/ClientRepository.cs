@@ -5,7 +5,7 @@ using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-internal sealed class ClientRepository : Repository<Client>, IGetClientRepository
+internal sealed class ClientRepository : Repository<Client>, IGetClientRepository, IAddClientRepository
 {
     public ClientRepository(ApplicationDbContext dbContext)
         : base(dbContext)

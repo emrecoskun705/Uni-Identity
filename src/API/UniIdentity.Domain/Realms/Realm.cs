@@ -97,20 +97,16 @@ public sealed class Realm : BaseEntity
     {
         return (await getRealmAttributeRepository.GetByNameAsync(Id, RealmAttributeName.SignatureAlgorithm, cancellationToken)).Value;
     }
-    
+
     /// <summary>
-    /// Adds a new attribute to the realm.
+    /// Creates a new realm attribute with the specified name and value.
     /// </summary>
-    /// <param name="name">The name of the attribute to add.</param>
-    /// <param name="value">The value of the attribute to add.</param>
-    /// <param name="addRealmAttributeRepository">The repository for adding realm attributes.</param>
-    /// <remarks>
-    /// This method adds a new attribute with the specified name and value to the realm.
-    /// </remarks>
-    public async Task AddAttribute(string name, string value, IAddRealmAttributeRepository addRealmAttributeRepository)
+    /// <param name="name">The name of the realm attribute.</param>
+    /// <param name="value">The value of the realm attribute.</param>
+    /// <returns>A new instance of <see cref="RealmAttribute"/>.</returns>
+    public RealmAttribute CreateAttribute(string name, string value)
     {
-        var realmAttribute =  new RealmAttribute(Id, name, value);
-        await addRealmAttributeRepository.AddAsync(realmAttribute);
+        return new RealmAttribute(Id, name, value);
     }
 
 }

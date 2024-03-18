@@ -48,14 +48,23 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<ApplicationDbContextInitializer>();
         services.AddScoped<IUserRepository, UserRepository>();
+        
         services.AddKeyedScoped<IGetRealmRepository, RealmRepository>(ServiceKey.RealmOriginalKey);
+        services.AddScoped<IAddRealmRepository, RealmRepository>();
         services.AddScoped<IGetRealmRepository, CachedRealmRepository>();
+        
         services.AddKeyedScoped<IGetRealmAttributeRepository, RealmAttributeRepository>(ServiceKey.RealmOriginalKey);
+        services.AddScoped<IAddRealmAttributeRepository, RealmAttributeRepository>();
         services.AddScoped<IGetRealmAttributeRepository, CachedRealmAttributeRepository>();
+        
         services.AddKeyedScoped<IGetClientRepository, ClientRepository>(ServiceKey.ClientOriginalKey);
+        services.AddScoped<IAddClientRepository, ClientRepository>();
         services.AddScoped<IGetClientRepository, CachedClientRepository>();
+        
         services.AddKeyedScoped<IGetClientAttributeRepository, ClientAttributeRepository>(ServiceKey.ClientOriginalKey);
+        services.AddScoped<IAddClientAttributeRepository, ClientAttributeRepository>();
         services.AddScoped<IGetClientAttributeRepository, CachedClientAttributeRepository>();
+        
         services.AddKeyedScoped<IConfigRepository, ConfigRepository>(ServiceKey.ConfigOriginalKey);
         services.AddScoped<IConfigRepository, CachedConfigRepository>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());

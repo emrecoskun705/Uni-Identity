@@ -16,4 +16,9 @@ public abstract class Repository<TEntity>
     {
         await _db.AddAsync(entity);
     }
+    
+    public void Add(TEntity entity)
+    {
+        _db.Add(entity);
+    }
 }
