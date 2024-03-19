@@ -2,18 +2,19 @@
 using Microsoft.Extensions.DependencyInjection;
 using UniIdentity.Domain;
 using UniIdentity.Domain.Configs;
+using UniIdentity.Domain.Configs.Repositories;
 using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-internal sealed class CachedConfigRepository : IConfigRepository
+internal sealed class CachedConfigRepository : IGetConfigRepository
 {
     private static readonly TimeSpan CacheTime = TimeSpan.FromDays(30);
-    private readonly IConfigRepository _configRepository;
+    private readonly IGetConfigRepository _configRepository;
     private readonly IMemoryCache _memoryCache;
 
     public CachedConfigRepository(
-        [FromKeyedServices(ServiceKey.ConfigOriginalKey)]IConfigRepository configRepository, 
+        [FromKeyedServices(ServiceKey.ConfigOriginalKey)]IGetConfigRepository configRepository, 
         IMemoryCache memoryCache)
     {
         _configRepository = configRepository;

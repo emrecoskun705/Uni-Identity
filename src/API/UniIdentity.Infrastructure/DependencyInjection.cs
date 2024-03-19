@@ -11,6 +11,7 @@ using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Clients.Repositories;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Configs;
+using UniIdentity.Domain.Configs.Repositories;
 using UniIdentity.Domain.Credentials.Services;
 using UniIdentity.Domain.RealmAttributes.Repositories;
 using UniIdentity.Domain.Realms;
@@ -65,8 +66,8 @@ public static class DependencyInjection
         services.AddScoped<IAddClientAttributeRepository, ClientAttributeRepository>();
         services.AddScoped<IGetClientAttributeRepository, CachedClientAttributeRepository>();
         
-        services.AddKeyedScoped<IConfigRepository, ConfigRepository>(ServiceKey.ConfigOriginalKey);
-        services.AddScoped<IConfigRepository, CachedConfigRepository>();
+        services.AddKeyedScoped<IGetConfigRepository, ConfigRepository>(ServiceKey.ConfigOriginalKey);
+        services.AddScoped<IGetConfigRepository, CachedConfigRepository>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddSingleton<ISessionManager, SessionManager>();
         services.AddSingleton(TimeProvider.System);

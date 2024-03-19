@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniIdentity.Domain.Configs;
+using UniIdentity.Domain.Configs.Repositories;
 using UniIdentity.Domain.Configs.ValueObjects;
 using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-internal sealed class ConfigRepository : Repository<Config>, IConfigRepository
+internal sealed class ConfigRepository : Repository<Config>, IGetConfigRepository
 {
     public ConfigRepository(ApplicationDbContext dbContext)
         : base(dbContext)

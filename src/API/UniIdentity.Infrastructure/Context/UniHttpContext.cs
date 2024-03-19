@@ -5,6 +5,7 @@ using UniIdentity.Domain.ClientAttributes.Repositories;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Clients.Repositories;
 using UniIdentity.Domain.Configs;
+using UniIdentity.Domain.Configs.Repositories;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Realms.Repositories;
 
@@ -21,14 +22,14 @@ internal sealed class UniHttpContext : IUniHttpContext
     private readonly IGetClientRepository _getClientRepository;
     private readonly IGetClientAttributeRepository _getClientAttributeRepository;
     private readonly IGetRealmRepository _getRealmRepository;
-    private readonly IConfigRepository _configRepository;
+    private readonly IGetConfigRepository _getConfigRepository;
     
-    public UniHttpContext(IHttpContextAccessor httpContextAccessor, IGetClientRepository getClientRepository, IGetRealmRepository getRealmRepository, IConfigRepository configRepository, IGetClientAttributeRepository getClientAttributeRepository)
+    public UniHttpContext(IHttpContextAccessor httpContextAccessor, IGetClientRepository getClientRepository, IGetRealmRepository getRealmRepository, IGetConfigRepository getConfigRepository, IGetClientAttributeRepository getClientAttributeRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _getClientRepository = getClientRepository;
         _getRealmRepository = getRealmRepository;
-        _configRepository = configRepository;
+        _getConfigRepository = getConfigRepository;
         _getClientAttributeRepository = getClientAttributeRepository;
         RealmId = ExtractRealmIdFromUrl(HttpContext.Request.Path);
         ClientKey = ExtractClientIdFromBody();
@@ -68,13 +69,13 @@ internal sealed class UniHttpContext : IUniHttpContext
     
     public async Task<RsaGenerationConfig> GetRsaGenerationConfigAsync(string name, CancellationToken ct = default)
     {
-        return await _configRepository.GetRsaGenerationConfigAsync(RealmId, name, ct)
+        return await _getConfigRepository.GetRsaGenerationConfigAsync(RealmId, name, ct)
             ?? throw new InvalidOperationException("Failed to retrieve RsaGenerationConfig with the provided RealmId and name.");
     }
 
     public async Task<HmacGenerationConfig> GetHmacGenerationConfigAsync(string name, CancellationToken ct = default)
     {
-        return await _configRepository.GetHmacGenerationConfigAsync(RealmId, name, ct)
+        return await _getConfigRepository.GetHmacGenerationConfigAsync(RealmId, name, ct)
             ?? throw new InvalidOperationException("Failed to retrieve HmacGenerationConfig with the provided RealmId and name.");
     }
 
