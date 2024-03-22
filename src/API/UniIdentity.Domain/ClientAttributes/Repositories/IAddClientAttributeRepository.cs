@@ -2,5 +2,5 @@
 
 public interface IAddClientAttributeRepository
 {
-    Task AddAsync(ClientAttribute clientAttribute);
+    void Add(ClientAttribute clientAttribute);
 }
