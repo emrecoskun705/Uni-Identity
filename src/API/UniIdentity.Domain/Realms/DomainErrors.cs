@@ -7,7 +7,7 @@ public static partial class DomainErrors
 {
     public static class RealmErrors
     {
-        public static Error AlreadyExists = Error.NotFound(
+        public static Error AlreadyExists = Error.Failure(
             "Realm.Exists",
             "The realm with the specified identifier exists.");
     }

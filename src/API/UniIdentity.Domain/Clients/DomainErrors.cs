@@ -11,5 +11,9 @@ public static partial class DomainErrors
             "Client.NotFound",
             "The client with the specified identifier was not found");
         
+        public static Error AlreadyExists = Error.Failure(
+            "Realm.Exists",
+            "The realm with the specified identifier exists.");
+        
     }
 }
