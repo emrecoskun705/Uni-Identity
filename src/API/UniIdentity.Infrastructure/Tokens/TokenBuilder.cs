@@ -5,10 +5,10 @@ using Microsoft.IdentityModel.Tokens;
 using UniIdentity.Application.Contracts.Context;
 using UniIdentity.Application.Tokens.Contracts;
 using UniIdentity.Application.Tokens.Models;
+using UniIdentity.Domain.ClientAttributes.Consts;
 using UniIdentity.Domain.ClientAttributes.Repositories;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Configs.Enums;
-using UniIdentity.Domain.OIDC;
 using UniIdentity.Domain.RealmAttributes.Repositories;
 using UniIdentity.Domain.Realms;
 
@@ -75,8 +75,12 @@ internal sealed class TokenBuilder : ITokenBuilder
     {
         var algorithm = (token.GetTokenType() switch
         {
-            TokenType.Access => await client.GetAttribute(OIDCAttribute.AccessTokenAlgorithm, _getClientAttributeRepository),
-            TokenType.Id => await client.GetAttribute(OIDCAttribute.IdTokenAlgorithm, _getClientAttributeRepository),
+            TokenType.Access => await client.GetAttribute(
+                ClientAttributeName.OIDCAttribute.AccessTokenAlgorithm, 
+                _getClientAttributeRepository),
+            TokenType.Id => await client.GetAttribute(
+                ClientAttributeName.OIDCAttribute.IdTokenAlgorithm, 
+                _getClientAttributeRepository),
             _ => throw new InvalidEnumArgumentException("Invalid TokenType enum exception.")
         } ?? await realm.GetSignatureAlgorithm(_getRealmAttributeRepository, cancellationToken)) ?? SignatureAlg.Default;
 
