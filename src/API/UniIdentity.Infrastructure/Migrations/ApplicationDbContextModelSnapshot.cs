@@ -24,7 +24,7 @@ namespace UniIdentity.Infrastructure.Migrations
 
             modelBuilder.Entity("UniIdentity.Domain.ClientAttributes.ClientAttribute", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -36,9 +36,27 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasMaxLength(3000)
                         .HasColumnType("character varying(3000)");
 
-                    b.HasKey("Id", "Name");
+                    b.HasKey("ClientId", "Name");
 
                     b.ToTable("ClientAttribute");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.ClientScopes.ClientScope", b =>
+                {
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ScopeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("DefaultScope")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("ClientId", "ScopeId");
+
+                    b.HasIndex("ScopeId");
+
+                    b.ToTable("ClientScope");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Clients.Client", b =>
@@ -135,24 +153,6 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.ToTable("Client");
                 });
 
-            modelBuilder.Entity("UniIdentity.Domain.Clients.ClientScope", b =>
-                {
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ScopeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("DefaultScope")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("ClientId", "ScopeId");
-
-                    b.HasIndex("ScopeId");
-
-                    b.ToTable("ClientScope");
-                });
-
             modelBuilder.Entity("UniIdentity.Domain.Configs.Config", b =>
                 {
                     b.Property<Guid>("Id")
@@ -170,7 +170,7 @@ namespace UniIdentity.Infrastructure.Migrations
 
                     b.Property<string>("RealmId")
                         .IsRequired()
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -256,18 +256,12 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<string>("RealmId")
-                        .IsRequired()
-                        .HasColumnType("character varying(100)");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasMaxLength(3000)
                         .HasColumnType("character varying(3000)");
 
                     b.HasKey("Id", "Name");
-
-                    b.HasIndex("RealmId");
 
                     b.ToTable("RealmAttribute");
                 });
@@ -366,6 +360,29 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasDatabaseName("IX_RoleGraph_ParentRoleId");
 
                     b.ToTable("RoleGraph");
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Scopes.DefaultScope", b =>
+                {
+                    b.Property<string>("RealmId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<Guid>("ScopeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("RealmId", "ScopeId");
+
+                    b.HasIndex("RealmId")
+                        .HasDatabaseName("IX_DefaultScope_RealmId");
+
+                    b.HasIndex("ScopeId")
+                        .HasDatabaseName("IX_DefaultScope_ScopeId");
+
+                    b.ToTable("DefaultScope");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Scopes.Scope", b =>
@@ -525,21 +542,12 @@ namespace UniIdentity.Infrastructure.Migrations
                 {
                     b.HasOne("UniIdentity.Domain.Clients.Client", null)
                         .WithMany()
-                        .HasForeignKey("Id")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UniIdentity.Domain.Clients.Client", b =>
-                {
-                    b.HasOne("UniIdentity.Domain.Realms.Realm", null)
-                        .WithMany()
-                        .HasForeignKey("RealmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("UniIdentity.Domain.Clients.ClientScope", b =>
+            modelBuilder.Entity("UniIdentity.Domain.ClientScopes.ClientScope", b =>
                 {
                     b.HasOne("UniIdentity.Domain.Clients.Client", null)
                         .WithMany()
@@ -554,15 +562,13 @@ namespace UniIdentity.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UniIdentity.Domain.Configs.Config", b =>
+            modelBuilder.Entity("UniIdentity.Domain.Clients.Client", b =>
                 {
-                    b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
+                    b.HasOne("UniIdentity.Domain.Realms.Realm", null)
                         .WithMany()
                         .HasForeignKey("RealmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Realm");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Configs.ConfigAttribute", b =>
@@ -592,14 +598,6 @@ namespace UniIdentity.Infrastructure.Migrations
                         .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("UniIdentity.Domain.Realms.Realm", "Realm")
-                        .WithMany()
-                        .HasForeignKey("RealmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Realm");
                 });
 
             modelBuilder.Entity("UniIdentity.Domain.Roles.Role", b =>
@@ -626,6 +624,21 @@ namespace UniIdentity.Infrastructure.Migrations
                     b.HasOne("UniIdentity.Domain.Roles.Role", null)
                         .WithMany()
                         .HasForeignKey("ParentRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UniIdentity.Domain.Scopes.DefaultScope", b =>
+                {
+                    b.HasOne("UniIdentity.Domain.Realms.Realm", null)
+                        .WithMany()
+                        .HasForeignKey("RealmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniIdentity.Domain.Scopes.Scope", null)
+                        .WithOne()
+                        .HasForeignKey("UniIdentity.Domain.Scopes.DefaultScope", "ScopeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

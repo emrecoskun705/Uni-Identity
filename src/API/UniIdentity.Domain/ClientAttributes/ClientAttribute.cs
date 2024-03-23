@@ -33,11 +33,11 @@ public sealed class ClientAttribute : BaseEntity
     /// <param name="name">The name of the client attribute.</param>
     /// <param name="value">The value of the client attribute.</param>
     internal ClientAttribute(
-        ClientId clientClientId,
+        ClientId clientId,
         string name,
         string value)
     {
-        ClientId = clientClientId;
+        ClientId = clientId;
         Name = name;
         Value = value;
     }

@@ -1,8 +1,11 @@
-﻿using UniIdentity.Domain.Common;
+﻿using UniIdentity.Domain.Clients.Repositories;
+using UniIdentity.Domain.Common;
 using UniIdentity.Domain.RealmAttributes;
 using UniIdentity.Domain.RealmAttributes.Repositories;
 using UniIdentity.Domain.Realms.Consts;
 using UniIdentity.Domain.Realms.Enums;
+using UniIdentity.Domain.Scopes;
+using UniIdentity.Domain.Scopes.Repositories;
 
 namespace UniIdentity.Domain.Realms;
 
@@ -107,6 +110,52 @@ public sealed class Realm : BaseEntity
     public RealmAttribute CreateAttribute(string name, string value)
     {
         return new RealmAttribute(Id, name, value);
+    }
+
+    public IReadOnlyList<Scope> AddDefaultScopes(IAddScopeRepository addScopeRepository)
+    {
+        var defaultScopes = new List<ScopeDto>()
+        {
+            new( "offline_access",
+                "OpenID Connect built-in scope: offline_access"),
+            new( "profile", "OpenID Connect built-in scope: profile"),
+            new( "email", "OpenID Connect built-in scope: email"),
+            new( "address", "OpenID Connect built-in scope: address"),
+            new( "phone", "OpenID Connect built-in scope: phone"),
+            new( "roles",
+                "OpenID Connect scope for add user roles to the access token"),
+            new( "web-origins",
+                "OpenID Connect scope for add allowed web origins to the access token"),
+            new( "microprofile-jwt",
+                "Microprofile - JWT built-in scope"),
+        };
+
+        var scopeList = new List<Scope>();
+        foreach (var scope in defaultScopes)
+        {
+            var addScope = Scope.Create(
+                scope.Name,
+                "openid-connect",
+                new RealmId("master"),
+                scope.Description
+            );
+            addScopeRepository.Add(addScope);
+            scopeList.Add(addScope);
+        }
+
+        return scopeList;
+    }
+    
+    private class ScopeDto
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public ScopeDto(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
     }
     
 }

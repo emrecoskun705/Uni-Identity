@@ -4,6 +4,8 @@ using UniIdentity.Domain.ClientAttributes.Repositories;
 using UniIdentity.Domain.Clients.Enums;
 using UniIdentity.Domain.Clients.Events;
 using UniIdentity.Domain.Clients.ValueObjects;
+using UniIdentity.Domain.ClientScopes;
+using UniIdentity.Domain.ClientScopes.Repositories;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Realms;
 
@@ -135,6 +137,13 @@ public sealed class Client : AggregateRoot
         return clientAttribute;
     }
 
+    /// <summary>
+    /// Adds default client attributes to a client using the provided repository.
+    /// </summary>
+    /// <param name="addClientAttributeRepository">The repository used to add client attributes.</param>
+    /// <returns>
+    /// A read-only list of client attributes added to the client. 
+    /// </returns>
     public IReadOnlyList<ClientAttribute> AddDefaultClientAttributes(IAddClientAttributeRepository addClientAttributeRepository)
     {
         var enableRefreshTokenAttribute = CreateAttribute(

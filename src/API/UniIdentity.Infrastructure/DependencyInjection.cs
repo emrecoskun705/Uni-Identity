@@ -60,6 +60,7 @@ public static class DependencyInjection
         services.AddKeyedScoped<IGetClientRepository, ClientRepository>(ServiceKey.ClientOriginalKey);
         services.AddScoped<IAddClientRepository, ClientRepository>();
         services.AddScoped<IGetClientRepository, CachedClientRepository>();
+        services.AddScoped<IClientExistenceRepository, ClientRepository>();
         
         services.AddKeyedScoped<IGetClientAttributeRepository, ClientAttributeRepository>(ServiceKey.ClientOriginalKey);
         services.AddScoped<IAddClientAttributeRepository, ClientAttributeRepository>();
