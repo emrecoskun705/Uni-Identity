@@ -29,7 +29,7 @@ public sealed class ClientAttribute : BaseEntity
     /// <summary>
     /// Initializes a new instance of the <see cref="ClientAttribute"/> class with the specified parameters.
     /// </summary>
-    /// <param name="clientClientId">The unique identifier of the client associated with this attribute.</param>
+    /// <param name="clientId">The unique identifier of the client associated with this attribute.</param>
     /// <param name="name">The name of the client attribute.</param>
     /// <param name="value">The value of the client attribute.</param>
     internal ClientAttribute(
