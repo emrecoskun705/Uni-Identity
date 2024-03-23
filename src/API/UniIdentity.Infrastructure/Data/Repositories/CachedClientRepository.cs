@@ -9,7 +9,6 @@ namespace UniIdentity.Infrastructure.Data.Repositories;
 
 internal sealed class CachedClientRepository : IGetClientRepository
 {
-    private static readonly TimeSpan CacheTime = TimeSpan.FromDays(1);
     private readonly IGetClientRepository _clientRepository;
     private readonly IMemoryCache _memoryCache;
 
@@ -25,10 +24,6 @@ internal sealed class CachedClientRepository : IGetClientRepository
     {
         return await _memoryCache.GetOrCreateAsync(
             CacheKeys.ClientByClientIdAndRealmId(clientKey, realmId),
-            cacheEntry =>
-            {
-                cacheEntry.SetAbsoluteExpiration(CacheTime);
-                return _clientRepository.GetByClientKeyAndRealmIdAsync(clientKey, realmId, ct);
-            });
+            _ => _clientRepository.GetByClientKeyAndRealmIdAsync(clientKey, realmId, ct));
     }
 }

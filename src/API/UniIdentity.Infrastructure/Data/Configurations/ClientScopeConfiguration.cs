@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.ClientScopes;
 using UniIdentity.Domain.Scopes;
 
 namespace UniIdentity.Infrastructure.Data.Configurations;

@@ -1,9 +1,10 @@
 ﻿using UniIdentity.Domain.Clients.ValueObjects;
+using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Scopes;
 
-namespace UniIdentity.Domain.Clients;
+namespace UniIdentity.Domain.ClientScopes;
 
-public class ClientScope
+public class ClientScope : BaseEntity
 {
     public ClientId ClientId { get; private set; }
     public ScopeId ScopeId { get; private set; }

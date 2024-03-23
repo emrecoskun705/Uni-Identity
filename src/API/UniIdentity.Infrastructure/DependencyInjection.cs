@@ -9,6 +9,7 @@ using UniIdentity.Domain;
 using UniIdentity.Domain.ClientAttributes.Repositories;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Clients.Repositories;
+using UniIdentity.Domain.ClientScopes.Repositories;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Configs;
 using UniIdentity.Domain.Configs.Repositories;
@@ -65,6 +66,10 @@ public static class DependencyInjection
         services.AddKeyedScoped<IGetClientAttributeRepository, ClientAttributeRepository>(ServiceKey.ClientOriginalKey);
         services.AddScoped<IAddClientAttributeRepository, ClientAttributeRepository>();
         services.AddScoped<IGetClientAttributeRepository, CachedClientAttributeRepository>();
+
+        services.AddKeyedScoped<IGetClientScopeRepository, ClientScopeRepository>(ServiceKey.ClientScopeOriginalKey);
+        services.AddScoped<IAddClientScopeRepository, ClientScopeRepository>();
+        services.AddScoped<IGetClientScopeRepository, CachedClientScopeRepository>();
         
         services.AddKeyedScoped<IGetConfigRepository, ConfigRepository>(ServiceKey.ConfigOriginalKey);
         services.AddScoped<IGetConfigRepository, CachedConfigRepository>();

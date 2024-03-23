@@ -1,4 +1,5 @@
 ﻿using UniIdentity.Domain.ClientAttributes;
+using UniIdentity.Domain.ClientAttributes.Consts;
 using UniIdentity.Domain.ClientAttributes.Repositories;
 using UniIdentity.Domain.Clients.Enums;
 using UniIdentity.Domain.Clients.Events;
@@ -132,6 +133,20 @@ public sealed class Client : AggregateRoot
     {
         var clientAttribute = new ClientAttribute(Id, name, value);
         return clientAttribute;
+    }
+
+    public IEnumerable<ClientAttribute> AddDefaultClientAttributes(IAddClientAttributeRepository addClientAttributeRepository)
+    {
+        var enableRefreshTokenAttribute = CreateAttribute(
+            ClientAttributeName.EnableRefreshToken, 
+            true.ToString()); 
+        
+        addClientAttributeRepository.Add(enableRefreshTokenAttribute);
+
+        return new[]
+        {
+            enableRefreshTokenAttribute
+        };
     }
     
     /// <summary>
