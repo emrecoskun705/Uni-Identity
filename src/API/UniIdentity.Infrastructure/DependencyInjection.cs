@@ -73,6 +73,8 @@ public static class DependencyInjection
         services.AddKeyedScoped<IGetScopeRepository, ScopeRepository>(ServiceKey.ScopeOriginalKey);
         services.AddScoped<IAddScopeRepository, ScopeRepository>();
         services.AddScoped<IGetScopeRepository, ScopeRepository>();
+
+        services.AddScoped<IAddDefaultScopeRepository, DefaultScopeRepository>();
         
         services.AddKeyedScoped<IGetConfigRepository, ConfigRepository>(ServiceKey.ConfigOriginalKey);
         services.AddScoped<IGetConfigRepository, CachedConfigRepository>();

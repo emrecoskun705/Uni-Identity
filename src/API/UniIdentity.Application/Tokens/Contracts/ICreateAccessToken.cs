@@ -1,5 +1,5 @@
 ﻿using UniIdentity.Application.Tokens.Models;
-using UniIdentity.Domain.Clients;
+using UniIdentity.Domain.Clients.ValueObjects;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Users;
 
