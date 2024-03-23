@@ -12,7 +12,7 @@ internal sealed class ClientScopeRepository : Repository<ClientScope>, IGetClien
     {
     }
 
-    public async Task<IReadOnlyCollection<ClientScope>> GetByClientId(ClientId clientId)
+    public async Task<IReadOnlyCollection<ClientScope>> GetAllAsync(ClientId clientId)
     {
         return await _db.Set<ClientScope>()
             .Where(x => x.ClientId == clientId)

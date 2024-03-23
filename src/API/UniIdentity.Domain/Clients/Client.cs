@@ -135,7 +135,7 @@ public sealed class Client : AggregateRoot
         return clientAttribute;
     }
 
-    public IEnumerable<ClientAttribute> AddDefaultClientAttributes(IAddClientAttributeRepository addClientAttributeRepository)
+    public IReadOnlyList<ClientAttribute> AddDefaultClientAttributes(IAddClientAttributeRepository addClientAttributeRepository)
     {
         var enableRefreshTokenAttribute = CreateAttribute(
             ClientAttributeName.EnableRefreshToken, 

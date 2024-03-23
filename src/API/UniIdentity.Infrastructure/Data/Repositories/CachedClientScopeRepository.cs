@@ -20,10 +20,10 @@ internal sealed class CachedClientScopeRepository : IGetClientScopeRepository
         _memoryCache = memoryCache;
     }
 
-    public async Task<IReadOnlyCollection<ClientScope>> GetByClientId(ClientId clientId)
+    public async Task<IReadOnlyCollection<ClientScope>> GetAllAsync(ClientId clientId)
     {
         return (await _memoryCache.GetOrCreateAsync(
-                   CacheKeys.ClientScopesByClientId,
-                   _ => _getClientScopeRepository.GetByClientId(clientId)))!;
+                   CacheKeys.ClientScopesByClientId(clientId),
+                   _ => _getClientScopeRepository.GetAllAsync(clientId)))!;
     }
 }

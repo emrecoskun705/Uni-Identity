@@ -7,16 +7,14 @@ using UniIdentity.Application.Contracts.Data;
 using UniIdentity.Application.Contracts.Sessions;
 using UniIdentity.Domain;
 using UniIdentity.Domain.ClientAttributes.Repositories;
-using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Clients.Repositories;
 using UniIdentity.Domain.ClientScopes.Repositories;
 using UniIdentity.Domain.Common;
-using UniIdentity.Domain.Configs;
 using UniIdentity.Domain.Configs.Repositories;
 using UniIdentity.Domain.Credentials.Services;
 using UniIdentity.Domain.RealmAttributes.Repositories;
-using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Realms.Repositories;
+using UniIdentity.Domain.Scopes.Repositories;
 using UniIdentity.Domain.Users;
 using UniIdentity.Infrastructure.Context;
 using UniIdentity.Infrastructure.Cryptography;
@@ -70,6 +68,10 @@ public static class DependencyInjection
         services.AddKeyedScoped<IGetClientScopeRepository, ClientScopeRepository>(ServiceKey.ClientScopeOriginalKey);
         services.AddScoped<IAddClientScopeRepository, ClientScopeRepository>();
         services.AddScoped<IGetClientScopeRepository, CachedClientScopeRepository>();
+
+        services.AddKeyedScoped<IGetScopeRepository, ScopeRepository>(ServiceKey.ScopeOriginalKey);
+        services.AddScoped<IAddScopeRepository, ScopeRepository>();
+        services.AddScoped<IGetScopeRepository, ScopeRepository>();
         
         services.AddKeyedScoped<IGetConfigRepository, ConfigRepository>(ServiceKey.ConfigOriginalKey);
         services.AddScoped<IGetConfigRepository, CachedConfigRepository>();

@@ -4,5 +4,5 @@ namespace UniIdentity.Domain.ClientScopes.Repositories;
 
 public interface IGetClientScopeRepository
 {
-    Task<IReadOnlyCollection<ClientScope>> GetByClientId(ClientId clientId);
+    Task<IReadOnlyCollection<ClientScope>> GetAllAsync(ClientId clientId);
 }
