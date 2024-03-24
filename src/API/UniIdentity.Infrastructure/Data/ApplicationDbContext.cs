@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using UniIdentity.Domain.ClientAttributes;
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Common;
@@ -34,5 +35,10 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         
         base.OnModelCreating(builder);
+    }
+
+    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        return Database.BeginTransactionAsync(cancellationToken);
     }
 }
