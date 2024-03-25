@@ -8,6 +8,7 @@ using UniIdentity.Domain.ClientScopes;
 using UniIdentity.Domain.ClientScopes.Repositories;
 using UniIdentity.Domain.Common;
 using UniIdentity.Domain.Realms;
+using UniIdentity.Domain.Scopes;
 
 namespace UniIdentity.Domain.Clients;
 
@@ -156,6 +157,20 @@ public sealed class Client : AggregateRoot
         {
             enableRefreshTokenAttribute
         };
+    }
+
+    /// <summary>
+    /// Adds default client scopes to the repository.
+    /// </summary>
+    /// <param name="addClientScopeRepository">The repository for adding client scopes.</param>
+    /// <param name="defaultScopes">The collection of default scopes to add.</param>
+    public void AddDefaultClientScopes(IAddClientScopeRepository addClientScopeRepository, IEnumerable<DefaultScope> defaultScopes)
+    {
+        foreach (var scope in defaultScopes)
+        {
+            var clientScope = new ClientScope(Id, scope.ScopeId, scope.IsDefault);
+            addClientScopeRepository.Add(clientScope);
+        }
     }
     
     /// <summary>
