@@ -13,6 +13,16 @@ public static class SignatureAlg
     /// Represents the RSA-SHA256 signature algorithm.
     /// </summary>
     public const string RsaSha256 = "RS256";
+    
+    /// <summary>
+    /// Represents the RSA-SHA384 signature algorithm.
+    /// </summary>
+    public const string RsaSha384 = "RS384";
+    
+    /// <summary>
+    /// Represents the RSA-SHA512 signature algorithm.
+    /// </summary>
+    public const string RsaSha512 = "RS512";
 
     /// <summary>
     /// Represents the HMAC-SHA256 signature algorithm.
