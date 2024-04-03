@@ -1,5 +1,4 @@
 ﻿using UniIdentity.Domain.Common;
-using UniIdentity.Domain.Credentials.Services;
 using UniIdentity.Domain.Realms;
 using UniIdentity.Domain.Shared;
 using UniIdentity.Domain.Users.Events;
@@ -60,7 +59,7 @@ public sealed class User : AggregateRoot
     /// <summary>
     /// Gets the identifier of the realm to which the user belongs.
     /// </summary>
-    public RealmId RealmId { get; set; }
+    public RealmId RealmId { get; private set; }
 
     /// <summary>
     /// Gets the identity identifier associated with the user.

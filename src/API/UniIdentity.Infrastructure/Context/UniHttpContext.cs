@@ -24,7 +24,12 @@ internal sealed class UniHttpContext : IUniHttpContext
     private readonly IGetRealmRepository _getRealmRepository;
     private readonly IGetConfigRepository _getConfigRepository;
     
-    public UniHttpContext(IHttpContextAccessor httpContextAccessor, IGetClientRepository getClientRepository, IGetRealmRepository getRealmRepository, IGetConfigRepository getConfigRepository, IGetClientAttributeRepository getClientAttributeRepository)
+    public UniHttpContext(
+        IHttpContextAccessor httpContextAccessor, 
+        IGetClientRepository getClientRepository, 
+        IGetRealmRepository getRealmRepository, 
+        IGetConfigRepository getConfigRepository, 
+        IGetClientAttributeRepository getClientAttributeRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _getClientRepository = getClientRepository;
@@ -34,21 +39,26 @@ internal sealed class UniHttpContext : IUniHttpContext
         RealmId = ExtractRealmIdFromUrl(HttpContext.Request.Path);
         ClientKey = ExtractClientIdFromBody();
     }
-
+    
+    /// <inheritdoc />
     public HttpContext HttpContext => _httpContextAccessor.HttpContext!;
 
+    /// <inheritdoc />
     public ClientKey? ClientKey { get; }
 
+    /// <inheritdoc />
     public RealmId RealmId { get; }
 
+    /// <inheritdoc />
     public async Task<ClientAttribute?> GetClientAttributeAsync(string attributeName)
     {
         if (ClientKey == null)
             return null;
 
-        return await _getClientAttributeRepository.GetByNameAsync(RealmId, ClientKey, attributeName);;
+        return await _getClientAttributeRepository.GetByNameAsync(RealmId, ClientKey, attributeName);
     }
 
+    /// <inheritdoc />
     public async Task<Realm> GetRealmAsync(CancellationToken ct = default)
     {
         if (RealmId == null)
@@ -57,7 +67,8 @@ internal sealed class UniHttpContext : IUniHttpContext
         return await _getRealmRepository.GetByRealmId(RealmId, ct)
             ?? throw new InvalidOperationException("Failed to retrieve Realm with the provided RealmId.");
     }
-
+    
+    /// <inheritdoc />
     public async Task<Client> GetClientAsync(CancellationToken ct = default)
     {
         if (ClientKey == null)
@@ -67,12 +78,14 @@ internal sealed class UniHttpContext : IUniHttpContext
             ?? throw new InvalidOperationException("Failed to retrieve Client with the provided ClientKey and RealmId.");
     }
     
+    /// <inheritdoc />
     public async Task<RsaGenerationConfig> GetRsaGenerationConfigAsync(string name, CancellationToken ct = default)
     {
         return await _getConfigRepository.GetRsaGenerationConfigAsync(RealmId, name, ct)
             ?? throw new InvalidOperationException("Failed to retrieve RsaGenerationConfig with the provided RealmId and name.");
     }
 
+    /// <inheritdoc />
     public async Task<HmacGenerationConfig> GetHmacGenerationConfigAsync(string name, CancellationToken ct = default)
     {
         return await _getConfigRepository.GetHmacGenerationConfigAsync(RealmId, name, ct)
