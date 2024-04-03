@@ -48,6 +48,23 @@ public static class DependencyInjection
         #endregion
 
         services.AddHttpContextAccessor();
+        
+        services.AddPersistence();
+        
+        services.AddDistributedMemoryCache();
+
+        #region Cryprography
+
+        services.AddTransient<IPasswordHasher, PasswordHasher>();
+        services.AddTransient<IPasswordVerifier, PasswordHasher>();
+
+        #endregion
+
+        return services;
+    }
+
+    private static void AddPersistence(this IServiceCollection services)
+    {
         services.AddScoped<ApplicationDbContextInitializer>();
         services.AddScoped<IUserRepository, UserRepository>();
         
@@ -84,16 +101,5 @@ public static class DependencyInjection
         services.AddSingleton<ISessionManager, SessionManager>();
         services.AddSingleton(TimeProvider.System);
         services.AddScoped<IUniHttpContext, UniHttpContext>();
-
-        services.AddDistributedMemoryCache();
-
-        #region Cryprography
-
-        services.AddTransient<IPasswordHasher, PasswordHasher>();
-        services.AddTransient<IPasswordVerifier, PasswordHasher>();
-
-        #endregion
-
-        return services;
     }
 }
