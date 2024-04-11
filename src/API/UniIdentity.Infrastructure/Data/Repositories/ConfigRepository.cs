@@ -6,7 +6,7 @@ using UniIdentity.Domain.Realms;
 
 namespace UniIdentity.Infrastructure.Data.Repositories;
 
-internal sealed class ConfigRepository : Repository<Config>, IGetConfigRepository
+internal sealed class ConfigRepository : Repository<Config>, IGetConfigRepository, IAddConfigRepository
 {
     public ConfigRepository(ApplicationDbContext dbContext)
         : base(dbContext)
