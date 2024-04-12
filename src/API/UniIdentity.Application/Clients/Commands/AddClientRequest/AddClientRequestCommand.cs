@@ -2,11 +2,10 @@
 using UniIdentity.Domain.Clients;
 using UniIdentity.Domain.Clients.ValueObjects;
 using UniIdentity.Domain.Realms;
-using UniIdentity.Domain.Shared;
 
 namespace UniIdentity.Application.Clients.Commands.AddClientRequest;
 
-public sealed record AddClientRequestCommand : ICommand<Result>
+public sealed record AddClientRequestCommand : ICommand
 {
     public RealmId RealmId { get; }
     public ClientKey ClientKey { get; }
