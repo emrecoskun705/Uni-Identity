@@ -1,15 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using UniIdentity.Domain.Clients;
-using UniIdentity.Domain.Clients.Enums;
-using UniIdentity.Domain.Clients.ValueObjects;
-using UniIdentity.Domain.Realms;
-using UniIdentity.Domain.Realms.Enums;
-using UniIdentity.Domain.Roles;
-using UniIdentity.Domain.Roles.ValueObjects;
-using UniIdentity.Domain.Scopes;
+using UniIdentity.Application.Realms.Commands.AddRealmRequest;
 
 namespace UniIdentity.Infrastructure.Data;
 
@@ -31,16 +25,19 @@ public class ApplicationDbContextInitializer
 {
     private readonly ILogger<ApplicationDbContextInitializer> _logger;
     private readonly ApplicationDbContext _context;
+    private readonly IMediator _mediator;
 
     private const string MasterRealmId = "master";
 
     
     public ApplicationDbContextInitializer(
         ILogger<ApplicationDbContextInitializer> logger,
-        ApplicationDbContext context)
+        ApplicationDbContext context, 
+        IMediator mediator)
     {
         _logger = logger;
         _context = context;
+        _mediator = mediator;
     }
 
     public async Task InitializeAsync()
@@ -71,144 +68,13 @@ public class ApplicationDbContextInitializer
 
     private async Task TrySeedAsync()
     {
-        // order important
-        
-        await AddMasterRealm();
-        
-        await AddDefaultScopesToMaster();
-
-        await AddDefaultRolesToMaster();
-
-        await AddDefaultClientsToMaster();
+        await AddMasterRealmCommand();
     }
 
-    private async Task AddDefaultClientsToMaster()
+    private async Task AddMasterRealmCommand()
     {
-        var defaultClients = new List<Client>
-        {
-            Client.Create(new RealmId(MasterRealmId), ClientKey.FromValue("account"), Protocol.OpenIdConnect, "/realms/master/account/"),
-            Client.Create(new RealmId(MasterRealmId), ClientKey.FromValue("account-console"), Protocol.OpenIdConnect, "/realms/master/account/"),
-            Client.Create(new RealmId(MasterRealmId), ClientKey.FromValue("admin-console"), Protocol.OpenIdConnect, "/admin/master/console/")
-        };
-
-        foreach (var defaultClient in defaultClients)
-        {
-            var client = await _context.Client.FirstOrDefaultAsync(x => x.ClientKey == defaultClient.ClientKey && x.RealmId == defaultClient.RealmId);
-
-            if (client == null)
-            {
-                _context.Add(defaultClient);
-            }
-        }
-
-        await _context.SaveChangesAsync();
-    }
-    
-    private async Task AddDefaultRolesToMaster()
-    {
-        
-        var masterRealmRoles = new List<RealmRoleDto>()
-        {
-            new("81596A81-52E0-4A97-85B8-BAFA2A38CEE9", "default-roles-master"),
-            new("60E092CC-E651-4489-B945-AF763EB5C306", "admin"), 
-            new("A4D5165B-D733-4A88-AA1C-D1C31539EF1E", "create-realm") 
-        };
-
-        foreach (var realmRoleDto in masterRealmRoles)
-        {
-            var realmRole = await _context.Role.AsNoTracking().FirstOrDefaultAsync(
-                x => x.Id == RoleId.FromValue(Guid.Parse(realmRoleDto.Id)));
-
-            if (realmRole == null)
-            {
-                realmRole = Role.CreateRealmRole(
-                    RoleId.FromValue(Guid.Parse(realmRoleDto.Id)),
-                    new Name(realmRoleDto.Name),
-                    new RealmId(MasterRealmId));
-            
-                _context.Add(realmRole);
-            }
-        }
-
-
-        await _context.SaveChangesAsync();
-    }
-    
-    private async Task AddDefaultScopesToMaster()
-    {
-        var defaultScopes = new List<ScopeDto>()
-        {
-            new ScopeDto( "offline_access",
-                "OpenID Connect built-in scope: offline_access"),
-            new ScopeDto( "profile", "OpenID Connect built-in scope: profile"),
-            new ScopeDto( "email", "OpenID Connect built-in scope: email"),
-            new ScopeDto( "address", "OpenID Connect built-in scope: address"),
-            new ScopeDto( "phone", "OpenID Connect built-in scope: phone"),
-            new ScopeDto( "roles",
-                "OpenID Connect scope for add user roles to the access token"),
-            new ScopeDto( "web-origins",
-                "OpenID Connect scope for add allowed web origins to the access token"),
-            new ScopeDto( "microprofile-jwt",
-                "Microprofile - JWT built-in scope"),
-        };
-        
-        foreach (var scope in defaultScopes)
-        {
-            var addScope =
-                await _context.Scope.FirstOrDefaultAsync(x => x.RealmId == new RealmId("master") && x.Name == scope.Name );
-
-            if (addScope == null)
-            {
-                addScope = Scope.Create(
-                    scope.Name,
-                    "openid-connect",
-                    new RealmId("master"),
-                    scope.Description
-                );
-
-                _context.Add(addScope);
-            }
-        }
-
-        await _context.SaveChangesAsync();
-    }
-    
-    private async Task AddMasterRealm()
-    {
-        var masterRealm = await _context.Realm.FirstOrDefaultAsync(x => x.Id == new RealmId("master"));
-
-        if (masterRealm == null)
-        {
-            masterRealm = Realm.Create("master" , true);
-            
-            _context.Add<Realm>(masterRealm);
-            
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    private class ScopeDto
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-
-        public ScopeDto(string name, string description)
-        {
-            Name = name;
-            Description = description;
-        }
-    }
-
-    private class RealmRoleDto
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-
-        public RealmRoleDto(string id, string name)
-        {
-            Id = id;
-            Name = name;
-        }
+        var addRealmRequestCommand = new AddRealmRequestCommand(MasterRealmId, true);
+        await _mediator.Send(addRealmRequestCommand);
     }
     
 }

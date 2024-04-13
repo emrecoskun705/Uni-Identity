@@ -64,37 +64,85 @@ public static class DependencyInjection
     private static void AddPersistence(this IServiceCollection services)
     {
         services.AddScoped<ApplicationDbContextInitializer>();
+
+        #region User
+
         services.AddScoped<IUserRepository, UserRepository>();
-        
+
+        #endregion
+
+        #region Realm
+
         services.AddKeyedScoped<IGetRealmRepository, RealmRepository>(ServiceKey.RealmOriginalKey);
         services.AddScoped<IAddRealmRepository, RealmRepository>();
         services.AddScoped<IGetRealmRepository, CachedRealmRepository>();
-        
+
+        #endregion
+
+        #region RealmAttribute
+
         services.AddKeyedScoped<IGetRealmAttributeRepository, RealmAttributeRepository>(ServiceKey.RealmOriginalKey);
         services.AddScoped<IAddRealmAttributeRepository, RealmAttributeRepository>();
         services.AddScoped<IGetRealmAttributeRepository, CachedRealmAttributeRepository>();
-        
+
+        #endregion
+
+        #region RealmAttribute
+
+        services.AddKeyedScoped<IGetRealmAttributeRepository, RealmAttributeRepository>(ServiceKey.RealmOriginalKey);
+        services.AddScoped<IAddRealmAttributeRepository, RealmAttributeRepository>();
+        services.AddScoped<IGetRealmAttributeRepository, CachedRealmAttributeRepository>();
+
+        #endregion
+
+        #region Client
+
         services.AddKeyedScoped<IGetClientRepository, ClientRepository>(ServiceKey.ClientOriginalKey);
         services.AddScoped<IAddClientRepository, ClientRepository>();
         services.AddScoped<IGetClientRepository, CachedClientRepository>();
         services.AddScoped<IClientExistenceRepository, ClientRepository>();
-        
+
+        #endregion
+
+        #region ClientAttribute
+
         services.AddKeyedScoped<IGetClientAttributeRepository, ClientAttributeRepository>(ServiceKey.ClientOriginalKey);
         services.AddScoped<IAddClientAttributeRepository, ClientAttributeRepository>();
         services.AddScoped<IGetClientAttributeRepository, CachedClientAttributeRepository>();
+
+        #endregion
+
+        #region ClientScope
 
         services.AddKeyedScoped<IGetClientScopeRepository, ClientScopeRepository>(ServiceKey.ClientScopeOriginalKey);
         services.AddScoped<IAddClientScopeRepository, ClientScopeRepository>();
         services.AddScoped<IGetClientScopeRepository, CachedClientScopeRepository>();
 
+        #endregion
+
+        #region Scope
+
         services.AddKeyedScoped<IGetScopeRepository, ScopeRepository>(ServiceKey.ScopeOriginalKey);
         services.AddScoped<IAddScopeRepository, ScopeRepository>();
         services.AddScoped<IGetScopeRepository, ScopeRepository>();
 
+        #endregion
+
+        #region DefaultScope
+
         services.AddScoped<IAddDefaultScopeRepository, DefaultScopeRepository>();
+        services.AddScoped<IGetDefaultScopeRepository, DefaultScopeRepository>();
         
+        #endregion
+
+        #region Config
+
         services.AddKeyedScoped<IGetConfigRepository, ConfigRepository>(ServiceKey.ConfigOriginalKey);
+        services.AddScoped<IAddConfigRepository, ConfigRepository>();
         services.AddScoped<IGetConfigRepository, CachedConfigRepository>();
+
+        #endregion
+
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddSingleton<ISessionManager, SessionManager>();
         services.AddSingleton(TimeProvider.System);
