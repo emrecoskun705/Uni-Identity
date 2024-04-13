@@ -15,6 +15,7 @@ using UniIdentity.Domain.Credentials.Services;
 using UniIdentity.Domain.RealmAttributes.Repositories;
 using UniIdentity.Domain.Realms.Repositories;
 using UniIdentity.Domain.Scopes.Repositories;
+using UniIdentity.Domain.Shared;
 using UniIdentity.Domain.Users;
 using UniIdentity.Infrastructure.Context;
 using UniIdentity.Infrastructure.Cryptography;
@@ -30,7 +31,8 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("Default") ?? throw new ArgumentNullException("connectionString");
+        var connectionString = configuration.GetConnectionString(ConnectionString.DefaultDbConnectionString) 
+                               ?? throw new ArgumentNullException(ConnectionString.DefaultDbConnectionString);
         
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
