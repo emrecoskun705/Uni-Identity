@@ -131,7 +131,7 @@ public sealed class Realm : BaseEntity
             var addScope = Scope.Create(
                 scope.Name,
                 "openid-connect",
-                new RealmId("master"),
+                Id,
                 scope.Description
             );
 

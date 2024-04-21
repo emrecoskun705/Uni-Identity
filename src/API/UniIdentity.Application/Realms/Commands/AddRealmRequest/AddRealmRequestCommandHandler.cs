@@ -27,6 +27,7 @@ internal sealed class AddRealmRequestCommandHandler : ICommandHandler<AddRealmRe
     private readonly IAddRealmAttributeRepository _addRealmAttributeRepository;
     private readonly IAddScopeRepository _addScopeRepository;
     private readonly IGetDefaultScopeRepository _getDefaultScopeRepository;
+    private readonly IRealmExistenceRepository _realmExistenceRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public AddRealmRequestCommandHandler(
@@ -39,7 +40,7 @@ internal sealed class AddRealmRequestCommandHandler : ICommandHandler<AddRealmRe
         IAddRealmAttributeRepository addRealmAttributeRepository, 
         IAddScopeRepository addScopeRepository,
         IGetDefaultScopeRepository getDefaultScopeRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, IRealmExistenceRepository realmExistenceRepository)
     {
         _getRealmRepository = getRealmRepository;
         _addRealmRepository = addRealmRepository;
@@ -51,11 +52,12 @@ internal sealed class AddRealmRequestCommandHandler : ICommandHandler<AddRealmRe
         _addScopeRepository = addScopeRepository;
         _getDefaultScopeRepository = getDefaultScopeRepository;
         _unitOfWork = unitOfWork;
+        _realmExistenceRepository = realmExistenceRepository;
     }
 
     public async Task<Result> Handle(AddRealmRequestCommand request, CancellationToken cancellationToken)
     {
-        var realmExists = (await _getRealmRepository.GetByRealmId(new RealmId(request.Name), cancellationToken)) != null;
+        var realmExists = await _realmExistenceRepository.CheckAsync(new RealmId(request.Name));
 
         if (realmExists)
             return Result.Failure(DomainErrors.RealmErrors.AlreadyExists);

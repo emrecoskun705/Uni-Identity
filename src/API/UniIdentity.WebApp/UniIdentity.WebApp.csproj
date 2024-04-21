@@ -17,10 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Endpoints\Realms\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
       <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
       <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4" />
