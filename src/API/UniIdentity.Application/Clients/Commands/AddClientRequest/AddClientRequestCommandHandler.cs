@@ -4,6 +4,7 @@ using UniIdentity.Domain.Clients.Repositories;
 using UniIdentity.Domain.Clients.Services;
 using UniIdentity.Domain.ClientScopes.Repositories;
 using UniIdentity.Domain.Common;
+using UniIdentity.Domain.Realms.Repositories;
 using UniIdentity.Domain.Scopes.Repositories;
 using UniIdentity.Domain.Shared;
 
@@ -15,6 +16,7 @@ internal sealed class AddClientRequestCommandHandler : ICommandHandler<AddClient
     private readonly IAddClientRepository _addClientRepository;
     private readonly IAddClientScopeRepository _addClientScopeRepository;
     private readonly IGetDefaultScopeRepository _getDefaultScopeRepository;
+    private readonly IRealmExistenceRepository _realmExistenceRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public AddClientRequestCommandHandler(
@@ -22,18 +24,24 @@ internal sealed class AddClientRequestCommandHandler : ICommandHandler<AddClient
         IAddClientRepository addClientRepository,
         IUnitOfWork unitOfWork, 
         IGetDefaultScopeRepository getDefaultScopeRepository, 
-        IAddClientScopeRepository addClientScopeRepository)
+        IAddClientScopeRepository addClientScopeRepository, 
+        IRealmExistenceRepository realmExistenceRepository)
     {
         _clientExistenceRepository = clientExistenceRepository;
         _addClientRepository = addClientRepository;
         _unitOfWork = unitOfWork;
         _getDefaultScopeRepository = getDefaultScopeRepository;
         _addClientScopeRepository = addClientScopeRepository;
+        _realmExistenceRepository = realmExistenceRepository;
     }
 
     public async Task<Result> Handle(AddClientRequestCommand request, CancellationToken cancellationToken)
     {
         var clientExists = await _clientExistenceRepository.CheckAsync(request.RealmId, request.ClientKey);
+        var realmExists = await _realmExistenceRepository.CheckAsync(request.RealmId);
+
+        if (!realmExists)
+            return Result.Failure(DomainErrors.RealmErrors.NotFound);
 
         if (clientExists)
             return Result.Failure(DomainErrors.ClientErrors.AlreadyExists);
