@@ -78,6 +78,7 @@ public static class DependencyInjection
         services.AddKeyedScoped<IGetRealmRepository, RealmRepository>(ServiceKey.RealmOriginalKey);
         services.AddScoped<IAddRealmRepository, RealmRepository>();
         services.AddScoped<IGetRealmRepository, CachedRealmRepository>();
+        services.AddScoped<IRealmExistenceRepository, RealmRepository>();
 
         #endregion
 

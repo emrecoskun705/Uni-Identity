@@ -1,4 +1,6 @@
-﻿namespace UniIdentity.Domain.Shared;
+﻿using System.Text.Json.Serialization;
+
+namespace UniIdentity.Domain.Shared;
 
 /// <summary>
 /// Represents an error.
@@ -49,6 +51,7 @@ public class Error : IEquatable<Error>
     /// <summary>
     /// Gets the error type.
     /// </summary>
+    [JsonIgnore]
     public ErrorType ErrorType { get; }
 
     public static implicit operator string(Error error) => error.Code;
