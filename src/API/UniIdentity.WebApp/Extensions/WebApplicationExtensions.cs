@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Asp.Versioning;
+using Asp.Versioning.Builder;
 using UniIdentity.Infrastructure.Data;
 
 namespace UniIdentity.WebApp.Extensions;
@@ -15,6 +17,15 @@ internal static class WebApplicationExtensions
             await app.InitializeDatabaseAsync();
         }
 
+        ApiVersionSet apiVersionSet = app.NewApiVersionSet()
+            .HasApiVersion(new ApiVersion(1))
+            .ReportApiVersions()
+            .Build();
+
+        RouteGroupBuilder versionedGroup = app
+            .MapGroup("api/v{version:apiVersion}")
+            .WithApiVersionSet(apiVersionSet);
+        
         app.MapEndpoints();
         
         return app;
