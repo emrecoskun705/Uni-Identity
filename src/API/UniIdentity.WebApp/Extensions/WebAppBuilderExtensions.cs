@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Asp.Versioning;
 using UniIdentity.Application;
 using UniIdentity.Infrastructure;
 
@@ -11,6 +12,9 @@ internal static class WebAppBuilderExtensions
     {
         #region Project Dependencies
 
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        
         builder.Services.AddApplicationServices();
         builder.Services.AddInfrastructureServices(builder.Configuration);
 

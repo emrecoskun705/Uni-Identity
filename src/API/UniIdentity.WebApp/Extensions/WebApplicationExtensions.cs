@@ -10,6 +10,8 @@ internal static class WebApplicationExtensions
     {
         if (app.Environment.IsDevelopment())
         {
+            app.UseSwagger();
+            app.UseSwaggerUI();
             await app.InitializeDatabaseAsync();
         }
         
