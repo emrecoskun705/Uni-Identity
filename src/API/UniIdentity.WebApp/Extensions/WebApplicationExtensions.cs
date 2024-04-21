@@ -14,6 +14,8 @@ internal static class WebApplicationExtensions
             app.UseSwaggerUI();
             await app.InitializeDatabaseAsync();
         }
+
+        app.MapEndpoints();
         
         return app;
     }

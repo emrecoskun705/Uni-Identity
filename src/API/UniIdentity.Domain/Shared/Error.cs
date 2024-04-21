@@ -20,7 +20,7 @@ public class Error : IEquatable<Error>
     /// </summary>
     public static readonly Error ConditionNotMet = new("Error.ConditionNotMet", "The specified condition was not met.", ErrorType.Failure);
 
-    public static Error NotFound(string code, string description) => new Error(code, description, ErrorType.Notfound);
+    public static Error NotFound(string code, string description) => new Error(code, description, ErrorType.NotFound);
     public static Error Validation(string code, string description) => new Error(code, description, ErrorType.Validation);
     public static Error Failure(string code, string description) => new Error(code, description, ErrorType.Failure);
     
@@ -94,6 +94,7 @@ public class Error : IEquatable<Error>
 public enum ErrorType
 {
     Failure,
-    Notfound,
+    NotFound,
     Validation,
+    Conflict
 }
