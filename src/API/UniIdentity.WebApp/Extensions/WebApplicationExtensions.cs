@@ -26,7 +26,7 @@ internal static class WebApplicationExtensions
             .MapGroup("api/v{version:apiVersion}")
             .WithApiVersionSet(apiVersionSet);
         
-        app.MapEndpoints();
+        app.MapEndpoints(versionedGroup);
         
         return app;
     }

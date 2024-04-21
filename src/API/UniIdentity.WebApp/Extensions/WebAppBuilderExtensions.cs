@@ -25,6 +25,8 @@ internal static class WebAppBuilderExtensions
             options.SubstituteApiVersionInUrl = true;
         });
         
+        builder.Services.AddEndpoints(typeof(Program).Assembly);
+        
         builder.Services.AddApplicationServices();
         builder.Services.AddInfrastructureServices(builder.Configuration);
 
