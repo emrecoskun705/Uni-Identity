@@ -4,6 +4,9 @@ using UniIdentity.WebApp.Abstractions;
 
 namespace UniIdentity.WebApp.Extensions;
 
+/// <summary>
+/// Extension methods for adding and mapping endpoints.
+/// </summary>
 public static class EndpointExtensions
 {
     public static IServiceCollection AddEndpoints(this IServiceCollection services, Assembly assembly)

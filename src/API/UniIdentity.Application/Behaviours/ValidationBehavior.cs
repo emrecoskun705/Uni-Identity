@@ -26,12 +26,9 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
         var context = new ValidationContext<TRequest>(request);
         
         var validationErrors = _validators
-            .Select(validator => validator.Validate(context))
-            .Where(validationResult => validationResult.Errors.Any())
-            .SelectMany(validationResult => validationResult.Errors)
-            .Select(validationFailure => new ValidationError(
-                validationFailure.PropertyName,
-                validationFailure.ErrorMessage))
+            .Select(v => v.Validate(context))
+            .SelectMany(result => result.Errors)
+            .Where(f => f != null)
             .ToList();
         
         if (validationErrors.Any())
