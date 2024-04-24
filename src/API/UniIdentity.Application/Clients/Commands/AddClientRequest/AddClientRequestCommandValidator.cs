@@ -3,7 +3,7 @@ using UniIdentity.Application.Core.Extensions;
 
 namespace UniIdentity.Application.Clients.Commands.AddClientRequest;
 
-internal sealed class AddClientRequestCommandValidator : AbstractValidator<AddClientRequestCommand>
+public sealed class AddClientRequestCommandValidator : AbstractValidator<AddClientRequestCommand>
 {
     public AddClientRequestCommandValidator()
     {

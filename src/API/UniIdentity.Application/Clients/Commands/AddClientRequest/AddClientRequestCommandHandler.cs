@@ -10,7 +10,7 @@ using UniIdentity.Domain.Shared;
 
 namespace UniIdentity.Application.Clients.Commands.AddClientRequest;
 
-internal sealed class AddClientRequestCommandHandler : ICommandHandler<AddClientRequestCommand>
+internal sealed class AddClientRequestCommandHandler : ICommandHandler<AddClientRequestCommand, Result>
 {
     private readonly IClientExistenceRepository _clientExistenceRepository;
     private readonly IAddClientRepository _addClientRepository;

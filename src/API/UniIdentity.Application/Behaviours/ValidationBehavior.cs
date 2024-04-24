@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
-using UniIdentity.Application.Contracts.Messaging;
-using UniIdentity.Application.Exceptions;
-using UniIdentity.Domain.Shared;
 
 namespace UniIdentity.Application.Behaviours;
 
-internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> 
-    where TRequest : IBaseCommand where TResponse : Result
+internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : class, IRequest<TResponse>
+    where TResponse : class
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
@@ -25,7 +24,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
         
         var context = new ValidationContext<TRequest>(request);
         
-        var validationErrors = _validators
+        List<ValidationFailure> validationErrors = _validators
             .Select(v => v.Validate(context))
             .SelectMany(result => result.Errors)
             .Where(f => f != null)

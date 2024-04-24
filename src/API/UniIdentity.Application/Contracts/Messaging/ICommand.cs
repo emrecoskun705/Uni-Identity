@@ -3,15 +3,10 @@ using UniIdentity.Domain.Shared;
 
 namespace UniIdentity.Application.Contracts.Messaging;
 
-public interface ICommand : IRequest<Result>
-{
-    
-}
-
-public interface ICommand<TResponse> : IRequest<Result<TResponse>>, IBaseCommand
-{
-}
-
-public interface IBaseCommand
+/// <summary>
+/// Represents the command interface.
+/// </summary>
+/// <typeparam name="TResponse">The command response type.</typeparam>
+public interface ICommand<out TResponse> : IRequest<TResponse>
 {
 }
