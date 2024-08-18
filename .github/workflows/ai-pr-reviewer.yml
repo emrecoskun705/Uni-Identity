@@ -25,6 +25,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         with:
+          openai_light_model: 'gpt-3.5-turbo'
           debug: false
           review_simple_changes: false
           review_comment_lgtm: false
