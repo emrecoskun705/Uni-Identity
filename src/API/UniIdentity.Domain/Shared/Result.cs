@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace UniIdentity.Domain.Shared;
 
@@ -16,19 +17,37 @@ public class Result
             throw new InvalidCastException();
         }
 
+        ResultType = error.ErrorType;
         IsSuccess = isSuccess;
-        Error = error;
-    }    
+        Errors = new List<Error>()
+        {
+            error
+        };
+    }
+
+    private Result(ErrorType errorType, params Error[] errors)
+    {
+        ResultType = errorType;
+        IsSuccess = false;
+        Errors = new List<Error>(errors);
+    }   
     
     
     public bool IsSuccess { get; }
     public bool IsFailure => !IsSuccess;
+    
+    /// <summary>
+    /// Gets the error type.
+    /// </summary>
+    [JsonIgnore]
+    public ErrorType ResultType { get; }
 
-    public Error Error { get; }
+    public IReadOnlyList<Error> Errors { get; }
 
     public static Result Success() => new(true, Error.None);
     
     public static Result Failure(Error error) => new(false, error);
+    public static Result Validation(params Error[] error) => new(ErrorType.Validation, error);
 
     public static Result<T> Success<T>(T value) => new(value, true, Error.None);
     

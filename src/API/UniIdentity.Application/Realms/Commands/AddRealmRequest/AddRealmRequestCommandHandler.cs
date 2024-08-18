@@ -16,7 +16,7 @@ using UniIdentity.Domain.Shared;
 
 namespace UniIdentity.Application.Realms.Commands.AddRealmRequest;
 
-internal sealed class AddRealmRequestCommandHandler : ICommandHandler<AddRealmRequestCommand, Result>
+internal sealed class AddRealmRequestCommandHandler : ICommandHandler<AddRealmRequestCommand>
 {
     private readonly IGetRealmRepository _getRealmRepository;
     private readonly IAddRealmRepository _addRealmRepository;

@@ -19,14 +19,14 @@ public static class ResultExtensions
         if (result.IsSuccess)
             throw new InvalidOperationException();
 
-        var error = result.Error;
+        var errors = result.Errors;
         return Results.Problem(
-            statusCode: GetStatusCode(error.ErrorType),
-            title: GetTitle(error.ErrorType),
-            type: GetType(error.ErrorType),
+            statusCode: GetStatusCode(result.ResultType),
+            title: GetTitle(result.ResultType),
+            type: GetType(result.ResultType),
             extensions: new Dictionary<string, object?>()
             {
-                { "errors", new[] { result.Error } }
+                { "errors", errors }
             }
         );
     }
@@ -35,6 +35,7 @@ public static class ResultExtensions
         errorType switch
         {
             ErrorType.Failure => StatusCodes.Status400BadRequest,
+            ErrorType.Validation => StatusCodes.Status400BadRequest,
             ErrorType.NotFound => StatusCodes.Status404NotFound,
             ErrorType.Conflict => StatusCodes.Status409Conflict,
             _ => StatusCodes.Status500InternalServerError

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
+using UniIdentity.Domain.Shared;
 
 namespace UniIdentity.Application.Behaviours;
 
@@ -32,9 +33,22 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
         
         if (validationErrors.Any())
         {
-            throw new Exceptions.ValidationException(validationErrors);
+            return CreateValidationErrorResponse(validationErrors);
         }
         
         return await next();
     }
+    
+    private TResponse CreateValidationErrorResponse(IEnumerable<ValidationFailure> validationErrors)
+    {
+
+        var errors = validationErrors.Distinct()
+            .Select(failure => Error.Validation(failure.ErrorCode, failure.ErrorMessage))
+            .ToArray();
+        
+        var response = Result.Validation(errors);
+        
+        return (response as TResponse)!;
+    }
+
 }

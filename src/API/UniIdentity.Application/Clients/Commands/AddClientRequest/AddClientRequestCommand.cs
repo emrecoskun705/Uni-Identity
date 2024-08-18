@@ -6,7 +6,7 @@ using UniIdentity.Domain.Shared;
 
 namespace UniIdentity.Application.Clients.Commands.AddClientRequest;
 
-public sealed class AddClientRequestCommand : ICommand<Result>
+public sealed class AddClientRequestCommand : ICommand
 {
     public RealmId RealmId { get; }
     public ClientKey ClientKey { get; }
