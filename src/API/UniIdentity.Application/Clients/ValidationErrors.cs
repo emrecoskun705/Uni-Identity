@@ -13,7 +13,7 @@ internal static partial class ValidationErrors
             "ClientKey is required");
         
         internal static Error RootUrlRequired => Error.Validation(
-            "Client.ClientKeyRequired",
-            "ClientKey is required");
+            "Client.RootUrlRequired",
+            "RootUrl is required");
     }
 }

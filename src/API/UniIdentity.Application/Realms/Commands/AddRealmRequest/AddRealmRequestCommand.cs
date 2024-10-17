@@ -3,7 +3,7 @@ using UniIdentity.Domain.Shared;
 
 namespace UniIdentity.Application.Realms.Commands.AddRealmRequest;
 
-public sealed record AddRealmRequestCommand : ICommand<Result>
+public sealed record AddRealmRequestCommand : ICommand
 {
     public string Name { get; }
     public bool Enabled { get; }

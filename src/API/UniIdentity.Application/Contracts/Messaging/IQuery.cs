@@ -7,6 +7,6 @@ namespace UniIdentity.Application.Contracts.Messaging;
 /// Represents the query interface.
 /// </summary>
 /// <typeparam name="TResponse">The query response type.</typeparam>
-public interface IQuery<out TResponse> : IRequest<TResponse>
+public interface IQuery<TResponse> : IRequest<Result<TResponse>>
 {
 }

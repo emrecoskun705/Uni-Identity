@@ -7,6 +7,11 @@ namespace UniIdentity.Application.Contracts.Messaging;
 /// Represents the command interface.
 /// </summary>
 /// <typeparam name="TResponse">The command response type.</typeparam>
-public interface ICommand<out TResponse> : IRequest<TResponse>
+public interface ICommand<TResponse> : IRequest<Result<TResponse>>
 {
+}
+
+public interface ICommand : IRequest<Result>
+{
+    
 }
